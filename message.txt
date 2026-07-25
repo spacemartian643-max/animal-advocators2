@@ -1,0 +1,62 @@
+import streamlit as st
+
+# This section sets up the website title and page settings.
+st.set_page_config(
+    page_title="Animal Advocators",
+    page_icon="🐾"
+)
+
+# This section displays the company name and mission.
+st.title("🐾 Animal Advocators")
+st.subheader("Helping wild animals who are suffering")
+st.write(
+    "Animal Advocators helps animal lovers support wildlife conservation "
+    "through donations."
+)
+
+# This section creates the Sprint 1 donation location feature.
+st.header("Choose a Wildlife Area to Support")
+
+location = st.selectbox(
+    "Select a location to donate toward:",
+    [
+        "Amazon Rainforest",
+        "African Savanna",
+        "Ocean Wildlife",
+        "Australian Wildlife",
+        "Arctic Wildlife"
+    ]
+)
+
+# This section allows users to enter how much they want to donate.
+st.header("Make a Donation")
+
+donation = st.number_input(
+    "Enter donation amount ($):",
+    min_value=0,
+    step=5
+)
+
+# This section processes the donation button.
+if st.button("Donate"):
+    if donation > 0:
+        st.success(
+            f"Thank you for donating ${donation} to help wildlife in {location}!"
+        )
+    else:
+        st.warning("Please enter a donation amount.")
+
+# This section creates the search bar feature.
+st.header("Search Animal Projects")
+
+search = st.text_input(
+    "Search for an animal or conservation project:"
+)
+
+if search:
+    st.write(f"Searching for: {search}")
+
+# This section adds simple brand colors using text.
+st.sidebar.title("Animal Advocators")
+st.sidebar.write("🌱 Nature • 🐾 Wildlife • 🌎 Conservation")
+st.sidebar.write("Colors: Green, Brown, Blue, Yellow")

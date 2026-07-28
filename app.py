@@ -108,11 +108,4 @@ st.markdown(f"""
     </div>
     """, unsafe_allow_html=True)
 
-# Footer with color scheme info
-st.markdown("---")
-st.markdown("""
-    <div style="background-color: #4A90A4; padding: 15px; border-radius: 8px; text-align: center; color: white;">
-        <p><strong>🌎 Earthy & Watery Design</strong><br>
-        Colors: Brown (Earth) 🟤 | Blue (Water) 🔵 | Green (Nature) 🟢 | Yellow (Hope) 🟡 | White (Purity) ⚪</p>
-    </div>
-    """, unsafe_allow_html=True)
+

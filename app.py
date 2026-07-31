@@ -21,7 +21,7 @@ st.subheader("Voice the Voiceless")
 # Search bar
 # -----------------------------------
 search = st.text_input(
-    "Search for an endangered animal with region:"
+    "Search for an endangered animal or region:"
 )
 
 # -----------------------------------
@@ -50,7 +50,8 @@ animals = [
         "Status": "Critically Endangered",
         "Latitude": 43.2,
         "Longitude": 131.9,
-        "Description": "One of the rarest big cats in the world."
+        "Description": "One of the rarest big cats in the world.",
+        "Keywords": "leopard leopards cat cats feline felines big cat"
     },
     {
         "Animal": "Javan Rhino",
@@ -58,7 +59,8 @@ animals = [
         "Status": "Critically Endangered",
         "Latitude": -6.75,
         "Longitude": 105.37,
-        "Description": "Only a small population remains in Java."
+        "Description": "Only a small population remains in Java.",
+        "Keywords": "rhino rhinos rhinoceros rhinoceroses"
     },
     {
         "Animal": "Vaquita",
@@ -66,7 +68,8 @@ animals = [
         "Status": "Critically Endangered",
         "Latitude": 31.0,
         "Longitude": -114.0,
-        "Description": "The world's rarest marine mammal."
+        "Description": "The world's rarest marine mammal.",
+        "Keywords": "vaquita porpoise porpoises marine mammal mammals"
     },
     {
         "Animal": "African Forest Elephant",
@@ -74,7 +77,8 @@ animals = [
         "Status": "Critically Endangered",
         "Latitude": 0.5,
         "Longitude": 21.0,
-        "Description": "Threatened by habitat loss and poaching."
+        "Description": "Threatened by habitat loss and poaching.",
+        "Keywords": "elephant elephants"
     },
     {
         "Animal": "Red Wolf",
@@ -82,7 +86,8 @@ animals = [
         "Status": "Critically Endangered",
         "Latitude": 35.5,
         "Longitude": -76.2,
-        "Description": "One of the world's most endangered wolves."
+        "Description": "One of the world's most endangered wolves.",
+        "Keywords": "wolf wolves canine canines"
     },
     {
         "Animal": "Mountain Gorilla",
@@ -90,7 +95,8 @@ animals = [
         "Status": "Endangered",
         "Latitude": -1.4,
         "Longitude": 29.6,
-        "Description": "Lives in the forests of Central Africa."
+        "Description": "Lives in the forests of Central Africa.",
+        "Keywords": "gorilla gorillas ape apes primate primates"
     },
     {
         "Animal": "Blue Whale",
@@ -98,7 +104,8 @@ animals = [
         "Status": "Endangered",
         "Latitude": 36.6,
         "Longitude": -122.0,
-        "Description": "The largest animal ever known."
+        "Description": "The largest animal ever known.",
+        "Keywords": "whale whales marine mammal mammals"
     },
     {
         "Animal": "Giant Panda",
@@ -106,7 +113,8 @@ animals = [
         "Status": "Vulnerable",
         "Latitude": 31.2,
         "Longitude": 103.5,
-        "Description": "Famous for eating bamboo."
+        "Description": "Famous for eating bamboo.",
+        "Keywords": "panda pandas bear bears"
     },
     {
         "Animal": "Snow Leopard",
@@ -114,7 +122,8 @@ animals = [
         "Status": "Vulnerable",
         "Latitude": 34.0,
         "Longitude": 75.0,
-        "Description": "Lives high in the mountains of Asia."
+        "Description": "Lives high in the mountains of Asia.",
+        "Keywords": "leopard leopards snow leopard cat cats feline felines"
     },
     {
         "Animal": "Sea Otter",
@@ -122,20 +131,48 @@ animals = [
         "Status": "Endangered",
         "Latitude": 57.0,
         "Longitude": -152.0,
-        "Description": "Helps keep kelp forests healthy."
+        "Description": "Helps keep kelp forests healthy.",
+        "Keywords": "otter otters marine mammal mammals"
     }
 ]
 
 df = pd.DataFrame(animals)
 
 # -----------------------------------
-# Connect the search bar to the data
+# Improved Search
 # -----------------------------------
-if search.strip() != "":
-    filtered_df = df[
-        df["Animal"].str.contains(search, case=False) |
-        df["Region"].str.contains(search, case=False)
-    ]
+
+def normalize_search(text):
+    text = text.lower().strip()
+    terms = {text}
+
+    if text.endswith("ies"):
+        terms.add(text[:-3] + "y")
+
+    if text.endswith("ves"):
+        terms.add(text[:-3] + "f")
+        terms.add(text[:-3] + "fe")
+
+    if text.endswith("s"):
+        terms.add(text[:-1])
+
+    return list(terms)
+
+if search.strip():
+    search_terms = normalize_search(search)
+
+    def matches(row):
+        searchable = (
+            f"{row['Animal']} "
+            f"{row['Region']} "
+            f"{row['Description']} "
+            f"{row['Keywords']}"
+        ).lower()
+
+        return any(term in searchable for term in search_terms)
+
+    filtered_df = df[df.apply(matches, axis=1)]
+
 else:
     filtered_df = df
 

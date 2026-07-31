@@ -214,4 +214,4 @@ for _, row in filtered_df.iterrows():
 # Footer
 # -----------------------------------
 st.markdown("---")
-st.caption("Animal Advocators • Helping Wild Animals Worldwide 🌎")
+st.caption("Animal Advocators • Helping Wild Animals Worldwide ")

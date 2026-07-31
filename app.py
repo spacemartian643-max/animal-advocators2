@@ -15,13 +15,13 @@ st.set_page_config(
 # Website title
 # -----------------------------------
 st.title("🌿 Animal Advocators")
-st.subheader("Helping Wild Animals Around the World")
+st.subheader("Voice the Voiceless")
 
 # -----------------------------------
 # Search bar
 # -----------------------------------
 search = st.text_input(
-    "Search for an endangered animal or region:"
+    "Search for an endangered animal with region:"
 )
 
 # -----------------------------------
@@ -214,4 +214,4 @@ for _, row in filtered_df.iterrows():
 # Footer
 # -----------------------------------
 st.markdown("---")
-st.caption("Animal Advocators • Helping Wild Animals Worldwide ")
+st.caption("Animal Advocators • Helping Wild Animals Worldwide 🌍")

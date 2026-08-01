@@ -104,7 +104,6 @@ if st.button("Continue as Guest"):
     st.session_state.logged_in = True
     st.session_state.username = "Guest"
 
-    st.switch_page("Home.py")
     import streamlit as st
 
 # -----------------------------------
@@ -145,7 +144,7 @@ if st.sidebar.button("🚪 Log Out"):
     st.session_state.logged_in = False
     st.session_state.username = "Guest"
     st.switch_page("Login.py")
-    
+
 # -----------------------------------
 # HOME PAGE
 # -----------------------------------

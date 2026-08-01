@@ -386,6 +386,51 @@ animals = [
         "Description": "A shy, nocturnal mammal covered in protective scales and threatened by illegal wildlife trade.",
         "Keywords": "pangolin pangolins mammal mammals scales"
     },
+    {
+        "Animal": "Arctic Wolf",
+        "Region": "North Pacific",
+        "Status": "Least Concern",
+        "Latitude": 71.0,
+        "Longitude": -156.0,
+        "Description": "A white-furred subspecies of the gray wolf adapted to the Arctic tundra.",
+        "Keywords": "wolf wolves arctic wolf canine canines"
+    },
+    {
+        "Animal": "Mexican Gray Wolf",
+        "Region": "United States",
+        "Status": "Endangered",
+        "Latitude": 33.5,
+        "Longitude": -109.0,
+        "Description": "The rarest gray wolf subspecies in North America, reintroduced to the southwestern United States.",
+        "Keywords": "wolf wolves mexican gray wolf canine canines"
+    },
+    {
+        "Animal": "Himalayan Wolf",
+        "Region": "Himalayas",
+        "Status": "Vulnerable",
+        "Latitude": 34.5,
+        "Longitude": 78.5,
+        "Description": "An ancient lineage of wolf that lives at high elevations in the Himalayan Mountains.",
+        "Keywords": "wolf wolves himalayan wolf canine canines"
+    },
+    {
+        "Animal": "Eurasian Wolf",
+        "Region": "Russia",
+        "Status": "Least Concern",
+        "Latitude": 58.0,
+        "Longitude": 90.0,
+        "Description": "A widespread gray wolf subspecies found throughout Europe and northern Asia.",
+        "Keywords": "wolf wolves eurasian wolf gray wolf canine canines"
+    },
+    {
+        "Animal": "Alexander Archipelago Wolf",
+        "Region": "United States",
+        "Status": "Near Threatened",
+        "Latitude": 56.5,
+        "Longitude": -133.0,
+        "Description": "A coastal wolf that inhabits the forests and islands of southeastern Alaska.",
+        "Keywords": "wolf wolves alexander archipelago wolf alaska canine canines"
+    },
 ]
 
 df = pd.DataFrame(animals)

@@ -13,49 +13,67 @@ st.set_page_config(
 
 import streamlit as st
 
-# ----------------------------
-# Login / Sign Up Section
-# ----------------------------
-st.markdown(
-    "<h3 style='text-align: right;'>🔑 Account</h3>",
-    unsafe_allow_html=True
+st.set_page_config(
+    page_title="Animal Advocators",
+    page_icon="🦁",
+    layout="centered"
 )
 
-account_option = st.radio(
-    "",
-    ["Log In", "Sign Up"],
-    horizontal=True
+st.title("🌿 Animal Advocators")
+st.subheader("Welcome!")
+
+choice = st.radio(
+    "Choose an option",
+    ["Log In", "Sign Up", "Continue as Guest"]
 )
 
-if account_option == "Log In":
-    st.subheader("Log In")
+# ----------------------------
+# LOG IN
+# ----------------------------
+if choice == "Log In":
 
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
 
     if st.button("Log In"):
         if username and password:
-            st.success(f"Welcome back, {username}!")
+            st.success("Welcome back!")
+            st.switch_page("Home.py")
         else:
             st.error("Please enter your username and password.")
 
-else:
-    st.subheader("Create an Account")
+# ----------------------------
+# SIGN UP
+# ----------------------------
+elif choice == "Sign Up":
 
     username = st.text_input("Username")
     email = st.text_input("Email")
     phone = st.text_input("Phone Number (Optional)")
     password = st.text_input("Password", type="password")
-    confirm_password = st.text_input("Confirm Password", type="password")
+    confirm = st.text_input("Confirm Password", type="password")
 
-    if st.button("Sign Up"):
-        if not username or not email or not password:
-            st.error("Please complete all required fields.")
-        elif password != confirm_password:
+    if st.button("Create Account"):
+
+        if password != confirm:
             st.error("Passwords do not match.")
+
+        elif username == "" or email == "" or password == "":
+            st.error("Please complete all required fields.")
+
         else:
-            st.success(f"🎉 Account created successfully! Welcome, {username}!")
-            
+            st.success("🎉 Account created successfully!")
+            st.switch_page("Home.py")
+
+# ----------------------------
+# GUEST
+# ----------------------------
+else:
+
+    st.write("Continue without creating an account.")
+
+    if st.button("Continue as Guest"):
+        st.switch_page("Home.py")
 # -----------------------------------
 # Website title
 # -----------------------------------

@@ -37,19 +37,6 @@ donation = st.slider(
     step=5
 )
 
-# -----------------------------------
-# Donation section
-# -----------------------------------
-st.header("💚 Donate")
-
-donation = st.slider(
-    "Choose a donation amount ($)",
-    min_value=5,
-    max_value=500,
-    value=25,
-    step=5
-)
-
 st.subheader("Choose a Payment Method")
 
 # Store the selected payment method

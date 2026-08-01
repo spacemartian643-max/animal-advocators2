@@ -10,25 +10,7 @@ st.set_page_config(
     page_icon="🦁",
     layout="wide"
 )
-# -----------------------------------
-# Sidebar Navigation
-# -----------------------------------
-with st.sidebar:
-    selected = option_menu(
-        menu_title="☰ Menu",
-        options=[
-            "Overview",
-            "Endangered Animal Library",
-            "Animal Information"
-        ],
-        icons=[
-            "house",
-            "book",
-            "info-circle"
-        ],
-        menu_icon="list",
-        default_index=0,
-    )
+
 # -----------------------------------
 # Website title
 # -----------------------------------

@@ -527,22 +527,6 @@ if not filtered_df.empty:
     st.pydeck_chart(deck)
 
 # -----------------------------------
-# Show information cards
-# -----------------------------------
-st.header("🐾 Animal Information")
-
-for _, row in filtered_df.iterrows():
-    with st.expander(row["Animal"]):
-        st.write("**Region:**", row["Region"])
-        st.write("**Conservation Status:**", row["Status"])
-        st.write("**About:**", row["Description"])
-
-        if st.button(f"Donate to help {row['Animal']}", key=row["Animal"]):
-            st.success(
-                f"Thank you for supporting the {row['Animal']}!"
-            )
-
-# -----------------------------------
 # Footer
 # -----------------------------------
 st.markdown("---")

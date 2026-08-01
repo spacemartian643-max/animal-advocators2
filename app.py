@@ -10,6 +10,7 @@ st.set_page_config(
     page_icon="🦁",
     layout="wide"
 )
+
 from streamlit_option_menu import option_menu
 
 # ----------------------------
@@ -87,7 +88,7 @@ elif selected == "Endangered Animal Library":
     # map
     # animal information
     # donation buttons
-    
+
 # -----------------------------------
 # Website title
 # -----------------------------------

@@ -11,8 +11,6 @@ st.set_page_config(
     layout="wide"
 )
 
-from streamlit_option_menu import option_menu
-
 # ----------------------------
 # Navigation Menu
 # ----------------------------

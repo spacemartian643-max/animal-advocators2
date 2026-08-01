@@ -105,6 +105,7 @@ if st.button("Continue as Guest"):
     st.session_state.username = "Guest"
 
     st.switch_page("Home.py")
+    
 # -----------------------------------
 # Website title
 # -----------------------------------

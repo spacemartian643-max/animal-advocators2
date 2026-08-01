@@ -189,8 +189,6 @@ Every donation helps protect wildlife and preserve habitats.
 # -----------------------------------
 # ENDANGERED ANIMAL LIBRARY
 # -----------------------------------
-elif page == "📚 Endangered Animal Library":
-
     st.title("📚 Endangered Animal Library")
 animals = [
     {

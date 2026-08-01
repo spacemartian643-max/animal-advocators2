@@ -145,6 +145,25 @@ if st.sidebar.button("🚪 Log Out"):
     st.session_state.logged_in = False
     st.session_state.username = "Guest"
     st.switch_page("Login.py")
+    
+# -----------------------------------
+# HOME PAGE
+# -----------------------------------
+if page == "🏠 Home":
+
+    st.title("🌿 Animal Advocators")
+    st.subheader("Voice the Voiceless")
+
+    st.success(f"Welcome, {st.session_state.username}!")
+
+    st.write("""
+    Animal Advocators is dedicated to protecting endangered
+    wildlife around the world.
+
+    Use the navigation menu on the left to explore
+    endangered species, learn about conservation,
+    and support wildlife through donations.
+    """)
 
 # -----------------------------------
 # OVERVIEW

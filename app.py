@@ -196,6 +196,177 @@ animals = [
         "Longitude": -152.0,
         "Description": "Helps keep kelp forests healthy.",
         "Keywords": "otter otters marine mammal mammals"
+    },
+    {
+        "Animal": "Siberian Tiger",
+        "Region": "Russia / China",
+        "Status": "Endangered",
+        "Latitude": 45.0,
+        "Longitude": 134.0,
+        "Description": "The largest wild cat, threatened by poaching and habitat loss.",
+        "Keywords": "tiger tigers big cat feline"
+    },
+    {
+        "Animal": "Chinese Giant Salamander",
+        "Region": "China",
+        "Status": "Critically Endangered",
+        "Latitude": 31.0,
+        "Longitude": 107.0,
+        "Description": "The world's largest amphibian.",
+        "Keywords": "salamander amphibian amphibians"
+    },
+    {
+        "Animal": "Sumatran Orangutan",
+        "Region": "Indonesia",
+        "Status": "Critically Endangered",
+        "Latitude": 3.3,
+        "Longitude": 98.5,
+        "Description": "Lives only on the island of Sumatra.",
+        "Keywords": "orangutan ape primate"
+    },
+    {
+        "Animal": "Sumatran Tiger",
+        "Region": "Indonesia",
+        "Status": "Critically Endangered",
+        "Latitude": -1.5,
+        "Longitude": 101.5,
+        "Description": "The smallest surviving tiger subspecies.",
+        "Keywords": "tiger big cat feline"
+    },
+    {
+        "Animal": "Hawksbill Sea Turtle",
+        "Region": "Pacific Ocean",
+        "Status": "Critically Endangered",
+        "Latitude": 10.0,
+        "Longitude": -140.0,
+        "Description": "A sea turtle known for its beautiful shell.",
+        "Keywords": "turtle turtles sea turtle marine reptile"
+    },
+    {
+        "Animal": "North Pacific Right Whale",
+        "Region": "North Pacific",
+        "Status": "Endangered",
+        "Latitude": 55.0,
+        "Longitude": -160.0,
+        "Description": "One of the rarest whale species in the world.",
+        "Keywords": "whale whales marine mammal"
+    },
+    {
+        "Animal": "California Condor",
+        "Region": "United States",
+        "Status": "Critically Endangered",
+        "Latitude": 36.5,
+        "Longitude": -118.5,
+        "Description": "North America's largest flying bird.",
+        "Keywords": "condor bird birds vulture"
+    },
+    {
+        "Animal": "Florida Panther",
+        "Region": "United States",
+        "Status": "Endangered",
+        "Latitude": 26.2,
+        "Longitude": -81.0,
+        "Description": "A rare cougar found in southern Florida.",
+        "Keywords": "panther cougar mountain lion cat feline"
+    },
+    {
+        "Animal": "Bonobo",
+        "Region": "Central Africa",
+        "Status": "Endangered",
+        "Latitude": -2.0,
+        "Longitude": 23.0,
+        "Description": "A great ape found only in the Democratic Republic of the Congo.",
+        "Keywords": "bonobo ape primate chimpanzee"
+    },
+    {
+        "Animal": "Okapi",
+        "Region": "Central Africa",
+        "Status": "Endangered",
+        "Latitude": 2.5,
+        "Longitude": 28.5,
+        "Description": "A unique relative of the giraffe found in Congo.",
+        "Keywords": "okapi giraffe mammal"
+    },
+    {
+        "Animal": "Golden Monkey",
+        "Region": "Rwanda / Uganda",
+        "Status": "Endangered",
+        "Latitude": -1.5,
+        "Longitude": 29.6,
+        "Description": "A colorful monkey living in the Virunga Mountains.",
+        "Keywords": "monkey monkeys primate"
+    },
+    {
+        "Animal": "Black Rhinoceros",
+        "Region": "Rwanda",
+        "Status": "Critically Endangered",
+        "Latitude": -1.9,
+        "Longitude": 30.1,
+        "Description": "A rhinoceros threatened by illegal poaching.",
+        "Keywords": "rhino rhinoceros"
+    },
+    {
+        "Animal": "Snowy Owl",
+        "Region": "North Pacific",
+        "Status": "Vulnerable",
+        "Latitude": 60.0,
+        "Longitude": -150.0,
+        "Description": "A large white owl adapted to cold climates.",
+        "Keywords": "owl bird birds"
+    },
+    {
+        "Animal": "Pallas's Cat",
+        "Region": "Himalayas",
+        "Status": "Near Threatened",
+        "Latitude": 35.5,
+        "Longitude": 78.0,
+        "Description": "A small wild cat with thick fur for mountain climates.",
+        "Keywords": "cat feline wildcat"
+    },
+    {
+        "Animal": "Red Panda",
+        "Region": "Himalayas",
+        "Status": "Endangered",
+        "Latitude": 27.8,
+        "Longitude": 88.2,
+        "Description": "A tree-dwelling mammal known for its reddish fur.",
+        "Keywords": "red panda panda bear"
+    },
+    {
+        "Animal": "Whale Shark",
+        "Region": "Pacific Ocean",
+        "Status": "Endangered",
+        "Latitude": 15.0,
+        "Longitude": -145.0,
+        "Description": "The largest fish species in the world.",
+        "Keywords": "shark sharks fish whale shark"
+    },
+    {
+        "Animal": "Manta Ray",
+        "Region": "Pacific Ocean",
+        "Status": "Vulnerable",
+        "Latitude": 12.0,
+        "Longitude": -150.0,
+        "Description": "A graceful giant ray threatened by fishing.",
+        "Keywords": "ray manta ray fish"
+    },
+    {
+        "Animal": "Guadalupe Fur Seal",
+        "Region": "Gulf of California",
+        "Status": "Endangered",
+        "Latitude": 29.0,
+        "Longitude": -113.0,
+        "Description": "A marine mammal native to the eastern Pacific.",
+        "Keywords": "seal seals marine mammal"
+    },
+    {
+        "Animal": "Totoaba",
+        "Region": "Gulf of California",
+        "Status": "Critically Endangered",
+        "Latitude": 30.8,
+        "Longitude": -114.2,
+        "Description": "A large fish threatened by illegal fishing.",
+        "Keywords": "fish totoaba"
     }
 ]
 

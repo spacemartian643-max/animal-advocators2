@@ -595,6 +595,10 @@ if st.session_state.payment_method:
             if gift_code:
                 st.success(
                     f"🎉 Thank you for donating ${donation} using {st.session_state.payment_method}!"
+                    st.subheader("1. Balloons / Snow : celebrate a win")
+c1, c2 = st.columns(2)
+if c1.button("🎈 Balloons"):
+    st.balloons()
                 )
             else:
                 st.error("Please enter your gift card code.")
@@ -602,6 +606,10 @@ if st.session_state.payment_method:
             if card_number and card_name and expiry and cvv:
                 st.success(
                     f"🎉 Thank you for donating ${donation} using {st.session_state.payment_method}!"
+                    st.subheader("1. Balloons / Snow : celebrate a win")
+c1, c2 = st.columns(2)
+if c1.button("🎈 Balloons"):
+    st.balloons()
                 )
             else:
                 st.error("Please complete all payment information.")

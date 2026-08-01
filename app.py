@@ -13,6 +13,185 @@ st.set_page_config(
     layout="centered"
 )
 
+import streamlit as st
+
+st.set_page_config(page_title="Animal Advocators", layout="centered")
+
+st.markdown("""
+<style>
+body{
+    background:#f5f5f5;
+}
+
+.logo-box{
+    width:520px;
+    height:520px;
+    margin:auto;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div class="logo-box">
+
+<svg viewBox="0 0 520 520" width="520" height="520">
+
+    <!-- Background -->
+    <defs>
+
+        <radialGradient id="bg" cx="50%" cy="45%">
+            <stop offset="0%" stop-color="#c8f5ff"/>
+            <stop offset="100%" stop-color="#62c8ff"/>
+        </radialGradient>
+
+        <linearGradient id="ribbon" x1="0%" x2="100%">
+            <stop offset="0%" stop-color="#b8e58f"/>
+            <stop offset="100%" stop-color="#9de69b"/>
+        </linearGradient>
+
+    </defs>
+
+    <rect
+        x="0"
+        y="0"
+        width="520"
+        height="520"
+        rx="35"
+        fill="url(#bg)"
+    />
+
+    <!-- TOP RIBBON -->
+
+    <polygon
+        points="30,90 120,40 150,120 70,160"
+        fill="#b8d98a"
+        opacity="0.8"
+    />
+
+    <polygon
+        points="490,90 400,40 370,120 450,160"
+        fill="#b8d98a"
+        opacity="0.8"
+    />
+
+    <path
+        d="
+        M110 60
+        Q260 20 410 60
+        L390 135
+        Q260 95 130 135
+        Z"
+        fill="url(#ribbon)"
+    />
+
+    <!-- Bottom ribbon -->
+
+    <polygon
+        points="20,470 110,405 150,500 55,515"
+        fill="#b8d98a"
+        opacity="0.8"
+    />
+
+    <polygon
+        points="500,470 410,405 370,500 465,515"
+        fill="#b8d98a"
+        opacity="0.8"
+    />
+
+    <path
+        d="
+        M110 430
+        Q260 470 410 430
+        L435 500
+        Q260 540 85 500
+        Z"
+        fill="url(#ribbon)"
+    />
+
+    <!-- Title -->
+
+    <text
+        x="260"
+        y="112"
+        text-anchor="middle"
+        font-size="58"
+        font-weight="bold"
+        fill="#6b5148"
+        font-family="Arial">
+
+        Animal
+
+    </text>
+
+    <text
+        x="260"
+        y="503"
+        text-anchor="middle"
+        font-size="56"
+        font-weight="bold"
+        fill="#6b5148"
+        font-family="Arial">
+
+        Advocators
+
+    </text>
+
+    <!-- Paw function recreated manually -->
+
+    <!-- Left Paw -->
+
+    <ellipse cx="170" cy="292" rx="18" ry="28"
+        fill="#5b2f22" stroke="#6f3d23" stroke-width="4"/>
+
+    <ellipse cx="208" cy="286" rx="18" ry="28"
+        fill="#5b2f22" stroke="#6f3d23" stroke-width="4"/>
+
+    <ellipse cx="240" cy="318" rx="18" ry="28"
+        fill="#5b2f22" stroke="#6f3d23" stroke-width="4"/>
+
+    <ellipse cx="140" cy="330" rx="18" ry="28"
+        fill="#5b2f22" stroke="#6f3d23" stroke-width="4"/>
+
+    <path
+        d="
+        M150 370
+        Q190 330 230 370
+        Q245 405 195 405
+        Q145 405 150 370
+        "
+        fill="#5b2f22"
+        stroke="#6f3d23"
+        stroke-width="4"/>
+
+    <!-- Right Paw -->
+
+    <ellipse cx="340" cy="225" rx="18" ry="28"
+        fill="#5b2f22" stroke="#6f3d23" stroke-width="4"/>
+
+    <ellipse cx="375" cy="195" rx="18" ry="28"
+        fill="#5b2f22" stroke="#6f3d23" stroke-width="4"/>
+
+    <ellipse cx="412" cy="200" rx="18" ry="28"
+        fill="#5b2f22" stroke="#6f3d23" stroke-width="4"/>
+
+    <ellipse cx="435" cy="235" rx="18" ry="28"
+        fill="#5b2f22" stroke="#6f3d23" stroke-width="4"/>
+
+    <path
+        d="
+        M345 265
+        Q385 230 425 270
+        Q435 300 390 300
+        Q345 300 345 265
+        "
+        fill="#5b2f22"
+        stroke="#6f3d23"
+        stroke-width="4"/>
+
+</svg>
+
+</div>
+""", unsafe_allow_html=True)
 # -----------------------------
 # Initialize Session State
 # -----------------------------

@@ -520,12 +520,6 @@ animals = [
 df = pd.DataFrame(animals)
 
 # -----------------------------------
-# Website title
-# -----------------------------------
-st.title("🌿 Animal Advocators")
-st.subheader("Voice the Voiceless")
-
-# -----------------------------------
 # Search bar
 # -----------------------------------
 search = st.text_input(

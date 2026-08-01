@@ -2,78 +2,109 @@ import streamlit as st
 import pandas as pd
 import pydeck as pdk
 
-# -----------------------------------
-# This sets up the page.
-# -----------------------------------
-st.set_page_config(
-    page_title="Animal Advocators",
-    page_icon="🦁",
-    layout="wide"
-)
-
 import streamlit as st
 
+# -----------------------------
+# Page Configuration
+# -----------------------------
 st.set_page_config(
-    page_title="Animal Advocators",
+    page_title="Animal Advocators - Login",
     page_icon="🦁",
     layout="centered"
 )
 
+# -----------------------------
+# Initialize Session State
+# -----------------------------
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+if "username" not in st.session_state:
+    st.session_state.username = "Guest"
+
+# -----------------------------
+# Title
+# -----------------------------
 st.title("🌿 Animal Advocators")
-st.subheader("Welcome!")
+st.subheader("Voice the Voiceless")
+st.write("Please log in, create an account, or continue as a guest.")
 
-choice = st.radio(
-    "Choose an option",
-    ["Log In", "Sign Up", "Continue as Guest"]
-)
+# -----------------------------
+# Login / Sign Up Tabs
+# -----------------------------
+login_tab, signup_tab = st.tabs(["🔑 Log In", "📝 Sign Up"])
 
-# ----------------------------
+# -----------------------------
 # LOG IN
-# ----------------------------
-if choice == "Log In":
+# -----------------------------
+with login_tab:
 
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    login_username = st.text_input("Username", key="login_user")
+    login_password = st.text_input(
+        "Password",
+        type="password",
+        key="login_pass"
+    )
 
     if st.button("Log In"):
-        if username and password:
-            st.success("Welcome back!")
+
+        if login_username and login_password:
+            st.session_state.logged_in = True
+            st.session_state.username = login_username
+
+            st.success(f"Welcome back, {login_username}!")
+
             st.switch_page("Home.py")
+
         else:
-            st.error("Please enter your username and password.")
+            st.error("Please enter both username and password.")
 
-# ----------------------------
+# -----------------------------
 # SIGN UP
-# ----------------------------
-elif choice == "Sign Up":
+# -----------------------------
+with signup_tab:
 
-    username = st.text_input("Username")
-    email = st.text_input("Email")
+    username = st.text_input("Create Username")
+    email = st.text_input("Email Address")
     phone = st.text_input("Phone Number (Optional)")
-    password = st.text_input("Password", type="password")
-    confirm = st.text_input("Confirm Password", type="password")
+    password = st.text_input(
+        "Create Password",
+        type="password"
+    )
+    confirm = st.text_input(
+        "Confirm Password",
+        type="password"
+    )
 
     if st.button("Create Account"):
 
-        if password != confirm:
-            st.error("Passwords do not match.")
-
-        elif username == "" or email == "" or password == "":
+        if username == "" or email == "" or password == "":
             st.error("Please complete all required fields.")
 
+        elif password != confirm:
+            st.error("Passwords do not match.")
+
         else:
+            st.session_state.logged_in = True
+            st.session_state.username = username
+
             st.success("🎉 Account created successfully!")
+
             st.switch_page("Home.py")
 
-# ----------------------------
-# GUEST
-# ----------------------------
-else:
+# -----------------------------
+# Continue as Guest
+# -----------------------------
+st.markdown("---")
 
-    st.write("Continue without creating an account.")
+st.write("Don't want to make an account?")
 
-    if st.button("Continue as Guest"):
-        st.switch_page("Home.py")
+if st.button("Continue as Guest"):
+
+    st.session_state.logged_in = True
+    st.session_state.username = "Guest"
+
+    st.switch_page("Home.py")
 # -----------------------------------
 # Website title
 # -----------------------------------

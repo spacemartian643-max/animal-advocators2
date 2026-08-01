@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import pydeck as pdk
+import option_menu
 
 # -----------------------------------
 # This sets up the page.

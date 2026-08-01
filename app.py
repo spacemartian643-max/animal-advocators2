@@ -141,7 +141,7 @@ st.sidebar.write(f"Logged in as: **{st.session_state.username}**")
 
 if st.sidebar.button("🚪 Log Out"):
     st.session_state.logged_in = False
-    st.session_state.username = "Guest"
+    st.session_state.username = "username"
     st.switch_page("Login.py")
 
 # -----------------------------------
@@ -166,7 +166,6 @@ if page == "🏠 Home":
 # -----------------------------------
 # OVERVIEW
 # -----------------------------------
-elif page == "🌎 Overview":
 
     st.title("🌎 Overview")
 

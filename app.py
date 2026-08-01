@@ -34,83 +34,139 @@ st.write("Please log in, create an account, or continue as a guest.")
 # -----------------------------
 login_tab, signup_tab = st.tabs(["🔑 Log In", "📝 Sign Up"])
 
-# -----------------------------
-# LOG IN
-# -----------------------------
-with login_tab:
+# -----------------------------------
+# LOGIN PAGE
+# -----------------------------------
 
-    login_username = st.text_input("Username", key="login_user")
-    login_password = st.text_input(
-        "Password",
-        type="password",
-        key="login_pass"
-    )
+if st.session_state.page == "login":
 
-    if st.button("Log In"):
+    st.markdown("<br>", unsafe_allow_html=True)
 
-        if login_username and login_password:
-            st.session_state.logged_in = True
-            st.session_state.username = login_username
+    col1, col2, col3 = st.columns([1,2,1])
 
-            st.success(f"Welcome back, {login_username}!")
+    with col2:
 
-            st.switch_page("Home.py")
+        st.image("logo.png", width=220)
+
+        st.title("Animal Advocators")
+
+        st.write("### Welcome!")
+
+        option = st.radio(
+            "Choose an option",
+            (
+                "Log In",
+                "Sign Up",
+                "Continue as Guest"
+            )
+        )
+
+        st.divider()
+
+        if option == "Log In":
+
+            username = st.text_input("Username")
+
+            password = st.text_input(
+                "Password",
+                type="password"
+            )
+
+            if st.button("Log In", use_container_width=True):
+
+                st.session_state.username = username
+                st.session_state.page = "loading"
+                st.rerun()
+
+        elif option == "Sign Up":
+
+            username = st.text_input("Create Username")
+
+            email = st.text_input("Email")
+
+            password = st.text_input(
+                "Create Password",
+                type="password"
+            )
+
+            confirm = st.text_input(
+                "Confirm Password",
+                type="password"
+            )
+
+            if st.button("Create Account", use_container_width=True):
+
+                st.session_state.username = username
+                st.session_state.page = "loading"
+                st.rerun()
 
         else:
-            st.error("Please enter both username and password.")
 
-# -----------------------------
-# SIGN UP
-# -----------------------------
-with signup_tab:
+            st.write("Continue without creating an account.")
 
-    username = st.text_input("Create Username")
-    email = st.text_input("Email Address")
-    phone = st.text_input("Phone Number (Optional)")
-    password = st.text_input(
-        "Create Password",
-        type="password"
-    )
-    confirm = st.text_input(
-        "Confirm Password",
-        type="password"
-    )
+            if st.button(
+                "Continue as Guest",
+                use_container_width=True
+            ):
 
-    if st.button("Create Account"):
-
-        if username == "" or email == "" or password == "":
-            st.error("Please complete all required fields.")
-
-        elif password != confirm:
-            st.error("Passwords do not match.")
-
-        else:
-            st.session_state.logged_in = True
-            st.session_state.username = username
-
-            st.success("🎉 Account created successfully!")
-
-            st.switch_page("Home.py")
-
-# -----------------------------
-# Continue as Guest
-# -----------------------------
-st.markdown("---")
-
-st.write("Don't want to make an account?")
-
-if st.button("Continue as Guest"):
-
-    st.session_state.logged_in = True
-    st.session_state.username = "Guest"
-
-    import streamlit as st
+                st.session_state.username = "Guest"
+                st.session_state.page = "loading"
+                st.rerun()
 
 # -----------------------------------
-# Check if the user is logged in
+# LOADING PAGE
 # -----------------------------------
-if "logged_in" not in st.session_state:
-    st.switch_page("Login.py")
+
+elif st.session_state.page == "loading":
+
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([1,2,1])
+
+    with col2:
+
+        st.image("logo.png", width=220)
+
+        st.title("Loading...")
+
+        progress = st.progress(0)
+
+        for i in range(101):
+            time.sleep(0.02)
+            progress.progress(i)
+
+        st.success("Welcome!")
+
+        time.sleep(1)
+
+        st.session_state.page = "home"
+        st.rerun()
+
+# -----------------------------------
+# HOME PAGE
+# -----------------------------------
+
+elif st.session_state.page == "home":
+
+    st.sidebar.image("logo.png", width=120)
+
+    st.sidebar.title("Animal Advocators")
+
+    st.sidebar.write(
+        f"Logged in as **{st.session_state.username}**"
+    )
+
+    if st.sidebar.button("Log Out"):
+
+        st.session_state.page = "login"
+        st.session_state.username = "Guest"
+        st.rerun()
+
+    st.title("🏠 Home")
+
+    st.write(
+        f"Welcome, **{st.session_state.username}**!"
+    )
 
 # -----------------------------------
 # Sidebar Navigation

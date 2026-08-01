@@ -72,10 +72,6 @@ with col6:
     if st.button("🎁 Mastercard Gift Card", use_container_width=True):
         st.session_state.payment_method = "Mastercard Gift Card"
 
-with col7:
-    if st.button("🎁 Amazon Gift Card", use_container_width=True):
-        st.session_state.payment_method = "Amazon Gift Card"
-
 # Show payment form after a method is selected
 if st.session_state.payment_method:
 

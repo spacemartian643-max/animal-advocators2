@@ -12,48 +12,6 @@ st.set_page_config(
 )
 
 # -----------------------------------
-# Page Configuration
-# -----------------------------------
-
-st.set_page_config(
-    page_title="Animal Advocators",
-    page_icon="🦁",
-    layout="wide"
-)
-
-
-# -----------------------------------
-# Sidebar Hamburger Navigation
-# -----------------------------------
-
-with st.sidebar:
-
-    selected = option_menu(
-        "🌿 Animal Advocators",
-        [
-            "Home",
-            "Overview",
-            "Animal Information",
-            "Donate",
-            "Payment",
-            "Login",
-            "Sign Up"
-        ],
-        icons=[
-            "house",
-            "book",
-            "paw",
-            "heart",
-            "credit-card",
-            "box-arrow-in-right",
-            "person-plus"
-        ],
-        menu_icon="list",
-        default_index=0
-    )
-
-
-# -----------------------------------
 # Website Animal Database
 # -----------------------------------
 
@@ -213,7 +171,7 @@ def normalize_search(text):
 
 
     return list(terms)
-    
+
 # -----------------------------------
 # Website title
 # -----------------------------------

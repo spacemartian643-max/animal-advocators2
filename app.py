@@ -367,7 +367,25 @@ animals = [
         "Longitude": -114.2,
         "Description": "A large fish threatened by illegal fishing.",
         "Keywords": "fish totoaba"
-    }
+    },
+    {
+        "Animal": "Saiga Antelope",
+        "Region": "Russia",
+        "Status": "Critically Endangered",
+        "Latitude": 49.5,
+        "Longitude": 46.0,
+        "Description": "A distinctive antelope known for its large, flexible nose. It faces threats from poaching and disease.",
+        "Keywords": "saiga antelope antelopes mammal mammals"
+    },
+    {
+        "Animal": "Chinese Pangolin",
+        "Region": "China",
+        "Status": "Critically Endangered",
+        "Latitude": 27.5,
+        "Longitude": 112.5,
+        "Description": "A shy, nocturnal mammal covered in protective scales and threatened by illegal wildlife trade.",
+        "Keywords": "pangolin pangolins mammal mammals scales"
+    },
 ]
 
 df = pd.DataFrame(animals)

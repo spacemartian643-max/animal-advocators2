@@ -21,7 +21,7 @@ st.subheader("Voice the Voiceless")
 # Search bar
 # -----------------------------------
 search = st.text_input(
-    "Search for an endangered animal or region:"
+    "🔎 Search for an endangered animal or region:"
 )
 
 # -----------------------------------

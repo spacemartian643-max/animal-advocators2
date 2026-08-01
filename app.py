@@ -132,7 +132,6 @@ page = st.sidebar.radio(
         "🏠 Home",
         "🌎 Overview",
         "📚 Endangered Animal Library",
-        "🐾 Animal Information"
     ]
 )
 

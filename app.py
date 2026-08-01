@@ -10,7 +10,45 @@ st.set_page_config(
     page_icon="🦁",
     layout="wide"
 )
+# -----------------------------------
+# Sidebar Navigation
+# -----------------------------------
+with st.sidebar:
+    selected = option_menu(
+        menu_title="☰ Menu",
+        options=[
+            "Overview",
+            "Endangered Animal Library",
+            "Animal Information"
+        ],
+        icons=[
+            "house",
+            "book",
+            "info-circle"
+        ],
+        menu_icon="list",
+        default_index=0,
+    )
+    if selected == "Overview":
+    st.title("🌿 Animal Advocators")
+    st.subheader("Voice the Voiceless")
 
+    st.markdown("""
+### Welcome to Animal Advocators!
+
+Animal Advocators is dedicated to protecting endangered species across the globe.
+
+### Our Mission
+Our mission is to educate people about endangered animals, encourage conservation efforts, and inspire everyone to make a difference.
+
+### What You Can Do Here
+- 🔍 Search for endangered animals.
+- 📚 Learn about their conservation status.
+- 🗺️ Explore where they live on an interactive map.
+- 💚 Donate to support wildlife conservation.
+
+Every donation helps protect wildlife and preserve habitats for future generations.
+""")
 # -----------------------------------
 # Website title
 # -----------------------------------

@@ -105,7 +105,116 @@ if st.button("Continue as Guest"):
     st.session_state.username = "Guest"
 
     st.switch_page("Home.py")
-    
+    import streamlit as st
+
+# -----------------------------------
+# Check if the user is logged in
+# -----------------------------------
+if "logged_in" not in st.session_state:
+    st.switch_page("Login.py")
+
+# -----------------------------------
+# Page Configuration
+# -----------------------------------
+st.set_page_config(
+    page_title="Animal Advocators",
+    page_icon="🦁",
+    layout="wide"
+)
+
+# -----------------------------------
+# Sidebar Navigation
+# -----------------------------------
+st.sidebar.title("☰ Navigation")
+
+page = st.sidebar.radio(
+    "Go to",
+    [
+        "🏠 Home",
+        "🌎 Overview",
+        "📚 Endangered Animal Library",
+        "🐾 Animal Information"
+    ]
+)
+
+st.sidebar.markdown("---")
+
+st.sidebar.write(f"Logged in as: **{st.session_state.username}**")
+
+if st.sidebar.button("🚪 Log Out"):
+    st.session_state.logged_in = False
+    st.session_state.username = "Guest"
+    st.switch_page("Login.py")
+
+# -----------------------------------
+# HOME PAGE
+# -----------------------------------
+if page == "🏠 Home":
+
+    st.title("🌿 Animal Advocators")
+    st.subheader("Voice the Voiceless")
+
+    st.success(f"Welcome, {st.session_state.username}!")
+
+    st.write("""
+    Animal Advocators is dedicated to protecting endangered
+    wildlife around the world.
+
+    Use the navigation menu on the left to explore
+    endangered species, learn about conservation,
+    and support wildlife through donations.
+    """)
+
+# -----------------------------------
+# OVERVIEW
+# -----------------------------------
+elif page == "🌎 Overview":
+
+    st.title("🌎 Overview")
+
+    st.markdown("""
+### Our Mission
+
+Animal Advocators raises awareness for endangered
+animals and supports conservation efforts.
+
+### What You Can Do
+
+- 🔍 Search for endangered animals
+- 📚 Learn about endangered species
+- 🗺️ View animals on an interactive map
+- 💚 Donate to conservation projects
+
+Every donation helps protect wildlife and preserve habitats.
+""")
+
+# -----------------------------------
+# ENDANGERED ANIMAL LIBRARY
+# -----------------------------------
+elif page == "📚 Endangered Animal Library":
+
+    st.title("📚 Endangered Animal Library")
+
+    st.info(
+        "Paste your existing Endangered Animal Library code here.\n\n"
+        "This includes:\n"
+        "- Search bar\n"
+        "- Animal DataFrame\n"
+        "- Interactive map\n"
+        "- Donation section"
+    )
+
+# -----------------------------------
+# ANIMAL INFORMATION
+# -----------------------------------
+elif page == "🐾 Animal Information":
+
+    st.title("🐾 Animal Information")
+
+    st.info(
+        "Paste your existing Animal Information section here.\n\n"
+        "This includes your expandable animal cards."
+    )
 # -----------------------------------
 # Website title
 # -----------------------------------

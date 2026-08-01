@@ -167,8 +167,8 @@ if page == "🏠 Home":
 # OVERVIEW
 # -----------------------------------
 
-elif page == "📚 Endangered Animal Library":
-    
+elif page == "🌎 Overview":
+
     st.title("🌎 Overview")
 
     st.markdown("""

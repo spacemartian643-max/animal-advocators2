@@ -192,122 +192,6 @@ Every donation helps protect wildlife and preserve habitats.
 elif page == "📚 Endangered Animal Library":
 
     st.title("📚 Endangered Animal Library")
-
-    st.info(
-        "Paste your existing Endangered Animal Library code here.\n\n"
-        "This includes:\n"
-        "- Search bar\n"
-        "- Animal DataFrame\n"
-        "- Interactive map\n"
-        "- Donation section"
-    )
-
-# -----------------------------------
-# ANIMAL INFORMATION
-# -----------------------------------
-elif page == "🐾 Animal Information":
-
-    st.title("🐾 Animal Information")
-
-    st.info(
-        "Paste your existing Animal Information section here.\n\n"
-        "This includes your expandable animal cards."
-    )
-# -----------------------------------
-# Website title
-# -----------------------------------
-st.title("🌿 Animal Advocators")
-st.subheader("Voice the Voiceless")
-
-# -----------------------------------
-# Search bar
-# -----------------------------------
-search = st.text_input(
-    "🔎 Search for an endangered animal or region:"
-)
-
-# -----------------------------------
-# Donation section
-# -----------------------------------
-st.header("💚 Donation")
-
-donation = st.slider(
-    "Choose a donation amount ($)",
-    min_value=5,
-    max_value=500,
-    value=25,
-    step=5
-)
-
-st.subheader("Choose a Payment Method")
-
-# Store the selected payment method
-if "payment_method" not in st.session_state:
-    st.session_state.payment_method = None
-
-# Create payment boxes
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    if st.button("💳 Visa", use_container_width=True):
-        st.session_state.payment_method = "Visa"
-
-with col2:
-    if st.button("💳 Mastercard", use_container_width=True):
-        st.session_state.payment_method = "Mastercard"
-
-with col3:
-    if st.button("💳 American Express", use_container_width=True):
-        st.session_state.payment_method = "American Express"
-
-with col4:
-    if st.button("💳 Chase", use_container_width=True):
-        st.session_state.payment_method = "Chase Credit Card"
-
-col5, col6, col7 = st.columns(3)
-
-with col5:
-    if st.button("🎁 Visa Gift Card", use_container_width=True):
-        st.session_state.payment_method = "Visa Gift Card"
-
-with col6:
-    if st.button("🎁 Mastercard Gift Card", use_container_width=True):
-        st.session_state.payment_method = "Mastercard Gift Card"
-
-# Show payment form after a method is selected
-if st.session_state.payment_method:
-
-    st.markdown("---")
-    st.subheader(f"Payment - {st.session_state.payment_method}")
-
-    if "Gift Card" in st.session_state.payment_method:
-        gift_code = st.text_input("Gift Card Code")
-    else:
-        card_number = st.text_input("Card Number")
-        card_name = st.text_input("Name on Card")
-        expiry = st.text_input("Expiration Date (MM/YY)")
-        cvv = st.text_input("CVV", type="password")
-
-    if st.button("Complete Donation"):
-
-        if "Gift Card" in st.session_state.payment_method:
-            if gift_code:
-                st.success(
-                    f"🎉 Thank you for donating ${donation} using {st.session_state.payment_method}!"
-                )
-            else:
-                st.error("Please enter your gift card code.")
-        else:
-            if card_number and card_name and expiry and cvv:
-                st.success(
-                    f"🎉 Thank you for donating ${donation} using {st.session_state.payment_method}!"
-                )
-            else:
-                st.error("Please complete all payment information.")
-
-# -----------------------------------
-# Endangered animal library
-# -----------------------------------
 animals = [
     {
         "Animal": "Amur Leopard",
@@ -636,6 +520,110 @@ animals = [
 ]
 
 df = pd.DataFrame(animals)
+    )
+
+# -----------------------------------
+# ANIMAL INFORMATION
+# -----------------------------------
+elif page == "🐾 Animal Information":
+
+    st.title("🐾 Animal Information")
+
+    st.info(
+        "Paste your existing Animal Information section here.\n\n"
+        "This includes your expandable animal cards."
+    )
+# -----------------------------------
+# Website title
+# -----------------------------------
+st.title("🌿 Animal Advocators")
+st.subheader("Voice the Voiceless")
+
+# -----------------------------------
+# Search bar
+# -----------------------------------
+search = st.text_input(
+    "🔎 Search for an endangered animal or region:"
+)
+
+# -----------------------------------
+# Donation section
+# -----------------------------------
+st.header("💚 Donation")
+
+donation = st.slider(
+    "Choose a donation amount ($)",
+    min_value=5,
+    max_value=500,
+    value=25,
+    step=5
+)
+
+st.subheader("Choose a Payment Method")
+
+# Store the selected payment method
+if "payment_method" not in st.session_state:
+    st.session_state.payment_method = None
+
+# Create payment boxes
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    if st.button("💳 Visa", use_container_width=True):
+        st.session_state.payment_method = "Visa"
+
+with col2:
+    if st.button("💳 Mastercard", use_container_width=True):
+        st.session_state.payment_method = "Mastercard"
+
+with col3:
+    if st.button("💳 American Express", use_container_width=True):
+        st.session_state.payment_method = "American Express"
+
+with col4:
+    if st.button("💳 Chase", use_container_width=True):
+        st.session_state.payment_method = "Chase Credit Card"
+
+col5, col6, col7 = st.columns(3)
+
+with col5:
+    if st.button("🎁 Visa Gift Card", use_container_width=True):
+        st.session_state.payment_method = "Visa Gift Card"
+
+with col6:
+    if st.button("🎁 Mastercard Gift Card", use_container_width=True):
+        st.session_state.payment_method = "Mastercard Gift Card"
+
+# Show payment form after a method is selected
+if st.session_state.payment_method:
+
+    st.markdown("---")
+    st.subheader(f"Payment - {st.session_state.payment_method}")
+
+    if "Gift Card" in st.session_state.payment_method:
+        gift_code = st.text_input("Gift Card Code")
+    else:
+        card_number = st.text_input("Card Number")
+        card_name = st.text_input("Name on Card")
+        expiry = st.text_input("Expiration Date (MM/YY)")
+        cvv = st.text_input("CVV", type="password")
+
+    if st.button("Complete Donation"):
+
+        if "Gift Card" in st.session_state.payment_method:
+            if gift_code:
+                st.success(
+                    f"🎉 Thank you for donating ${donation} using {st.session_state.payment_method}!"
+                )
+            else:
+                st.error("Please enter your gift card code.")
+        else:
+            if card_number and card_name and expiry and cvv:
+                st.success(
+                    f"🎉 Thank you for donating ${donation} using {st.session_state.payment_method}!"
+                )
+            else:
+                st.error("Please complete all payment information.")
 
 # -----------------------------------
 # Improved Search

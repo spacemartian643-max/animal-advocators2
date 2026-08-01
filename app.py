@@ -2,7 +2,9 @@ import streamlit as st
 import pandas as pd
 import pydeck as pdk
 
+
 import streamlit as st
+
 
 # -----------------------------
 # Page Configuration
@@ -13,14 +15,17 @@ st.set_page_config(
     layout="centered"
 )
 
+
 # -----------------------------
 # Initialize Session State
 # -----------------------------
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
+
 if "username" not in st.session_state:
     st.session_state.username = "Guest"
+
 
 # -----------------------------
 # Title
@@ -29,15 +34,18 @@ st.title("🌿 Animal Advocators")
 st.subheader("Voice the Voiceless")
 st.write("Please log in, create an account, or continue as a guest.")
 
+
 # -----------------------------
 # Login / Sign Up Tabs
 # -----------------------------
 login_tab, signup_tab = st.tabs(["🔑 Log In", "📝 Sign Up"])
 
+
 # -----------------------------
 # LOG IN
 # -----------------------------
 with login_tab:
+
 
     login_username = st.text_input("Username", key="login_user")
     login_password = st.text_input(
@@ -46,23 +54,30 @@ with login_tab:
         key="login_pass"
     )
 
+
     if st.button("Log In"):
+
 
         if login_username and login_password:
             st.session_state.logged_in = True
             st.session_state.username = login_username
 
+
             st.success(f"Welcome back, {login_username}!")
+
 
             st.switch_page("Home.py")
 
+
         else:
             st.error("Please enter both username and password.")
+
 
 # -----------------------------
 # SIGN UP
 # -----------------------------
 with signup_tab:
+
 
     username = st.text_input("Create Username")
     email = st.text_input("Email Address")
@@ -76,41 +91,54 @@ with signup_tab:
         type="password"
     )
 
+
     if st.button("Create Account"):
+
 
         if username == "" or email == "" or password == "":
             st.error("Please complete all required fields.")
 
+
         elif password != confirm:
             st.error("Passwords do not match.")
+
 
         else:
             st.session_state.logged_in = True
             st.session_state.username = username
 
+
             st.success("🎉 Account created successfully!")
 
+
             st.switch_page("Home.py")
+
 
 # -----------------------------
 # Continue as Guest
 # -----------------------------
 st.markdown("---")
 
+
 st.write("Don't want to make an account?")
 
+
 if st.button("Continue as Guest"):
+
 
     st.session_state.logged_in = True
     st.session_state.username = "Guest"
 
+
     import streamlit as st
+
 
 # -----------------------------------
 # Check if the user is logged in
 # -----------------------------------
 if "logged_in" not in st.session_state:
     st.switch_page("Login.py")
+
 
 # -----------------------------------
 # Page Configuration
@@ -121,10 +149,12 @@ st.set_page_config(
     layout="wide"
 )
 
+
 # -----------------------------------
 # Sidebar Navigation
 # -----------------------------------
 st.sidebar.title("☰ Navigation")
+
 
 page = st.sidebar.radio(
     "Go to",
@@ -135,57 +165,74 @@ page = st.sidebar.radio(
     ]
 )
 
+
 st.sidebar.markdown("---")
 
+
 st.sidebar.write(f"Logged in as: **{st.session_state.username}**")
+
 
 if st.sidebar.button("🚪 Log Out"):
     st.session_state.logged_in = False
     st.session_state.username = "username"
     st.switch_page("Login.py")
 
+
 # -----------------------------------
 # HOME PAGE
 # -----------------------------------
 if page == "🏠 Home":
 
+
     st.title("🌿 Animal Advocators")
     st.subheader("Voice the Voiceless")
 
+
     st.success(f"Welcome, {st.session_state.username}!")
+
 
     st.write("""
     Animal Advocators is dedicated to protecting endangered
     wildlife around the world.
+
 
     Use the navigation menu on the left to explore
     endangered species, learn about conservation,
     and support wildlife through donations.
     """)
 
+
 # -----------------------------------
 # OVERVIEW
 # -----------------------------------
 
+
 elif page == "🌎 Overview":
 
+
     st.title("🌎 Overview")
+
 
     st.markdown("""
 ### Our Mission
 
+
 Animal Advocators raises awareness for endangered
 animals and supports conservation efforts.
 
+
 ### What You Can Do
+
 
 - 🔍 Search for endangered animals
 - 📚 Learn about endangered species
 - 🗺️ View animals on an interactive map
 - 💚 Donate to conservation projects
 
+
 Every donation helps protect wildlife and preserve habitats.
 """)
+
 
 # -----------------------------------
 # ENDANGERED ANIMAL LIBRARY
@@ -518,7 +565,9 @@ animals = [
     },
 ]
 
+
 df = pd.DataFrame(animals)
+
 
 # -----------------------------------
 # Search bar
@@ -527,10 +576,12 @@ search = st.text_input(
     "🔎 Search for an endangered animal or region:"
 )
 
+
 # -----------------------------------
 # Donation section
 # -----------------------------------
 st.header("💚 Donation")
+
 
 donation = st.slider(
     "Choose a donation amount ($)",
@@ -540,46 +591,59 @@ donation = st.slider(
     step=5
 )
 
+
 st.subheader("Choose a Payment Method")
+
 
 # Store the selected payment method
 if "payment_method" not in st.session_state:
     st.session_state.payment_method = None
 
+
 # Create payment boxes
 col1, col2, col3, col4 = st.columns(4)
+
 
 with col1:
     if st.button("💳 Visa", use_container_width=True):
         st.session_state.payment_method = "Visa"
 
+
 with col2:
     if st.button("💳 Mastercard", use_container_width=True):
         st.session_state.payment_method = "Mastercard"
+
 
 with col3:
     if st.button("💳 American Express", use_container_width=True):
         st.session_state.payment_method = "American Express"
 
+
 with col4:
     if st.button("💳 Chase", use_container_width=True):
         st.session_state.payment_method = "Chase Credit Card"
 
+
 col5, col6, col7 = st.columns(3)
+
 
 with col5:
     if st.button("🎁 Visa Gift Card", use_container_width=True):
         st.session_state.payment_method = "Visa Gift Card"
 
+
 with col6:
     if st.button("🎁 Mastercard Gift Card", use_container_width=True):
         st.session_state.payment_method = "Mastercard Gift Card"
 
+
 # Show payment form after a method is selected
 if st.session_state.payment_method:
 
+
     st.markdown("---")
     st.subheader(f"Payment - {st.session_state.payment_method}")
+
 
     if "Gift Card" in st.session_state.payment_method:
         gift_code = st.text_input("Gift Card Code")
@@ -589,7 +653,9 @@ if st.session_state.payment_method:
         expiry = st.text_input("Expiration Date (MM/YY)")
         cvv = st.text_input("CVV", type="password")
 
+
     if st.button("Complete Donation"):
+
 
         if "Gift Card" in st.session_state.payment_method:
             if gift_code:
@@ -606,6 +672,7 @@ if st.session_state.payment_method:
             else:
                 st.error("Please complete all payment information.")
 
+
 # -----------------------------------
 # Improved Search
 # -----------------------------------
@@ -613,20 +680,26 @@ def normalize_search(text):
     text = text.lower().strip()
     terms = {text}
 
+
     if text.endswith("ies"):
         terms.add(text[:-3] + "y")
+
 
     if text.endswith("ves"):
         terms.add(text[:-3] + "f")
         terms.add(text[:-3] + "fe")
 
+
     if text.endswith("s"):
         terms.add(text[:-1])
 
+
     return list(terms)
+
 
 if search.strip():
     search_terms = normalize_search(search)
+
 
     def matches(row):
         searchable = (
@@ -636,16 +709,20 @@ if search.strip():
             f"{row['Keywords']}"
         ).lower()
 
+
         return any(term in searchable for term in search_terms)
+
 
     filtered_df = df[df.apply(matches, axis=1)]
 else:
     filtered_df = df
 
+
 # -----------------------------------
 # Display matching animals
 # -----------------------------------
 st.header("📚 Endangered Animal Library")
+
 
 if filtered_df.empty:
     st.warning("No animals were found.")
@@ -657,12 +734,15 @@ else:
         use_container_width=True
     )
 
+
 # -----------------------------------
 # Show the map
 # -----------------------------------
 st.header("🗺️ Endangered Animal Map")
 
+
 if not filtered_df.empty:
+
 
     view_state = pdk.ViewState(
         latitude=float(filtered_df["Latitude"].mean()),
@@ -670,6 +750,7 @@ if not filtered_df.empty:
         zoom=1,
         pitch=0,
     )
+
 
     layer = pdk.Layer(
         "ScatterplotLayer",
@@ -680,6 +761,7 @@ if not filtered_df.empty:
         pickable=True,
     )
 
+
     tooltip = {
         "html": """
         <b>{Animal}</b><br/>
@@ -689,16 +771,21 @@ if not filtered_df.empty:
         """
     }
 
+
     deck = pdk.Deck(
         layers=[layer],
         initial_view_state=view_state,
         tooltip=tooltip,
     )
 
+
     st.pydeck_chart(deck)
+
 
 # -----------------------------------
 # Footer
 # -----------------------------------
 st.markdown("---")
 st.caption("Animal Advocators • Helping Wild Animals Worldwide 🌍")
+
+

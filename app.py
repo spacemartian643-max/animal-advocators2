@@ -113,15 +113,6 @@ if "logged_in" not in st.session_state:
     st.switch_page("Login.py")
 
 # -----------------------------------
-# Page Configuration
-# -----------------------------------
-st.set_page_config(
-    page_title="Animal Advocators",
-    page_icon="🦁",
-    layout="wide"
-)
-
-# -----------------------------------
 # Sidebar Navigation
 # -----------------------------------
 st.sidebar.title("☰ Navigation")

@@ -520,7 +520,6 @@ animals = [
 ]
 
 df = pd.DataFrame(animals)
-    )
 
 # -----------------------------------
 # ANIMAL INFORMATION

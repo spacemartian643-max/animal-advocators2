@@ -27,7 +27,7 @@ search = st.text_input(
 # -----------------------------------
 # Donation section
 # -----------------------------------
-st.header("💚 Donate")
+st.header("💚 Donation")
 
 donation = st.slider(
     "Choose a donation amount ($)",

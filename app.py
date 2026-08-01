@@ -37,8 +37,44 @@ donation = st.slider(
     step=5
 )
 
+# Payment method selection
+payment_method = st.selectbox(
+    "Select Payment Method",
+    [
+        "💳 Visa",
+        "💳 Mastercard",
+        "💳 American Express",
+        "💳 Discover",
+        "💳 Chase Credit Card",
+        "🎁 Visa Gift Card",
+        "🎁 Mastercard Gift Card",
+        "🎁 Amazon Gift Card"
+    ]
+)
+
+# Show different payment fields
+if "Gift Card" in payment_method:
+    gift_code = st.text_input("Gift Card Code")
+else:
+    card_number = st.text_input("Card Number")
+    expiry = st.text_input("Expiration Date (MM/YY)")
+    cvv = st.text_input("CVV", type="password")
+
 if st.button("Donate"):
-    st.success(f"Thank you for donating ${donation}!")
+    if "Gift Card" in payment_method:
+        if gift_code.strip():
+            st.success(
+                f"🎉 Thank you for donating ${donation} using {payment_method}!"
+            )
+        else:
+            st.error("Please enter your gift card code.")
+    else:
+        if card_number.strip() and expiry.strip() and cvv.strip():
+            st.success(
+                f"🎉 Thank you for donating ${donation} using {payment_method}!"
+            )
+        else:
+            st.error("Please complete all payment information.")
 
 # -----------------------------------
 # Endangered animal library
@@ -141,7 +177,6 @@ df = pd.DataFrame(animals)
 # -----------------------------------
 # Improved Search
 # -----------------------------------
-
 def normalize_search(text):
     text = text.lower().strip()
     terms = {text}
@@ -172,7 +207,6 @@ if search.strip():
         return any(term in searchable for term in search_terms)
 
     filtered_df = df[df.apply(matches, axis=1)]
-
 else:
     filtered_df = df
 

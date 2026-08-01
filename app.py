@@ -74,6 +74,29 @@ else:
 
     if st.button("Continue as Guest"):
         st.switch_page("Home.py")
+
+        import streamlit as st
+
+st.set_page_config(
+    page_title="Animal Advocators",
+    page_icon="🦁",
+    layout="wide"
+)
+
+st.title("🌿 Animal Advocators")
+st.subheader("Voice the Voiceless")
+
+st.success("Welcome to Animal Advocators!")
+
+st.write("""
+You are now on the Home Page.
+
+Use the navigation menu on the left to visit:
+
+• Overview
+• Endangered Animal Library
+• Animal Information
+""")
 # -----------------------------------
 # Website title
 # -----------------------------------

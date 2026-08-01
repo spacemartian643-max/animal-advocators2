@@ -522,17 +522,6 @@ animals = [
 df = pd.DataFrame(animals)
 
 # -----------------------------------
-# ANIMAL INFORMATION
-# -----------------------------------
-elif page == "🐾 Animal Information":
-
-    st.title("🐾 Animal Information")
-
-    st.info(
-        "Paste your existing Animal Information section here.\n\n"
-        "This includes your expandable animal cards."
-    )
-# -----------------------------------
 # Website title
 # -----------------------------------
 st.title("🌿 Animal Advocators")

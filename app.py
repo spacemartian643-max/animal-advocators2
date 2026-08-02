@@ -456,6 +456,144 @@ else:
                 " canines"
             ),
         },
+        # -----------------------------
+        # NEW ANIMALS ADDED BELOW
+        # -----------------------------
+        {
+            "Animal": "Kakapo",
+            "Region": "New Zealand",
+            "Status": "Critically Endangered",
+            "Latitude": -45.0,
+            "Longitude": 167.5,
+            "Description": "A rare, flightless, nocturnal parrot native to New Zealand.",
+            "Keywords": "kakapo parrot bird flightless parrot new zealand",
+        },
+        {
+            "Animal": "Galapagos Giant Tortoise",
+            "Region": "Ecuador",
+            "Status": "Vulnerable",
+            "Latitude": -0.9,
+            "Longitude": -90.9,
+            "Description": "The largest living species of tortoise, inhabiting the Galapagos Islands.",
+            "Keywords": "tortoise giant tortoise reptile galapagos ecuador",
+        },
+        {
+            "Animal": "Iberian Lynx",
+            "Region": "Spain / Portugal",
+            "Status": "Endangered",
+            "Latitude": 37.5,
+            "Longitude": -6.5,
+            "Description": "A wild cat endemic to the Iberian Peninsula in southwestern Europe.",
+            "Keywords": "lynx iberian lynx cat wildcat feline spain portugal",
+        },
+        {
+            "Animal": "Cheetah",
+            "Region": "Sub-Saharan Africa",
+            "Status": "Vulnerable",
+            "Latitude": -2.0,
+            "Longitude": 34.5,
+            "Description": "The fastest land animal on Earth, threatened by habitat loss.",
+            "Keywords": "cheetah cat big cat feline africa fast mammal",
+        },
+        {
+            "Animal": "Monarch Butterfly",
+            "Region": "North America",
+            "Status": "Endangered",
+            "Latitude": 19.6,
+            "Longitude": -100.3,
+            "Description": "Famous for its long annual migration across North America.",
+            "Keywords": "monarch butterfly insect migration pollinator",
+        },
+        {
+            "Animal": "African Wild Dog",
+            "Region": "Sub-Saharan Africa",
+            "Status": "Endangered",
+            "Latitude": -18.0,
+            "Longitude": 25.0,
+            "Description": "Known for its mottled fur and highly social pack behaviors.",
+            "Keywords": "wild dog african wild dog canine hunting dog mammal",
+        },
+        {
+            "Animal": "Komodo Dragon",
+            "Region": "Indonesia",
+            "Status": "Endangered",
+            "Latitude": -8.5,
+            "Longitude": 119.5,
+            "Description": "The largest living species of lizard, native to Indonesian islands.",
+            "Keywords": "komodo dragon lizard reptile giant lizard indonesia",
+        },
+        {
+            "Animal": "Axolotl",
+            "Region": "Mexico",
+            "Status": "Critically Endangered",
+            "Latitude": 19.2,
+            "Longitude": -99.1,
+            "Description": "A unique walking salamander native to Lake Xochimilco.",
+            "Keywords": "axolotl salamander amphibian Mexico xochimilco",
+        },
+        {
+            "Animal": "Tasmanian Devil",
+            "Region": "Australia",
+            "Status": "Endangered",
+            "Latitude": -42.0,
+            "Longitude": 146.5,
+            "Description": "The largest carnivorous marsupial, native to the island of Tasmania.",
+            "Keywords": "tasmanian devil marsupial australia tasmania mammal",
+        },
+        {
+            "Animal": "Gharial",
+            "Region": "India / Nepal",
+            "Status": "Critically Endangered",
+            "Latitude": 27.5,
+            "Longitude": 81.2,
+            "Description": "A fish-eating crocodilian with a long, narrow snout.",
+            "Keywords": "gharial crocodile crocodilian reptile india nepal",
+        },
+        {
+            "Animal": "Sloth Bear",
+            "Region": "India / Sri Lanka",
+            "Status": "Vulnerable",
+            "Latitude": 20.5,
+            "Longitude": 78.9,
+            "Description": "A shaggy-coated bear adapted for feeding on insects like termites.",
+            "Keywords": "sloth bear bear mammal india sri lanka",
+        },
+        {
+            "Animal": "Polar Bear",
+            "Region": "North Pacific",
+            "Status": "Vulnerable",
+            "Latitude": 75.0,
+            "Longitude": -100.0,
+            "Description": "The world's largest land carnivore, threatened by melting sea ice.",
+            "Keywords": "polar bear bear arctic marine mammal ice",
+        },
+        {
+            "Animal": "Tree Kangaroo",
+            "Region": "Papua New Guinea",
+            "Status": "Endangered",
+            "Latitude": -6.0,
+            "Longitude": 143.5,
+            "Description": "A tree-dwelling marsupial adapted for climbing in tropical rainforests.",
+            "Keywords": "tree kangaroo kangaroo marsupial papua new guinea",
+        },
+        {
+            "Animal": "Amazon River Dolphin",
+            "Region": "South America",
+            "Status": "Endangered",
+            "Latitude": -3.4,
+            "Longitude": -62.2,
+            "Description": "A pink freshwater dolphin native to the rivers of the Amazon basin.",
+            "Keywords": "amazon river dolphin pink dolphin river dolphin freshwater marine mammal",
+        },
+        {
+            "Animal": "Philippine Eagle",
+            "Region": "Philippines",
+            "Status": "Critically Endangered",
+            "Latitude": 7.1,
+            "Longitude": 125.6,
+            "Description": "One of the world's largest and most powerful forest eagles.",
+            "Keywords": "philippine eagle eagle bird bird of prey raptor philippines",
+        },
     ]
 
     df = pd.DataFrame(animals)
@@ -478,7 +616,6 @@ else:
     # -----------------------------
     st.sidebar.title("☰ Navigation")
 
-    # Added "🤝 Other Ways To Help" to options
     page = st.sidebar.radio(
         "Go to",
         [

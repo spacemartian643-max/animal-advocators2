@@ -91,6 +91,13 @@ if "payment_method" not in st.session_state:
 if "view_profile" not in st.session_state:
     st.session_state.view_profile = False
 
+# Donation goal trackers
+if "total_donated" not in st.session_state:
+    st.session_state.total_donated = 0.0
+
+if "claimed_rewards" not in st.session_state:
+    st.session_state.claimed_rewards = set()
+
 
 # =============================================================================
 # 🔑 LOGIN / SIGN UP / GUEST VIEW
@@ -873,7 +880,65 @@ else:
 
         # Donation Section
         st.markdown("---")
-        st.header("💚 Donation")
+        st.header("💚 Donation Tracker & Rewards")
+
+        # Goal Progress Circle / Bar & Tracker (Placed ON TOP of Donation Bar)
+        max_goal = 10000.0
+        current_total = st.session_state.total_donated
+        progress_pct = min(1.0, current_total / max_goal)
+
+        col_circle, col_stats = st.columns([1, 2])
+
+        with col_circle:
+            # Custom CSS SVG Animated Progress Circle
+            circle_pct = progress_pct * 100
+            dash_array = f"{circle_pct}, 100"
+            st.markdown(
+                f"""
+                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                    <svg viewBox="0 0 36 36" style="width:140px; height:140px;">
+                        <path stroke="#e6e6e6" stroke-width="3.8" fill="none"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path stroke="#11998e" stroke-width="3.8" stroke-dasharray="{dash_array}" stroke-linecap="round" fill="none"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <text x="18" y="20.35" font-size="7" font-weight="bold" text-anchor="middle" fill="#11998e">{int(circle_pct)}%</text>
+                    </svg>
+                    <p style="margin-top:8px; font-weight:600; color:#11998e;">Goal Progress</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        with col_stats:
+            st.subheader(f"Total Raised: **${current_total:,.2f}** / **${max_goal:,.2f}**")
+            st.progress(progress_pct)
+
+            # Define Rewards Thresholds
+            rewards = [
+                {"name": "🔑 Free Keychain", "goal": 100.0, "key": "keychain"},
+                {"name": "👕 Free T-Shirt", "goal": 1000.0, "key": "tshirt"},
+                {"name": "🏷️ Merch Discount", "goal": 5000.0, "key": "discount"},
+                {"name": "✈️ Visit to Help Out", "goal": 10000.0, "key": "visit"},
+            ]
+
+            st.markdown("### 🏆 Reward Unlocks:")
+            for r in rewards:
+                is_unlocked = current_total >= r["goal"]
+                is_claimed = r["key"] in st.session_state.claimed_rewards
+
+                if is_claimed:
+                    st.success(f"✅ **{r['name']}** (${r['goal']:,.0f}) - **Claimed!**")
+                elif is_unlocked:
+                    st.info(f"🎉 **{r['name']}** (${r['goal']:,.0f}) - **Unlocked!**")
+                    if st.button(f"🎁 Claim {r['name']}", key=f"claim_{r['key']}"):
+                        st.session_state.claimed_rewards.add(r["key"])
+                        st.balloons()
+                        st.toast(f"🎉 You claimed your {r['name']}!")
+                        st.rerun()
+                else:
+                    st.write(f"🔒 **{r['name']}** (${r['goal']:,.0f}) - *(Donate ${r['goal'] - current_total:,.0f} more)*")
+
+        st.markdown("---")
 
         donation = st.slider(
             "Choose a donation amount ($)",
@@ -925,20 +990,24 @@ else:
             if st.button("Complete Donation"):
                 if "Gift Card" in st.session_state.payment_method:
                     if gift_code:
+                        st.session_state.total_donated += float(donation)
                         st.balloons()
                         st.success(
                             f"🎉 Thank you for donating ${donation} using"
                             f" {st.session_state.payment_method}!"
                         )
+                        st.rerun()
                     else:
                         st.error("Please enter your gift card code.")
                 else:
                     if card_number and card_name and expiry and cvv:
+                        st.session_state.total_donated += float(donation)
                         st.balloons()
                         st.success(
                             f"🎉 Thank you for donating ${donation} using"
                             f" {st.session_state.payment_method}!"
                         )
+                        st.rerun()
                     else:
                         st.error("Please complete all payment information.")
 

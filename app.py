@@ -26,6 +26,9 @@ if "phone" not in st.session_state:
 if "description" not in st.session_state:
     st.session_state.description = "Passionate about protecting wildlife!"
 
+# Default profile photo URL if none uploaded
+DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+
 if "profile_pic" not in st.session_state:
     st.session_state.profile_pic = None
 
@@ -622,27 +625,23 @@ else:
         return list(terms)
 
     # -----------------------------
-    # Sidebar Profile Header & Navigation
+    # Sidebar Navigation Header & Profile Pic
     # -----------------------------
-    st.sidebar.title("👤 Profile & Nav")
+    st.sidebar.title("☰ Navigation")
 
-    # Profile Header Section at Top of Sidebar
-    profile_col1, profile_col2 = st.sidebar.columns([1, 2])
-    with profile_col1:
-        if st.session_state.profile_pic is not None:
-            st.image(st.session_state.profile_pic, width=50)
-        else:
-            st.write("👤")
-    with profile_col2:
-        st.write(f"**{st.session_state.username}**")
+    # Display Profile Picture Icon at Top Left
+    pic_to_show = (
+        st.session_state.profile_pic
+        if st.session_state.profile_pic is not None
+        else DEFAULT_AVATAR
+    )
+    st.sidebar.image(pic_to_show, width=65)
 
-    # Profile Page Toggle Button
-    if st.sidebar.button("⚙️ Edit Profile", use_container_width=True):
-        st.session_state.view_profile = not st.session_state.view_profile
+    if st.sidebar.button("Edit Profile", use_container_width=True):
+        st.session_state.view_profile = True
         st.rerun()
 
     st.sidebar.markdown("---")
-    st.sidebar.subheader("☰ Navigation")
 
     page = st.sidebar.radio(
         "Go to",
@@ -668,12 +667,12 @@ else:
         st.rerun()
 
     # -----------------------------
-    # PAGE: PROFILE MANAGEMENT (Toggled via Sidebar Profile Button)
+    # PAGE: PROFILE MANAGEMENT (Accessed via Profile Icon Button)
     # -----------------------------
     if st.session_state.view_profile:
         st.title("👤 Profile & Account Settings")
 
-        if st.button("⬅️ Back to Main App"):
+        if st.button("⬅️ Back to App"):
             st.session_state.view_profile = False
             st.rerun()
 
@@ -682,21 +681,18 @@ else:
         col1, col2 = st.columns([1, 2])
 
         with col1:
-            st.subheader("Profile Picture")
-            if st.session_state.profile_pic is not None:
-                st.image(st.session_state.profile_pic, width=150)
-            else:
-                st.info("No profile photo uploaded yet.")
+            st.subheader("Profile Photo")
+            st.image(pic_to_show, width=150)
 
             uploaded_file = st.file_uploader(
-                "Upload a new photo", type=["jpg", "png", "jpeg"]
+                "Change photo", type=["jpg", "png", "jpeg"]
             )
             if uploaded_file is not None:
                 st.session_state.profile_pic = uploaded_file
-                st.success("Photo uploaded successfully!")
+                st.success("Photo updated!")
 
         with col2:
-            st.subheader("Personal Details")
+            st.subheader("Account Details")
             new_username = st.text_input(
                 "Username", value=st.session_state.username
             )
@@ -711,7 +707,7 @@ else:
                 st.session_state.username = new_username
                 st.session_state.phone = new_phone
                 st.session_state.description = new_description
-                st.success("Profile updated successfully!")
+                st.success("Profile changes saved!")
 
         st.markdown("---")
         st.subheader("🔁 Account Options")

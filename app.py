@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # -----------------------------
-# Custom CSS: Moving Bottom Blue/Green Gradient
+# Custom CSS: Moving Blue and Green Bottom Background Banner
 # -----------------------------
 st.markdown(
     """
@@ -23,19 +23,28 @@ st.markdown(
         100% { background-position: 0% 50%; }
     }
 
-    .bottom-gradient-bar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
+    /* Style for the bottom animated gradient banner */
+    .bottom-background-banner {
         width: 100%;
-        height: 8px;
-        background: linear-gradient(270deg, #00c6ff, #0072ff, #11998e, #38ef7d, #00c6ff);
+        height: 120px;
+        margin-top: 30px;
+        border-radius: 12px;
+        background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #11998e, #1a5b4c);
         background-size: 400% 400%;
-        animation: gradientShift 6s ease infinite;
-        z-index: 99999;
+        animation: gradientShift 10s ease infinite;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .bottom-background-banner p {
+        color: white;
+        font-weight: 500;
+        font-size: 1rem;
+        margin: 0;
     }
     </style>
-    <div class="bottom-gradient-bar"></div>
     """,
     unsafe_allow_html=True,
 )
@@ -65,6 +74,18 @@ if "payment_method" not in st.session_state:
 
 if "view_profile" not in st.session_state:
     st.session_state.view_profile = False
+
+
+# Helper function to display the bottom banner
+def show_bottom_banner():
+    st.markdown(
+        """
+        <div class="bottom-background-banner">
+            <p>Animal Advocators • Helping Wild Animals Worldwide 🌍</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 # =============================================================================
@@ -125,6 +146,8 @@ if not st.session_state.logged_in:
         st.session_state.logged_in = True
         st.session_state.username = "Guest"
         st.rerun()
+
+    show_bottom_banner()
 
 
 # =============================================================================
@@ -744,6 +767,8 @@ else:
             st.session_state.view_profile = False
             st.rerun()
 
+        show_bottom_banner()
+
     # -----------------------------
     # PAGE 1: HOME PAGE
     # -----------------------------
@@ -897,6 +922,8 @@ else:
                     else:
                         st.error("Please complete all payment information.")
 
+        show_bottom_banner()
+
     # -----------------------------
     # PAGE 2: OVERVIEW
     # -----------------------------
@@ -920,6 +947,8 @@ else:
         """
         )
 
+        show_bottom_banner()
+
     # -----------------------------
     # PAGE 3: ENDANGERED ANIMAL LIBRARY
     # -----------------------------
@@ -936,6 +965,8 @@ else:
             df[["Animal", "Region", "Status", "Description"]],
             use_container_width=True,
         )
+
+        show_bottom_banner()
 
     # -----------------------------
     # PAGE 4: OTHER WAYS TO HELP
@@ -984,6 +1015,8 @@ else:
             Have an idea or want to collaborate on a conservation project? Reach out to us at **support@animaladvocators.org**!
             """
             )
+
+        show_bottom_banner()
 
     # -----------------------------
     # PAGE 5: SETTINGS
@@ -1034,6 +1067,8 @@ else:
                     st.success("Bug report submitted successfully! Our team will look into it.")
                 else:
                     st.warning("Please fill in both the summary and description.")
+
+        show_bottom_banner()
 
     # -----------------------------
     # Footer

@@ -6,7 +6,7 @@ import streamlit as st
 # Page Configuration
 # -----------------------------
 st.set_page_config(
-    page_title="Animal Advocators",
+    page_title="🌿 Animal Advocators",
     page_icon="🦁",
     layout="wide" if st.session_state.get("logged_in") else "centered",
 )
@@ -145,7 +145,7 @@ if not st.session_state.logged_in:
         except Exception:
             st.image(DEFAULT_AVATAR, width=100)
     with col_title:
-        st.title("Animal Advocators")
+        st.title("🌿 Animal Advocators")
         st.subheader("Voice the Voiceless")
 
     st.write("Please log in, create an account, or continue as a guest.")

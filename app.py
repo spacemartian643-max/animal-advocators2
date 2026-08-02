@@ -82,6 +82,9 @@ if "description" not in st.session_state:
 
 DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
 
+# 🐾 LOGO PATH: Points to your uploaded logo file
+LOGO_PATH = "ANIMAL ADVOCATORS.jpg"
+
 if "profile_pic" not in st.session_state:
     st.session_state.profile_pic = None
 
@@ -107,8 +110,17 @@ if "donation_success_msg" not in st.session_state:
 # =============================================================================
 if not st.session_state.logged_in:
 
-    st.title("🌿 Animal Advocators")
-    st.subheader("Voice the Voiceless")
+    # Display Logo and Title side-by-side
+    col_logo, col_title = st.columns([1, 4])
+    with col_logo:
+        try:
+            st.image(LOGO_PATH, width=100)
+        except Exception:
+            st.image(DEFAULT_AVATAR, width=100)
+    with col_title:
+        st.title("Animal Advocators")
+        st.subheader("Voice the Voiceless")
+
     st.write("Please log in, create an account, or continue as a guest.")
 
     # Login / Sign Up Tabs
@@ -801,8 +813,17 @@ else:
     # PAGE 1: HOME PAGE
     # -----------------------------
     elif page == "🏠 Home":
-        st.title("🌿 Animal Advocators")
-        st.subheader("Voice the Voiceless")
+
+        # Header with Logo beside the Title
+        col_logo, col_title = st.columns([1, 5])
+        with col_logo:
+            try:
+                st.image(LOGO_PATH, width=110)
+            except Exception:
+                st.image(DEFAULT_AVATAR, width=100)
+        with col_title:
+            st.title("Animal Advocators")
+            st.subheader("Voice the Voiceless")
 
         st.success(f"Welcome, {st.session_state.username}!")
 

@@ -478,12 +478,14 @@ else:
     # -----------------------------
     st.sidebar.title("☰ Navigation")
 
+    # Added "🤝 Other Ways To Help" to options
     page = st.sidebar.radio(
         "Go to",
         [
             "🏠 Home",
             "🌎 Overview",
             "📚 Endangered Animal Library",
+            "🤝 Other Ways To Help",
         ],
     )
 
@@ -688,6 +690,54 @@ else:
             df[["Animal", "Region", "Status", "Description"]],
             use_container_width=True,
         )
+
+    # -----------------------------
+    # PAGE 4: OTHER WAYS TO HELP
+    # -----------------------------
+    elif page == "🤝 Other Ways To Help":
+        st.title("🤝 Other Ways To Help")
+        st.write(
+            "Donations aren't the only way to make a big difference! Here are"
+            " impactful ways you can help protect endangered animals without"
+            " spending money:"
+        )
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.markdown(
+                """
+            ### 📢 Spread Awareness
+            * **Share on Social Media:** Educate friends and family by sharing facts about endangered species.
+            * **Advocate:** Speak up for local wildlife protections and conservation initiatives.
+            * **Support Sustainable Brands:** Purchase eco-friendly products that don't harm habitats.
+            """
+            )
+
+            st.markdown(
+                """
+            ### 🙋‍♂️ Volunteer Your Time
+            * **Local Animal Shelters:** Offer a helping hand at community wildlife rescues or shelters.
+            * **Cleanup Events:** Participate in local beach, park, or river cleanups to protect habitats.
+            """
+            )
+
+        with col2:
+            st.markdown(
+                """
+            ### ♻️ Eco-Friendly Habits
+            * **Reduce, Reuse, Recycle:** Minimize single-use plastics that end up in marine environments.
+            * **Plant Native Species:** Grow local flora to build supportive habitats for local pollinators and birds.
+            * **Reduce Carbon Footprint:** Save energy at home to help slow down global climate change.
+            """
+            )
+
+            st.markdown(
+                """
+            ### 📬 Get Involved
+            Have an idea or want to collaborate on a conservation project? Reach out to us at **support@animaladvocators.org**!
+            """
+            )
 
     # -----------------------------
     # Footer

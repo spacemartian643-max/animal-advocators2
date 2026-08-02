@@ -20,8 +20,20 @@ if "logged_in" not in st.session_state:
 if "username" not in st.session_state:
     st.session_state.username = "Guest"
 
+if "phone" not in st.session_state:
+    st.session_state.phone = ""
+
+if "description" not in st.session_state:
+    st.session_state.description = "Passionate about protecting wildlife!"
+
+if "profile_pic" not in st.session_state:
+    st.session_state.profile_pic = None
+
 if "payment_method" not in st.session_state:
     st.session_state.payment_method = None
+
+if "view_profile" not in st.session_state:
+    st.session_state.view_profile = False
 
 
 # =============================================================================
@@ -71,6 +83,7 @@ if not st.session_state.logged_in:
             else:
                 st.session_state.logged_in = True
                 st.session_state.username = username
+                st.session_state.phone = phone
                 st.rerun()
 
     # GUEST OPTION
@@ -456,9 +469,6 @@ else:
                 " canines"
             ),
         },
-        # -----------------------------
-        # NEW ANIMALS ADDED BELOW
-        # -----------------------------
         {
             "Animal": "Kakapo",
             "Region": "New Zealand",
@@ -612,9 +622,27 @@ else:
         return list(terms)
 
     # -----------------------------
-    # Sidebar Navigation & Logout
+    # Sidebar Profile Header & Navigation
     # -----------------------------
-    st.sidebar.title("☰ Navigation")
+    st.sidebar.title("👤 Profile & Nav")
+
+    # Profile Header Section at Top of Sidebar
+    profile_col1, profile_col2 = st.sidebar.columns([1, 2])
+    with profile_col1:
+        if st.session_state.profile_pic is not None:
+            st.image(st.session_state.profile_pic, width=50)
+        else:
+            st.write("👤")
+    with profile_col2:
+        st.write(f"**{st.session_state.username}**")
+
+    # Profile Page Toggle Button
+    if st.sidebar.button("⚙️ Edit Profile", use_container_width=True):
+        st.session_state.view_profile = not st.session_state.view_profile
+        st.rerun()
+
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("☰ Navigation")
 
     page = st.sidebar.radio(
         "Go to",
@@ -623,22 +651,79 @@ else:
             "🌎 Overview",
             "📚 Endangered Animal Library",
             "🤝 Other Ways To Help",
+            "⚙️ Settings",
         ],
     )
 
     st.sidebar.markdown("---")
-    st.sidebar.write(f"Logged in as: **{st.session_state.username}**")
 
-    if st.sidebar.button("🚪 Log Out"):
+    if st.sidebar.button("🚪 Log Out", use_container_width=True):
         st.session_state.logged_in = False
         st.session_state.username = "Guest"
+        st.session_state.phone = ""
+        st.session_state.description = "Passionate about protecting wildlife!"
+        st.session_state.profile_pic = None
         st.session_state.payment_method = None
+        st.session_state.view_profile = False
         st.rerun()
+
+    # -----------------------------
+    # PAGE: PROFILE MANAGEMENT (Toggled via Sidebar Profile Button)
+    # -----------------------------
+    if st.session_state.view_profile:
+        st.title("👤 Profile & Account Settings")
+
+        if st.button("⬅️ Back to Main App"):
+            st.session_state.view_profile = False
+            st.rerun()
+
+        st.markdown("---")
+
+        col1, col2 = st.columns([1, 2])
+
+        with col1:
+            st.subheader("Profile Picture")
+            if st.session_state.profile_pic is not None:
+                st.image(st.session_state.profile_pic, width=150)
+            else:
+                st.info("No profile photo uploaded yet.")
+
+            uploaded_file = st.file_uploader(
+                "Upload a new photo", type=["jpg", "png", "jpeg"]
+            )
+            if uploaded_file is not None:
+                st.session_state.profile_pic = uploaded_file
+                st.success("Photo uploaded successfully!")
+
+        with col2:
+            st.subheader("Personal Details")
+            new_username = st.text_input(
+                "Username", value=st.session_state.username
+            )
+            new_phone = st.text_input(
+                "Phone Number (Optional)", value=st.session_state.phone
+            )
+            new_description = st.text_area(
+                "Profile Description", value=st.session_state.description
+            )
+
+            if st.button("Save Profile Changes"):
+                st.session_state.username = new_username
+                st.session_state.phone = new_phone
+                st.session_state.description = new_description
+                st.success("Profile updated successfully!")
+
+        st.markdown("---")
+        st.subheader("🔁 Account Options")
+        if st.button("Switch Account"):
+            st.session_state.logged_in = False
+            st.session_state.view_profile = False
+            st.rerun()
 
     # -----------------------------
     # PAGE 1: HOME PAGE
     # -----------------------------
-    if page == "🏠 Home":
+    elif page == "🏠 Home":
         st.title("🌿 Animal Advocators")
         st.subheader("Voice the Voiceless")
 
@@ -875,6 +960,56 @@ else:
             Have an idea or want to collaborate on a conservation project? Reach out to us at **support@animaladvocators.org**!
             """
             )
+
+    # -----------------------------
+    # PAGE 5: SETTINGS
+    # -----------------------------
+    elif page == "⚙️ Settings":
+        st.title("⚙️ Settings")
+
+        settings_tab1, settings_tab2, settings_tab3 = st.tabs(
+            ["📊 Activity", "💬 Feedback", "🐞 Help & Bug Report"]
+        )
+
+        # TAB 1: ACTIVITY
+        with settings_tab1:
+            st.subheader("📊 Your Activity Log")
+            st.write(f"**Logged in as:** {st.session_state.username}")
+            st.write("**Account Status:** Active")
+            st.markdown("---")
+            st.write("Recent Actions:")
+            st.write("- Logged into Animal Advocators")
+            st.write("- Explored Endangered Animal Library")
+
+        # TAB 2: FEEDBACK
+        with settings_tab2:
+            st.subheader("💬 Send Us Feedback")
+            st.write("We'd love to hear how we can improve Animal Advocators!")
+            feedback_type = st.selectbox(
+                "Feedback Topic",
+                ["General Feedback", "Feature Request", "Content Suggestion", "Other"],
+            )
+            feedback_text = st.text_area("Your Feedback")
+
+            if st.button("Submit Feedback"):
+                if feedback_text.strip():
+                    st.success("Thank you for your feedback! We appreciate your support.")
+                else:
+                    st.warning("Please enter your feedback before submitting.")
+
+        # TAB 3: HELP & BUG REPORT
+        with settings_tab3:
+            st.subheader("🐞 Help & Report Bugs")
+            st.write("Encountered an issue or glitch on the site? Let us know!")
+
+            bug_title = st.text_input("Bug Summary")
+            bug_description = st.text_area("Describe the issue in detail")
+
+            if st.button("Submit Bug Report"):
+                if bug_title.strip() and bug_description.strip():
+                    st.success("Bug report submitted successfully! Our team will look into it.")
+                else:
+                    st.warning("Please fill in both the summary and description.")
 
     # -----------------------------
     # Footer

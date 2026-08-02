@@ -12,6 +12,35 @@ st.set_page_config(
 )
 
 # -----------------------------
+# Custom CSS: Moving Bottom Blue/Green Gradient
+# -----------------------------
+st.markdown(
+    """
+    <style>
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .bottom-gradient-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 8px;
+        background: linear-gradient(270deg, #00c6ff, #0072ff, #11998e, #38ef7d, #00c6ff);
+        background-size: 400% 400%;
+        animation: gradientShift 6s ease infinite;
+        z-index: 99999;
+    }
+    </style>
+    <div class="bottom-gradient-bar"></div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# -----------------------------
 # Initialize Session State
 # -----------------------------
 if "logged_in" not in st.session_state:
@@ -26,7 +55,6 @@ if "phone" not in st.session_state:
 if "description" not in st.session_state:
     st.session_state.description = "Passionate about protecting wildlife!"
 
-# Default profile photo URL if none uploaded
 DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
 
 if "profile_pic" not in st.session_state:

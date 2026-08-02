@@ -891,7 +891,7 @@ else:
             st.success(st.session_state.donation_success_msg)
             st.session_state.donation_success_msg = None
 
-        # Goal Progress Circle / Bar & Tracker (Placed ON TOP of Donation Bar)
+        # Goal Progress Circle / Bar & Tracker
         max_goal = 10000.0
         current_total = st.session_state.total_donated
         progress_pct = min(1.0, current_total / max_goal)
@@ -936,16 +936,17 @@ else:
                 is_claimed = r["key"] in st.session_state.claimed_rewards
 
                 if is_claimed:
-                    st.success(f"✅ **{r['name']}** (${r['goal']:,.0f}) - **Claimed!**")
+                    st.success(f"✅ **{r['name']}** — Goal: **${r['goal']:,.0f}** *(Claimed!)*")
                 elif is_unlocked:
-                    st.info(f"🎉 **{r['name']}** (${r['goal']:,.0f}) - **Unlocked!**")
+                    st.info(f"🎉 **{r['name']}** — Goal: **${r['goal']:,.0f}** *(Unlocked!)*")
                     if st.button(f"🎁 Claim {r['name']}", key=f"claim_{r['key']}"):
                         st.session_state.claimed_rewards.add(r["key"])
                         st.balloons()
                         st.toast(f"🎉 You claimed your {r['name']}!")
                         st.rerun()
                 else:
-                    st.write(f"🔒 **{r['name']}** (${r['goal']:,.0f}) - *(Donate ${r['goal'] - current_total:,.0f} more)*")
+                    needed = r["goal"] - current_total
+                    st.write(f"🔒 **{r['name']}** — Goal: **${r['goal']:,.0f}** *(Need **${needed:,.0f}** more)*")
 
         st.markdown("---")
 

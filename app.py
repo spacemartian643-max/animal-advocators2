@@ -49,9 +49,25 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+# Helper function to display the bottom banner
+def show_bottom_banner():
+    st.markdown(
+        """
+        <div class="bottom-background-banner">
+            <p>Animal Advocators • Helping Wild Animals Worldwide 🌍</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 # -----------------------------
 # Initialize Session State
 # -----------------------------
+if "users_db" not in st.session_state:
+    st.session_state.users_db = {}
+
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
@@ -76,18 +92,6 @@ if "view_profile" not in st.session_state:
     st.session_state.view_profile = False
 
 
-# Helper function to display the bottom banner
-def show_bottom_banner():
-    st.markdown(
-        """
-        <div class="bottom-background-banner">
-            <p>Animal Advocators • Helping Wild Animals Worldwide 🌍</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
 # =============================================================================
 # 🔑 LOGIN / SIGN UP / GUEST VIEW
 # =============================================================================
@@ -108,12 +112,18 @@ if not st.session_state.logged_in:
         )
 
         if st.button("Log In"):
-            if login_username and login_password:
+            user_entry = st.session_state.users_db.get(login_username)
+
+            if user_entry and user_entry["password"] == login_password:
                 st.session_state.logged_in = True
                 st.session_state.username = login_username
+                st.session_state.phone = user_entry.get("phone", "")
+                st.session_state.description = user_entry.get(
+                    "description", "Passionate about protecting wildlife!"
+                )
                 st.rerun()
             else:
-                st.error("Please enter both username and password.")
+                st.error("Invalid username or password.")
 
     # SIGN UP TAB
     with signup_tab:
@@ -130,9 +140,17 @@ if not st.session_state.logged_in:
         if st.button("Create Account"):
             if not username or not email or not password:
                 st.error("Please complete all required fields.")
+            elif username in st.session_state.users_db:
+                st.error("Username already exists.")
             elif password != confirm:
                 st.error("Passwords do not match.")
             else:
+                st.session_state.users_db[username] = {
+                    "password": password,
+                    "email": email,
+                    "phone": phone,
+                    "description": "Passionate about protecting wildlife!",
+                }
                 st.session_state.logged_in = True
                 st.session_state.username = username
                 st.session_state.phone = phone
@@ -899,7 +917,7 @@ else:
             if "Gift Card" in st.session_state.payment_method:
                 gift_code = st.text_input("Gift Card Code")
             else:
-                card_number = st.text_input("Card Number")
+                card_number = st.text_input("Card Number", type="password")
                 card_name = st.text_input("Name on Card")
                 expiry = st.text_input("Expiration Date (MM/YY)")
                 cvv = st.text_input("CVV", type="password")
@@ -907,6 +925,7 @@ else:
             if st.button("Complete Donation"):
                 if "Gift Card" in st.session_state.payment_method:
                     if gift_code:
+                        st.balloons()
                         st.success(
                             f"🎉 Thank you for donating ${donation} using"
                             f" {st.session_state.payment_method}!"
@@ -915,6 +934,7 @@ else:
                         st.error("Please enter your gift card code.")
                 else:
                     if card_number and card_name and expiry and cvv:
+                        st.balloons()
                         st.success(
                             f"🎉 Thank you for donating ${donation} using"
                             f" {st.session_state.payment_method}!"

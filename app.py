@@ -1069,9 +1069,3 @@ else:
                     st.warning("Please fill in both the summary and description.")
 
         show_bottom_banner()
-
-    # -----------------------------
-    # Footer
-    # -----------------------------
-    st.markdown("---")
-    st.caption("Animal Advocators • Helping Wild Animals Worldwide 🌍")

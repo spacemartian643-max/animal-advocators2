@@ -6,7 +6,7 @@ import streamlit as st
 # Page Configuration
 # -----------------------------
 st.set_page_config(
-    page_title="Animal Advocators",
+    page_title="Animal Advocators 🌿",
     page_icon="🦁",
     layout="wide" if st.session_state.get("logged_in") else "centered",
 )
@@ -81,7 +81,6 @@ if "description" not in st.session_state:
     st.session_state.description = "Passionate about protecting wildlife!"
 
 DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-LOGO_PATH = "ANIMAL ADVOCATORS.jpg"
 
 if "profile_pic" not in st.session_state:
     st.session_state.profile_pic = None
@@ -137,16 +136,9 @@ def logout_confirm_dialog():
 # =============================================================================
 if not st.session_state.logged_in:
 
-    # Display Logo and Title side-by-side
-    col_logo, col_title = st.columns([1, 4])
-    with col_logo:
-        try:
-            st.image(LOGO_PATH, width=100)
-        except Exception:
-            st.image(DEFAULT_AVATAR, width=100)
-    with col_title:
-        st.title("🌿 Animal Advocators")
-        st.subheader("Voice the Voiceless")
+    # Title with 🌿 Emoji
+    st.title("Animal Advocators 🌿")
+    st.subheader("Voice the Voiceless")
 
     st.write("Please log in, create an account, or continue as a guest.")
 
@@ -835,8 +827,8 @@ else:
     # -----------------------------
     elif page == "🏠 Home":
 
-        # Header Title
-        st.title("Animal Advocators")
+        # Header Title with 🌿 Emoji
+        st.title("Animal Advocators 🌿")
         st.subheader("Voice the Voiceless")
 
         st.success(f"Welcome, {st.session_state.username}!")

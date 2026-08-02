@@ -81,8 +81,6 @@ if "description" not in st.session_state:
     st.session_state.description = "Passionate about protecting wildlife!"
 
 DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-
-# 🐾 LOGO PATH: Points to your uploaded logo file
 LOGO_PATH = "ANIMAL ADVOCATORS.jpg"
 
 if "profile_pic" not in st.session_state:
@@ -103,6 +101,35 @@ if "claimed_rewards" not in st.session_state:
 
 if "donation_success_msg" not in st.session_state:
     st.session_state.donation_success_msg = None
+
+
+# -----------------------------
+# Log Out Confirmation Dialog (Pop-up)
+# -----------------------------
+@st.dialog("Log Out Confirmation")
+def logout_confirm_dialog():
+    st.write(
+        "Are you sure you want to log out? All changes and donations you did"
+        " won't change."
+    )
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Close", use_container_width=True):
+            st.rerun()
+
+    with col2:
+        if st.button("Yes", type="primary", use_container_width=True):
+            st.session_state.logged_in = False
+            st.session_state.username = "Guest"
+            st.session_state.phone = ""
+            st.session_state.description = (
+                "Passionate about protecting wildlife!"
+            )
+            st.session_state.profile_pic = None
+            st.session_state.payment_method = None
+            st.session_state.view_profile = False
+            st.rerun()
 
 
 # =============================================================================
@@ -747,15 +774,9 @@ else:
 
     st.sidebar.markdown("---")
 
+    # Triggers the confirmation pop-up modal
     if st.sidebar.button("🚪 Log Out", use_container_width=True):
-        st.session_state.logged_in = False
-        st.session_state.username = "Guest"
-        st.session_state.phone = ""
-        st.session_state.description = "Passionate about protecting wildlife!"
-        st.session_state.profile_pic = None
-        st.session_state.payment_method = None
-        st.session_state.view_profile = False
-        st.rerun()
+        logout_confirm_dialog()
 
     # -----------------------------
     # PAGE: PROFILE MANAGEMENT (Accessed via Profile Icon Button)
@@ -814,16 +835,9 @@ else:
     # -----------------------------
     elif page == "🏠 Home":
 
-        # Header with Logo beside the Title
-        col_logo, col_title = st.columns([1, 5])
-        with col_logo:
-            try:
-                st.image(LOGO_PATH, width=110)
-            except Exception:
-                st.image(DEFAULT_AVATAR, width=100)
-        with col_title:
-            st.title("Animal Advocators")
-            st.subheader("Voice the Voiceless")
+        # Header Title
+        st.title("Animal Advocators")
+        st.subheader("Voice the Voiceless")
 
         st.success(f"Welcome, {st.session_state.username}!")
 

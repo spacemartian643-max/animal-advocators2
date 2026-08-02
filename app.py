@@ -100,7 +100,6 @@ else:
             "Longitude": 131.9,
             "Description": "One of the rarest big cats in the world.",
             "Keywords": "leopard leopards cat cats feline felines big cat",
-            "Image": "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?w=400",
         },
         {
             "Animal": "Javan Rhino",
@@ -110,7 +109,6 @@ else:
             "Longitude": 105.37,
             "Description": "Only a small population remains in Java.",
             "Keywords": "rhino rhinos rhinoceros rhinoceroses",
-            "Image": "https://images.unsplash.com/photo-1535591273668-578e31182c4f?w=400",
         },
         {
             "Animal": "Vaquita",
@@ -120,7 +118,6 @@ else:
             "Longitude": -114.0,
             "Description": "The world's rarest marine mammal.",
             "Keywords": "vaquita porpoise porpoises marine mammal mammals",
-            "Image": "https://images.unsplash.com/photo-1568430460464-02e3cb1845b3?w=400",
         },
         {
             "Animal": "African Forest Elephant",
@@ -130,7 +127,6 @@ else:
             "Longitude": 21.0,
             "Description": "Threatened by habitat loss and poaching.",
             "Keywords": "elephant elephants",
-            "Image": "https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=400",
         },
         {
             "Animal": "Red Wolf",
@@ -140,7 +136,6 @@ else:
             "Longitude": -76.2,
             "Description": "One of the world's most endangered wolves.",
             "Keywords": "wolf wolves canine canines",
-            "Image": "https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=400",
         },
         {
             "Animal": "Mountain Gorilla",
@@ -150,7 +145,6 @@ else:
             "Longitude": 29.6,
             "Description": "Lives in the forests of Central Africa.",
             "Keywords": "gorilla gorillas ape apes primate primates",
-            "Image": "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=400",
         },
         {
             "Animal": "Blue Whale",
@@ -160,7 +154,6 @@ else:
             "Longitude": -122.0,
             "Description": "The largest animal ever known.",
             "Keywords": "whale whales marine mammal mammals",
-            "Image": "https://images.unsplash.com/photo-1568430460464-02e3cb1845b3?w=400",
         },
         {
             "Animal": "Giant Panda",
@@ -170,7 +163,6 @@ else:
             "Longitude": 103.5,
             "Description": "Famous for eating bamboo.",
             "Keywords": "panda pandas bear bears",
-            "Image": "https://images.unsplash.com/photo-1564349683136-77e08dba1ef9?w=400",
         },
         {
             "Animal": "Snow Leopard",
@@ -182,7 +174,6 @@ else:
             "Keywords": (
                 "leopard leopards snow leopard cat cats feline felines"
             ),
-            "Image": "https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=400",
         },
         {
             "Animal": "Sea Otter",
@@ -192,7 +183,6 @@ else:
             "Longitude": -152.0,
             "Description": "Helps keep kelp forests healthy.",
             "Keywords": "otter otters marine mammal mammals",
-            "Image": "https://images.unsplash.com/photo-1590420485404-f86d22b8abf8?w=400",
         },
         {
             "Animal": "Siberian Tiger",
@@ -205,7 +195,6 @@ else:
                 " loss."
             ),
             "Keywords": "tiger tigers big cat feline",
-            "Image": "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=400",
         },
         {
             "Animal": "Chinese Giant Salamander",
@@ -215,7 +204,6 @@ else:
             "Longitude": 107.0,
             "Description": "The world's largest amphibian.",
             "Keywords": "salamander amphibian amphibians",
-            "Image": "https://images.unsplash.com/photo-1550358864-518f202c02ba?w=400",
         },
         {
             "Animal": "Sumatran Orangutan",
@@ -225,7 +213,6 @@ else:
             "Longitude": 98.5,
             "Description": "Lives only on the island of Sumatra.",
             "Keywords": "orangutan ape primate",
-            "Image": "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=400",
         },
         {
             "Animal": "Sumatran Tiger",
@@ -235,7 +222,6 @@ else:
             "Longitude": 101.5,
             "Description": "The smallest surviving tiger subspecies.",
             "Keywords": "tiger big cat feline",
-            "Image": "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=400",
         },
         {
             "Animal": "Hawksbill Sea Turtle",
@@ -245,7 +231,6 @@ else:
             "Longitude": -140.0,
             "Description": "A sea turtle known for its beautiful shell.",
             "Keywords": "turtle turtles sea turtle marine reptile",
-            "Image": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400",
         },
         {
             "Animal": "North Pacific Right Whale",
@@ -255,7 +240,6 @@ else:
             "Longitude": -160.0,
             "Description": "One of the rarest whale species in the world.",
             "Keywords": "whale whales marine mammal",
-            "Image": "https://images.unsplash.com/photo-1568430460464-02e3cb1845b3?w=400",
         },
         {
             "Animal": "California Condor",
@@ -265,7 +249,6 @@ else:
             "Longitude": -118.5,
             "Description": "North America's largest flying bird.",
             "Keywords": "condor bird birds vulture",
-            "Image": "https://images.unsplash.com/photo-1611095790444-1dfa35e37b52?w=400",
         },
         {
             "Animal": "Florida Panther",
@@ -275,7 +258,6 @@ else:
             "Longitude": -81.0,
             "Description": "A rare cougar found in southern Florida.",
             "Keywords": "panther cougar mountain lion cat feline",
-            "Image": "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?w=400",
         },
         {
             "Animal": "Bonobo",
@@ -288,7 +270,6 @@ else:
                 " Congo."
             ),
             "Keywords": "bonobo ape primate chimpanzee",
-            "Image": "https://images.unsplash.com/photo-1540573133985-778788177267?w=400",
         },
         {
             "Animal": "Okapi",
@@ -300,7 +281,6 @@ else:
                 "A unique relative of the giraffe found in Congo."
             ),
             "Keywords": "okapi giraffe mammal",
-            "Image": "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=400",
         },
         {
             "Animal": "Golden Monkey",
@@ -312,7 +292,6 @@ else:
                 "A colorful monkey living in the Virunga Mountains."
             ),
             "Keywords": "monkey monkeys primate",
-            "Image": "https://images.unsplash.com/photo-1540573133985-778788177267?w=400",
         },
         {
             "Animal": "Black Rhinoceros",
@@ -322,7 +301,6 @@ else:
             "Longitude": 30.1,
             "Description": "A rhinoceros threatened by illegal poaching.",
             "Keywords": "rhino rhinoceros",
-            "Image": "https://images.unsplash.com/photo-1535591273668-578e31182c4f?w=400",
         },
         {
             "Animal": "Snowy Owl",
@@ -332,7 +310,6 @@ else:
             "Longitude": -150.0,
             "Description": "A large white owl adapted to cold climates.",
             "Keywords": "owl bird birds",
-            "Image": "https://images.unsplash.com/photo-1551085254-e96b210df58a?w=400",
         },
         {
             "Animal": "Pallas's Cat",
@@ -344,7 +321,6 @@ else:
                 "A small wild cat with thick fur for mountain climates."
             ),
             "Keywords": "cat feline wildcat",
-            "Image": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400",
         },
         {
             "Animal": "Red Panda",
@@ -356,7 +332,6 @@ else:
                 "A tree-dwelling mammal known for its reddish fur."
             ),
             "Keywords": "red panda panda bear",
-            "Image": "https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=400",
         },
         {
             "Animal": "Whale Shark",
@@ -366,7 +341,6 @@ else:
             "Longitude": -145.0,
             "Description": "The largest fish species in the world.",
             "Keywords": "shark sharks fish whale shark",
-            "Image": "https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=400",
         },
         {
             "Animal": "Manta Ray",
@@ -376,7 +350,6 @@ else:
             "Longitude": -150.0,
             "Description": "A graceful giant ray threatened by fishing.",
             "Keywords": "ray manta ray fish",
-            "Image": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400",
         },
         {
             "Animal": "Guadalupe Fur Seal",
@@ -386,7 +359,6 @@ else:
             "Longitude": -113.0,
             "Description": "A marine mammal native to the eastern Pacific.",
             "Keywords": "seal seals marine mammal",
-            "Image": "https://images.unsplash.com/photo-1590420485404-f86d22b8abf8?w=400",
         },
         {
             "Animal": "Totoaba",
@@ -396,7 +368,6 @@ else:
             "Longitude": -114.2,
             "Description": "A large fish threatened by illegal fishing.",
             "Keywords": "fish totoaba",
-            "Image": "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=400",
         },
         {
             "Animal": "Saiga Antelope",
@@ -409,7 +380,6 @@ else:
                 " It faces threats from poaching and disease."
             ),
             "Keywords": "saiga antelope antelopes mammal mammals",
-            "Image": "https://images.unsplash.com/photo-1535591273668-578e31182c4f?w=400",
         },
         {
             "Animal": "Chinese Pangolin",
@@ -422,7 +392,6 @@ else:
                 " threatened by illegal wildlife trade."
             ),
             "Keywords": "pangolin pangolins mammal mammals scales",
-            "Image": "https://images.unsplash.com/photo-1550358864-518f202c02ba?w=400",
         },
         {
             "Animal": "Arctic Wolf",
@@ -435,7 +404,6 @@ else:
                 " Arctic tundra."
             ),
             "Keywords": "wolf wolves arctic wolf canine canines",
-            "Image": "https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=400",
         },
         {
             "Animal": "Mexican Gray Wolf",
@@ -448,7 +416,6 @@ else:
                 " reintroduced to the southwestern United States."
             ),
             "Keywords": "wolf wolves mexican gray wolf canine canines",
-            "Image": "https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=400",
         },
         {
             "Animal": "Himalayan Wolf",
@@ -461,7 +428,6 @@ else:
                 " in the Himalayan Mountains."
             ),
             "Keywords": "wolf wolves himalayan wolf canine canines",
-            "Image": "https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=400",
         },
         {
             "Animal": "Eurasian Wolf",
@@ -474,7 +440,6 @@ else:
                 " and northern Asia."
             ),
             "Keywords": "wolf wolves eurasian wolf gray wolf canine canines",
-            "Image": "https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=400",
         },
         {
             "Animal": "Alexander Archipelago Wolf",
@@ -490,7 +455,6 @@ else:
                 "wolf wolves alexander archipelago wolf alaska canine"
                 " canines"
             ),
-            "Image": "https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=400",
         },
     ]
 
@@ -601,13 +565,10 @@ else:
 
             tooltip = {
                 "html": """
-                <div style="font-family: sans-serif; max-width: 200px;">
-                    <b style="font-size: 14px;">{Animal}</b><br/>
-                    <img src="{Image}" style="width: 160px; height: 110px; object-fit: cover; border-radius: 6px; margin: 6px 0;"/><br/>
-                    <b>Region:</b> {Region}<br/>
-                    <b>Status:</b> {Status}<br/>
-                    <span style="font-size: 11px; color: #ddd;">{Description}</span>
-                </div>
+                <b>{Animal}</b><br/>
+                Region: {Region}<br/>
+                Status: {Status}<br/>
+                {Description}
                 """
             }
 

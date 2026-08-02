@@ -98,6 +98,9 @@ if "total_donated" not in st.session_state:
 if "claimed_rewards" not in st.session_state:
     st.session_state.claimed_rewards = set()
 
+if "donation_success_msg" not in st.session_state:
+    st.session_state.donation_success_msg = None
+
 
 # =============================================================================
 # 🔑 LOGIN / SIGN UP / GUEST VIEW
@@ -882,6 +885,12 @@ else:
         st.markdown("---")
         st.header("💚 Donation Tracker & Rewards")
 
+        # Display Balloon Animation and Success Banner on Page Load if recent donation exists
+        if st.session_state.donation_success_msg:
+            st.balloons()
+            st.success(st.session_state.donation_success_msg)
+            st.session_state.donation_success_msg = None
+
         # Goal Progress Circle / Bar & Tracker (Placed ON TOP of Donation Bar)
         max_goal = 10000.0
         current_total = st.session_state.total_donated
@@ -890,7 +899,7 @@ else:
         col_circle, col_stats = st.columns([1, 2])
 
         with col_circle:
-            # Custom CSS SVG Animated Progress Circle
+            # Custom SVG Animated Progress Circle
             circle_pct = progress_pct * 100
             dash_array = f"{circle_pct}, 100"
             st.markdown(
@@ -991,9 +1000,8 @@ else:
                 if "Gift Card" in st.session_state.payment_method:
                     if gift_code:
                         st.session_state.total_donated += float(donation)
-                        st.balloons()
-                        st.success(
-                            f"🎉 Thank you for donating ${donation} using"
+                        st.session_state.donation_success_msg = (
+                            f"🎉 Thank you for donating ${donation:,.2f} using"
                             f" {st.session_state.payment_method}!"
                         )
                         st.rerun()
@@ -1002,9 +1010,8 @@ else:
                 else:
                     if card_number and card_name and expiry and cvv:
                         st.session_state.total_donated += float(donation)
-                        st.balloons()
-                        st.success(
-                            f"🎉 Thank you for donating ${donation} using"
+                        st.session_state.donation_success_msg = (
+                            f"🎉 Thank you for donating ${donation:,.2f} using"
                             f" {st.session_state.payment_method}!"
                         )
                         st.rerun()

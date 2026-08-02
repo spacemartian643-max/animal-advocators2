@@ -6,7 +6,7 @@ import streamlit as st
 # Page Configuration
 # -----------------------------
 st.set_page_config(
-    page_title="🌿 Animal Advocators",
+    page_title="Animal Advocators",
     page_icon="🦁",
     layout="wide" if st.session_state.get("logged_in") else "centered",
 )

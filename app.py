@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # -----------------------------
-# Global CSS: Set Font to Times New Roman & Bottom Banner
+# Global CSS & Auto Scroll-to-Top JS
 # -----------------------------
 st.markdown(
     """
@@ -50,6 +50,10 @@ st.markdown(
         margin: 0;
     }
     </style>
+
+    <script>
+        window.scrollTo(0, 0);
+    </script>
     """,
     unsafe_allow_html=True,
 )
@@ -776,7 +780,7 @@ else:
         logout_confirm_dialog()
 
     # -----------------------------
-    # PAGE: PROFILE MANAGEMENT (Accessed via Profile Icon Button)
+    # PAGE: PROFILE MANAGEMENT
     # -----------------------------
     if st.session_state.view_profile:
         st.title("👤 Profile & Account Settings")
@@ -928,9 +932,30 @@ else:
         current_total = st.session_state.total_donated
         progress_pct = min(1.0, current_total / max_goal)
 
-        col_circle, col_stats = st.columns([1, 2])
+        col_stats, col_form = st.columns([1, 1])
 
-        with col_circle:
-            # Custom SVG Animated Progress Circle
-            circle_pct = progress_pct * 100
-            show_bottom_banner()
+        with col_stats:
+            st.subheader("Goal Progress")
+            st.progress(progress_pct)
+            st.metric(
+                label="Total Raised So Far",
+                value=f"${current_total:,.2f}",
+                delta=f"Goal: ${max_goal:,.0f}",
+            )
+
+        with col_form:
+            st.subheader("Make a Donation")
+            with st.form("donation_form"):
+                amount = st.number_input(
+                    "Donation Amount ($):", min_value=1.0, value=25.0, step=5.0
+                )
+                submitted = st.form_submit_button("Donate Now")
+
+                if submitted:
+                    st.session_state.total_donated += amount
+                    st.session_state.donation_success_msg = (
+                        f"Thank you for donating ${amount:,.2f}!"
+                    )
+                    st.rerun()
+
+        show_bottom_banner()

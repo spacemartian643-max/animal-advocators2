@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # -----------------------------
-# Global CSS (Times New Roman Font & Styling)
+# Global CSS & Auto Scroll-to-Top JS
 # -----------------------------
 st.markdown(
     """
@@ -50,6 +50,10 @@ st.markdown(
         margin: 0;
     }
     </style>
+
+    <script>
+        window.scrollTo(0, 0);
+    </script>
     """,
     unsafe_allow_html=True,
 )
@@ -103,6 +107,9 @@ if "total_donated" not in st.session_state:
 if "claimed_rewards" not in st.session_state:
     st.session_state.claimed_rewards = set()
 
+if "donation_success_msg" not in st.session_state:
+    st.session_state.donation_success_msg = None
+
 
 # -----------------------------
 # Log Out Confirmation Dialog (Pop-up)
@@ -138,7 +145,6 @@ def logout_confirm_dialog():
 # =============================================================================
 if not st.session_state.logged_in:
 
-    # Title with 🌿 Emoji
     st.title("Animal Advocators 🌿")
     st.subheader("Voice the Voiceless")
 
@@ -723,7 +729,6 @@ else:
 
     df = pd.DataFrame(animals)
 
-    # Search Logic Helper
     def normalize_search(text):
         text = text.lower().strip()
         terms = {text}
@@ -741,7 +746,6 @@ else:
     # -----------------------------
     st.sidebar.title("☰ Navigation")
 
-    # Display Profile Picture Icon at Top Left
     pic_to_show = (
         st.session_state.profile_pic
         if st.session_state.profile_pic is not None
@@ -768,17 +772,17 @@ else:
 
     st.sidebar.markdown("---")
 
-    # Triggers the confirmation pop-up modal
     if st.sidebar.button("🚪 Log Out", use_container_width=True):
         logout_confirm_dialog()
 
     # -----------------------------
-    # PAGE: PROFILE MANAGEMENT
+    # PAGE: PROFILE MANAGEMENT (VIEW PROFILE MODE)
     # -----------------------------
     if st.session_state.view_profile:
         st.title("👤 Profile & Account Settings")
 
-        if st.button("keyboard_double_arrow_left Back to App"):
+        # Standard clean arrow used here to prevent text leakage glitch
+        if st.button("← Back to App"):
             st.session_state.view_profile = False
             st.rerun()
 
@@ -829,7 +833,6 @@ else:
     # -----------------------------
     elif page == "🏠 Home":
 
-        # Header Title with 🌿 Emoji
         st.title("Animal Advocators 🌿")
         st.subheader("Voice the Voiceless")
 
@@ -846,7 +849,6 @@ else:
 
         st.markdown("---")
 
-        # Search bar
         search = st.text_input("🔎 Search for an endangered animal or region:")
 
         if search.strip():
@@ -871,7 +873,6 @@ else:
         elif filtered_df.empty and search.strip():
             st.warning("No animals were found.")
 
-        # Map Visualization
         st.header("🗺️ Endangered Animal Map")
 
         map_data = filtered_df if search.strip() else df
@@ -910,11 +911,16 @@ else:
 
             st.pydeck_chart(deck)
 
-        # Donation Section
+        # DONATION SECTION
         st.markdown("---")
         st.header("💚 Donation Tracker & Rewards")
 
-        # Goal Progress Circle / Bar & Tracker
+        # Displays thank-you banner after donation submission
+        if st.session_state.donation_success_msg:
+            st.balloons()
+            st.success(st.session_state.donation_success_msg)
+            st.session_state.donation_success_msg = None
+
         max_goal = 10000.0
         current_total = st.session_state.total_donated
         progress_pct = min(1.0, current_total / max_goal)
@@ -940,11 +946,94 @@ else:
 
                 if submitted:
                     st.session_state.total_donated += amount
-                    st.balloons()
-                    st.success(
-                        f"Thank you for donating ${amount:,.2f}! Your support"
-                        " helps protect wild animals globally."
+                    st.session_state.donation_success_msg = (
+                        f"Thank you for donating ${amount:,.2f}!"
                     )
                     st.rerun()
+
+        show_bottom_banner()
+
+    # -----------------------------
+    # PAGE 2: OVERVIEW
+    # -----------------------------
+    elif page == "🌎 Overview":
+        st.title("🌎 Overview & Mission")
+        st.write(
+            """
+        Welcome to the Overview of **Animal Advocators**. 
+
+        Human expansion, poaching, and climate change threaten thousands of unique species across the globe. 
+        Our goal is to spread awareness, display real-time geographic data on endangered species, and collect 
+        critical donations to fund global conservation projects.
+        """
+        )
+
+        st.markdown("---")
+        st.subheader("📊 Wildlife Conservation Impact")
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Species Tracked", len(df))
+        col2.metric("Critical Regions", len(df["Region"].unique()))
+        col3.metric("Funds Raised", f"${st.session_state.total_donated:,.2f}")
+
+        show_bottom_banner()
+
+    # -----------------------------
+    # PAGE 3: ENDANGERED ANIMAL LIBRARY
+    # -----------------------------
+    elif page == "📚 Endangered Animal Library":
+        st.title("📚 Endangered Animal Library")
+        st.write(
+            "Explore information on protected species tracked in our system."
+        )
+
+        selected_status = st.multiselect(
+            "Filter by Threat Status:",
+            options=df["Status"].unique(),
+            default=df["Status"].unique(),
+        )
+
+        filtered_library = df[df["Status"].isin(selected_status)]
+
+        st.dataframe(
+            filtered_library[["Animal", "Region", "Status", "Description"]],
+            use_container_width=True,
+        )
+
+        show_bottom_banner()
+
+    # -----------------------------
+    # PAGE 4: OTHER WAYS TO HELP
+    # -----------------------------
+    elif page == "🤝 Other Ways To Help":
+        st.title("🤝 Other Ways To Help")
+        st.write(
+            "Donations aren't the only way to make a difference! Here is how"
+            " you can help protect wild animals:"
+        )
+
+        st.markdown(
+            """
+        * **📢 Spread Awareness**: Share wildlife protection campaigns on social media.
+        * **🌳 Reduce Carbon Footprint**: Protect natural habitats by reducing waste and recycling.
+        * **🙋 Volunteer**: Join local environmental cleanups and wildlife shelters.
+        * **🚫 Say No to Illegal Wildlife Trade**: Avoid purchasing products made from endangered species.
+        """
+        )
+
+        show_bottom_banner()
+
+    # -----------------------------
+    # PAGE 5: SETTINGS
+    # -----------------------------
+    elif page == "⚙️ Settings":
+        st.title("⚙️ App Settings")
+        st.write("Customize your application preferences.")
+
+        st.subheader("Preferences")
+        st.checkbox("Enable sound notifications", value=True)
+        st.checkbox("Email newsletter updates", value=False)
+
+        if st.button("Save Settings"):
+            st.success("Settings saved successfully!")
 
         show_bottom_banner()

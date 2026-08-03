@@ -41,8 +41,26 @@ if "editing_profile" not in st.session_state:
 if "page" not in st.session_state:
     st.session_state.page = "🏠 Home"
 
+# --- Donation & Reward Gamification State ---
+if "total_donated" not in st.session_state:
+    st.session_state.total_donated = 0
+
+if "current_goal" not in st.session_state:
+    st.session_state.current_goal = 100
+
+if "claimed_rewards" not in st.session_state:
+    st.session_state.claimed_rewards = []
+
+# Goal mapping config
+GOAL_TIERS = [
+    {"goal": 100, "reward": "🔑 Free Keychain"},
+    {"goal": 500, "reward": "👕 Free T-Shirt"},
+    {"goal": 1000, "reward": "🏷️ Special Merch Discount"},
+    {"goal": 5000, "reward": "🎟️ VIP Tour: Visit How We Help Animals!"},
+]
+
 # -----------------------------
-# Full Animals Dataset (with 25 new animals, 10 from Antarctica)
+# Full Animals Dataset
 # -----------------------------
 animals = [
     # --- Original Dataset ---
@@ -387,7 +405,7 @@ animals = [
         "Status": "Least Concern",
         "Latitude": -77.8,
         "Longitude": 166.6,
-        "Description": "A ice-dwelling seal that lives further south than any other mammal.",
+        "Description": "An ice-dwelling seal that lives further south than any other mammal.",
         "Keywords": "seal seals weddell marine mammal polar antarctica"
     },
     {
@@ -806,9 +824,66 @@ else:
 
             st.pydeck_chart(deck)
 
-        # --- DONATION SECTION ---
+        # --- DONATION & GOAL PROGRESS SECTION ---
         st.markdown("---")
-        st.header("💚 Donation")
+        st.header("💚 Support & Goal Progress")
+
+        # Active reward goal tier lookup
+        current_tier = next((t for t in GOAL_TIERS if t["goal"] == st.session_state.current_goal), None)
+        
+        if current_tier:
+            reward_title = current_tier["reward"]
+            target_goal = current_tier["goal"]
+            progress_pct = min(st.session_state.total_donated / target_goal, 1.0)
+
+            # Circular Progress Ring & Milestone Display
+            st.markdown(f"""
+            <div style="background-color: #f0f7f4; border: 2px solid #2e7d32; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 25px;">
+                <h3 style="color: #2e7d32; margin-bottom: 5px;">🎯 Next Reward Goal: ${target_goal}</h3>
+                <h4 style="color: #1b5e20; margin-top: 0px;">Reward: {reward_title}</h4>
+                <div style="font-size: 20px; font-weight: bold; margin: 15px 0; color: #333;">
+                    Total Donated: <span style="color: #2e7d32;">${st.session_state.total_donated}</span> / ${target_goal}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            # Streamlit progress bar tracking goal
+            st.progress(progress_pct)
+
+            # Goal met & Claim Reward button action
+            if st.session_state.total_donated >= target_goal:
+                st.balloons()
+                st.success(f"🎉 **Goal Completed!** You unlocked: **{reward_title}**!")
+                
+                if st.button("🎁 Claim Reward & Unlock Next Goal"):
+                    st.session_state.claimed_rewards.append(reward_title)
+                    
+                    # Scale goal to next tier
+                    if target_goal == 100:
+                        st.session_state.current_goal = 500
+                    elif target_goal == 500:
+                        st.session_state.current_goal = 1000
+                    elif target_goal == 1000:
+                        st.session_state.current_goal = 5000
+                    
+                    st.success("Reward Claimed! Your goal has leveled up!")
+                    st.rerun()
+        else:
+            # All milestones achieved state
+            st.balloons()
+            st.markdown("""
+            <div style="background-color: #fff8e1; border: 2px solid #ffa000; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 25px;">
+                <h3 style="color: #f57f17;">🏆 Ultimate Wildlife Champion!</h3>
+                <p style="font-size: 16px;">You have beaten all donation milestones ($5,000 max tier)! Thank you for your incredible impact on wildlife conservation.</p>
+            </div>
+            """, unsafe_allow_html=True)
+            st.progress(1.0)
+
+        # Claimed Rewards Summary Box
+        if st.session_state.claimed_rewards:
+            st.markdown("**🏅 Claimed Rewards:** " + ", ".join(st.session_state.claimed_rewards))
+
+        st.markdown("### 💳 Make a Donation")
 
         donation = st.slider(
             "Choose a donation amount ($)",
@@ -861,16 +936,14 @@ else:
                 cvv = st.text_input("CVV", type="password")
 
             if st.button("Complete Donation"):
-                if "Gift Card" in st.session_state.payment_method:
-                    if gift_code:
-                        st.success(f"🎉 Thank you for donating ${donation} using {st.session_state.payment_method}!")
-                    else:
-                        st.error("Please enter your gift card code.")
+                if "Gift Card" in st.session_state.payment_method and not gift_code:
+                    st.error("Please enter your gift card code.")
+                elif "Gift Card" not in st.session_state.payment_method and not (card_number and card_name and expiry and cvv):
+                    st.error("Please complete all payment information.")
                 else:
-                    if card_number and card_name and expiry and cvv:
-                        st.success(f"🎉 Thank you for donating ${donation} using {st.session_state.payment_method}!")
-                    else:
-                        st.error("Please complete all payment information.")
+                    st.session_state.total_donated += donation
+                    st.success(f"🎉 Thank you for donating ${donation} using {st.session_state.payment_method}!")
+                    st.rerun()
 
     # -----------------------------------
     # OVERVIEW PAGE
@@ -1017,6 +1090,7 @@ else:
             st.subheader(f"Username: {st.session_state.username}")
             st.write(f"**Bio / Description:**\n{st.session_state.bio}")
             st.write(f"**Phone Number:** {st.session_state.phone if st.session_state.phone else 'Not provided'}")
+            st.write(f"**Total Impact Donated:** ${st.session_state.total_donated}")
 
     # -----------------------------------
     # SETTINGS PAGE (Feedback & Bug Report)

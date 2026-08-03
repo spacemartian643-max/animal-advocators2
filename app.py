@@ -9,6 +9,7 @@ st.set_page_config(
     page_title="Animal Advocators 🌿",
     page_icon="🦁",
     layout="wide" if st.session_state.get("logged_in") else "centered",
+    initial_sidebar_state="expanded",
 )
 
 # -----------------------------
@@ -94,18 +95,12 @@ DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
 if "profile_pic" not in st.session_state:
     st.session_state.profile_pic = None
 
-if "payment_method" not in st.session_state:
-    st.session_state.payment_method = None
-
 if "view_profile" not in st.session_state:
     st.session_state.view_profile = False
 
 # Donation goal trackers
 if "total_donated" not in st.session_state:
     st.session_state.total_donated = 0.0
-
-if "claimed_rewards" not in st.session_state:
-    st.session_state.claimed_rewards = set()
 
 if "donation_success_msg" not in st.session_state:
     st.session_state.donation_success_msg = None
@@ -117,8 +112,8 @@ if "donation_success_msg" not in st.session_state:
 @st.dialog("Log Out Confirmation")
 def logout_confirm_dialog():
     st.write(
-        "Are you sure you want to log out? All changes and donations you did"
-        " won't change."
+        "Are you sure you want to log out? All changes and donations you made"
+        " will remain saved."
     )
 
     col1, col2 = st.columns(2)
@@ -135,7 +130,6 @@ def logout_confirm_dialog():
                 "Passionate about protecting wildlife!"
             )
             st.session_state.profile_pic = None
-            st.session_state.payment_method = None
             st.session_state.view_profile = False
             st.rerun()
 
@@ -150,7 +144,6 @@ if not st.session_state.logged_in:
 
     st.write("Please log in, create an account, or continue as a guest.")
 
-    # Login / Sign Up Tabs
     login_tab, signup_tab = st.tabs(["🔑 Log In", "📝 Sign Up"])
 
     # LOG IN TAB
@@ -218,7 +211,7 @@ if not st.session_state.logged_in:
 
 
 # =============================================================================
-# 🏠 HOME / MAIN APP VIEW (Shown after logging in or continuing as guest)
+# 🏠 HOME / MAIN APP VIEW
 # =============================================================================
 else:
 
@@ -305,9 +298,7 @@ else:
             "Latitude": 34.0,
             "Longitude": 75.0,
             "Description": "Lives high in the mountains of Asia.",
-            "Keywords": (
-                "leopard leopards snow leopard cat cats feline felines"
-            ),
+            "Keywords": "leopard leopards snow leopard cat cats feline felines",
         },
         {
             "Animal": "Sea Otter",
@@ -317,413 +308,6 @@ else:
             "Longitude": -152.0,
             "Description": "Helps keep kelp forests healthy.",
             "Keywords": "otter otters marine mammal mammals",
-        },
-        {
-            "Animal": "Siberian Tiger",
-            "Region": "Russia / China",
-            "Status": "Endangered",
-            "Latitude": 45.0,
-            "Longitude": 134.0,
-            "Description": (
-                "The largest wild cat, threatened by poaching and habitat"
-                " loss."
-            ),
-            "Keywords": "tiger tigers big cat feline",
-        },
-        {
-            "Animal": "Chinese Giant Salamander",
-            "Region": "China",
-            "Status": "Critically Endangered",
-            "Latitude": 31.0,
-            "Longitude": 107.0,
-            "Description": "The world's largest amphibian.",
-            "Keywords": "salamander amphibian amphibians",
-        },
-        {
-            "Animal": "Sumatran Orangutan",
-            "Region": "Indonesia",
-            "Status": "Critically Endangered",
-            "Latitude": 3.3,
-            "Longitude": 98.5,
-            "Description": "Lives only on the island of Sumatra.",
-            "Keywords": "orangutan ape primate",
-        },
-        {
-            "Animal": "Sumatran Tiger",
-            "Region": "Indonesia",
-            "Status": "Critically Endangered",
-            "Latitude": -1.5,
-            "Longitude": 101.5,
-            "Description": "The smallest surviving tiger subspecies.",
-            "Keywords": "tiger big cat feline",
-        },
-        {
-            "Animal": "Hawksbill Sea Turtle",
-            "Region": "Pacific Ocean",
-            "Status": "Critically Endangered",
-            "Latitude": 10.0,
-            "Longitude": -140.0,
-            "Description": "A sea turtle known for its beautiful shell.",
-            "Keywords": "turtle turtles sea turtle marine reptile",
-        },
-        {
-            "Animal": "North Pacific Right Whale",
-            "Region": "North Pacific",
-            "Status": "Endangered",
-            "Latitude": 55.0,
-            "Longitude": -160.0,
-            "Description": "One of the rarest whale species in the world.",
-            "Keywords": "whale whales marine mammal",
-        },
-        {
-            "Animal": "California Condor",
-            "Region": "United States",
-            "Status": "Critically Endangered",
-            "Latitude": 36.5,
-            "Longitude": -118.5,
-            "Description": "North America's largest flying bird.",
-            "Keywords": "condor bird birds vulture",
-        },
-        {
-            "Animal": "Florida Panther",
-            "Region": "United States",
-            "Status": "Endangered",
-            "Latitude": 26.2,
-            "Longitude": -81.0,
-            "Description": "A rare cougar found in southern Florida.",
-            "Keywords": "panther cougar mountain lion cat feline",
-        },
-        {
-            "Animal": "Bonobo",
-            "Region": "Central Africa",
-            "Status": "Endangered",
-            "Latitude": -2.0,
-            "Longitude": 23.0,
-            "Description": (
-                "A great ape found only in the Democratic Republic of the"
-                " Congo."
-            ),
-            "Keywords": "bonobo ape primate chimpanzee",
-        },
-        {
-            "Animal": "Okapi",
-            "Region": "Central Africa",
-            "Status": "Endangered",
-            "Latitude": 2.5,
-            "Longitude": 28.5,
-            "Description": (
-                "A unique relative of the giraffe found in Congo."
-            ),
-            "Keywords": "okapi giraffe mammal",
-        },
-        {
-            "Animal": "Golden Monkey",
-            "Region": "Rwanda / Uganda",
-            "Status": "Endangered",
-            "Latitude": -1.5,
-            "Longitude": 29.6,
-            "Description": (
-                "A colorful monkey living in the Virunga Mountains."
-            ),
-            "Keywords": "monkey monkeys primate",
-        },
-        {
-            "Animal": "Black Rhinoceros",
-            "Region": "Rwanda",
-            "Status": "Critically Endangered",
-            "Latitude": -1.9,
-            "Longitude": 30.1,
-            "Description": "A rhinoceros threatened by illegal poaching.",
-            "Keywords": "rhino rhinoceros",
-        },
-        {
-            "Animal": "Snowy Owl",
-            "Region": "North Pacific",
-            "Status": "Vulnerable",
-            "Latitude": 60.0,
-            "Longitude": -150.0,
-            "Description": "A large white owl adapted to cold climates.",
-            "Keywords": "owl bird birds",
-        },
-        {
-            "Animal": "Pallas's Cat",
-            "Region": "Himalayas",
-            "Status": "Near Threatened",
-            "Latitude": 35.5,
-            "Longitude": 78.0,
-            "Description": (
-                "A small wild cat with thick fur for mountain climates."
-            ),
-            "Keywords": "cat feline wildcat",
-        },
-        {
-            "Animal": "Red Panda",
-            "Region": "Himalayas",
-            "Status": "Endangered",
-            "Latitude": 27.8,
-            "Longitude": 88.2,
-            "Description": (
-                "A tree-dwelling mammal known for its reddish fur."
-            ),
-            "Keywords": "red panda panda bear",
-        },
-        {
-            "Animal": "Whale Shark",
-            "Region": "Pacific Ocean",
-            "Status": "Endangered",
-            "Latitude": 15.0,
-            "Longitude": -145.0,
-            "Description": "The largest fish species in the world.",
-            "Keywords": "shark sharks fish whale shark",
-        },
-        {
-            "Animal": "Manta Ray",
-            "Region": "Pacific Ocean",
-            "Status": "Vulnerable",
-            "Latitude": 12.0,
-            "Longitude": -150.0,
-            "Description": "A graceful giant ray threatened by fishing.",
-            "Keywords": "ray manta ray fish",
-        },
-        {
-            "Animal": "Guadalupe Fur Seal",
-            "Region": "Gulf of California",
-            "Status": "Endangered",
-            "Latitude": 29.0,
-            "Longitude": -113.0,
-            "Description": "A marine mammal native to the eastern Pacific.",
-            "Keywords": "seal seals marine mammal",
-        },
-        {
-            "Animal": "Totoaba",
-            "Region": "Gulf of California",
-            "Status": "Critically Endangered",
-            "Latitude": 30.8,
-            "Longitude": -114.2,
-            "Description": "A large fish threatened by illegal fishing.",
-            "Keywords": "fish totoaba",
-        },
-        {
-            "Animal": "Saiga Antelope",
-            "Region": "Russia",
-            "Status": "Critically Endangered",
-            "Latitude": 49.5,
-            "Longitude": 46.0,
-            "Description": (
-                "A distinctive antelope known for its large, flexible nose."
-                " It faces threats from poaching and disease."
-            ),
-            "Keywords": "saiga antelope antelopes mammal mammals",
-        },
-        {
-            "Animal": "Chinese Pangolin",
-            "Region": "China",
-            "Status": "Critically Endangered",
-            "Latitude": 27.5,
-            "Longitude": 112.5,
-            "Description": (
-                "A shy, nocturnal mammal covered in protective scales and"
-                " threatened by illegal wildlife trade."
-            ),
-            "Keywords": "pangolin pangolins mammal mammals scales",
-        },
-        {
-            "Animal": "Arctic Wolf",
-            "Region": "North Pacific",
-            "Status": "Least Concern",
-            "Latitude": 71.0,
-            "Longitude": -156.0,
-            "Description": (
-                "A white-furred subspecies of the gray wolf adapted to the"
-                " Arctic tundra."
-            ),
-            "Keywords": "wolf wolves arctic wolf canine canines",
-        },
-        {
-            "Animal": "Mexican Gray Wolf",
-            "Region": "United States",
-            "Status": "Endangered",
-            "Latitude": 33.5,
-            "Longitude": -109.0,
-            "Description": (
-                "The rarest gray wolf subspecies in North America,"
-                " reintroduced to the southwestern United States."
-            ),
-            "Keywords": "wolf wolves mexican gray wolf canine canines",
-        },
-        {
-            "Animal": "Himalayan Wolf",
-            "Region": "Himalayas",
-            "Status": "Vulnerable",
-            "Latitude": 34.5,
-            "Longitude": 78.5,
-            "Description": (
-                "An ancient lineage of wolf that lives at high elevations"
-                " in the Himalayan Mountains."
-            ),
-            "Keywords": "wolf wolves himalayan wolf canine canines",
-        },
-        {
-            "Animal": "Eurasian Wolf",
-            "Region": "Russia",
-            "Status": "Least Concern",
-            "Latitude": 58.0,
-            "Longitude": 90.0,
-            "Description": (
-                "A widespread gray wolf subspecies found throughout Europe"
-                " and northern Asia."
-            ),
-            "Keywords": "wolf wolves eurasian wolf gray wolf canine canines",
-        },
-        {
-            "Animal": "Alexander Archipelago Wolf",
-            "Region": "United States",
-            "Status": "Near Threatened",
-            "Latitude": 56.5,
-            "Longitude": -133.0,
-            "Description": (
-                "A coastal wolf that inhabits the forests and islands of"
-                " southeastern Alaska."
-            ),
-            "Keywords": (
-                "wolf wolves alexander archipelago wolf alaska canine"
-                " canines"
-            ),
-        },
-        {
-            "Animal": "Kakapo",
-            "Region": "New Zealand",
-            "Status": "Critically Endangered",
-            "Latitude": -45.0,
-            "Longitude": 167.5,
-            "Description": "A rare, flightless, nocturnal parrot native to New Zealand.",
-            "Keywords": "kakapo parrot bird flightless parrot new zealand",
-        },
-        {
-            "Animal": "Galapagos Giant Tortoise",
-            "Region": "Ecuador",
-            "Status": "Vulnerable",
-            "Latitude": -0.9,
-            "Longitude": -90.9,
-            "Description": "The largest living species of tortoise, inhabiting the Galapagos Islands.",
-            "Keywords": "tortoise giant tortoise reptile galapagos ecuador",
-        },
-        {
-            "Animal": "Iberian Lynx",
-            "Region": "Spain / Portugal",
-            "Status": "Endangered",
-            "Latitude": 37.5,
-            "Longitude": -6.5,
-            "Description": "A wild cat endemic to the Iberian Peninsula in southwestern Europe.",
-            "Keywords": "lynx iberian lynx cat wildcat feline spain portugal",
-        },
-        {
-            "Animal": "Cheetah",
-            "Region": "Sub-Saharan Africa",
-            "Status": "Vulnerable",
-            "Latitude": -2.0,
-            "Longitude": 34.5,
-            "Description": "The fastest land animal on Earth, threatened by habitat loss.",
-            "Keywords": "cheetah cat big cat feline africa fast mammal",
-        },
-        {
-            "Animal": "Monarch Butterfly",
-            "Region": "North America",
-            "Status": "Endangered",
-            "Latitude": 19.6,
-            "Longitude": -100.3,
-            "Description": "Famous for its long annual migration across North America.",
-            "Keywords": "monarch butterfly insect migration pollinator",
-        },
-        {
-            "Animal": "African Wild Dog",
-            "Region": "Sub-Saharan Africa",
-            "Status": "Endangered",
-            "Latitude": -18.0,
-            "Longitude": 25.0,
-            "Description": "Known for its mottled fur and highly social pack behaviors.",
-            "Keywords": "wild dog african wild dog canine hunting dog mammal",
-        },
-        {
-            "Animal": "Komodo Dragon",
-            "Region": "Indonesia",
-            "Status": "Endangered",
-            "Latitude": -8.5,
-            "Longitude": 119.5,
-            "Description": "The largest living species of lizard, native to Indonesian islands.",
-            "Keywords": "komodo dragon lizard reptile giant lizard indonesia",
-        },
-        {
-            "Animal": "Axolotl",
-            "Region": "Mexico",
-            "Status": "Critically Endangered",
-            "Latitude": 19.2,
-            "Longitude": -99.1,
-            "Description": "A unique walking salamander native to Lake Xochimilco.",
-            "Keywords": "axolotl salamander amphibian Mexico xochimilco",
-        },
-        {
-            "Animal": "Tasmanian Devil",
-            "Region": "Australia",
-            "Status": "Endangered",
-            "Latitude": -42.0,
-            "Longitude": 146.5,
-            "Description": "The largest carnivorous marsupial, native to the island of Tasmania.",
-            "Keywords": "tasmanian devil marsupial australia tasmania mammal",
-        },
-        {
-            "Animal": "Gharial",
-            "Region": "India / Nepal",
-            "Status": "Critically Endangered",
-            "Latitude": 27.5,
-            "Longitude": 81.2,
-            "Description": "A fish-eating crocodilian with a long, narrow snout.",
-            "Keywords": "gharial crocodile crocodilian reptile india nepal",
-        },
-        {
-            "Animal": "Sloth Bear",
-            "Region": "India / Sri Lanka",
-            "Status": "Vulnerable",
-            "Latitude": 20.5,
-            "Longitude": 78.9,
-            "Description": "A shaggy-coated bear adapted for feeding on insects like termites.",
-            "Keywords": "sloth bear bear mammal india sri lanka",
-        },
-        {
-            "Animal": "Polar Bear",
-            "Region": "North Pacific",
-            "Status": "Vulnerable",
-            "Latitude": 75.0,
-            "Longitude": -100.0,
-            "Description": "The world's largest land carnivore, threatened by melting sea ice.",
-            "Keywords": "polar bear bear arctic marine mammal ice",
-        },
-        {
-            "Animal": "Tree Kangaroo",
-            "Region": "Papua New Guinea",
-            "Status": "Endangered",
-            "Latitude": -6.0,
-            "Longitude": 143.5,
-            "Description": "A tree-dwelling marsupial adapted for climbing in tropical rainforests.",
-            "Keywords": "tree kangaroo kangaroo marsupial papua new guinea",
-        },
-        {
-            "Animal": "Amazon River Dolphin",
-            "Region": "South America",
-            "Status": "Endangered",
-            "Latitude": -3.4,
-            "Longitude": -62.2,
-            "Description": "A pink freshwater dolphin native to the rivers of the Amazon basin.",
-            "Keywords": "amazon river dolphin pink dolphin river dolphin freshwater marine mammal",
-        },
-        {
-            "Animal": "Philippine Eagle",
-            "Region": "Philippines",
-            "Status": "Critically Endangered",
-            "Latitude": 7.1,
-            "Longitude": 125.6,
-            "Description": "One of the world's largest and most powerful forest eagles.",
-            "Keywords": "philippine eagle eagle bird bird of prey raptor philippines",
         },
     ]
 
@@ -742,7 +326,7 @@ else:
         return list(terms)
 
     # -----------------------------
-    # Sidebar Navigation Header & Profile Pic
+    # Sidebar Navigation Header
     # -----------------------------
     st.sidebar.title("☰ Navigation")
 
@@ -776,12 +360,11 @@ else:
         logout_confirm_dialog()
 
     # -----------------------------
-    # PAGE: PROFILE MANAGEMENT (VIEW PROFILE MODE)
+    # PAGE: PROFILE MANAGEMENT
     # -----------------------------
     if st.session_state.view_profile:
         st.title("👤 Profile & Account Settings")
 
-        # Standard clean arrow used here to prevent text leakage glitch
         if st.button("← Back to App"):
             st.session_state.view_profile = False
             st.rerun()
@@ -794,24 +377,19 @@ else:
             st.subheader("Profile Photo")
             st.image(pic_to_show, width=150)
 
+            # Single Uploader Input
             uploaded_file = st.file_uploader(
-                "Change photo", type=["jpg", "png", "jpeg"]
+                "Upload a new photo", type=["jpg", "png", "jpeg"], key="profile_photo_uploader"
             )
             if uploaded_file is not None:
                 st.session_state.profile_pic = uploaded_file
-                st.success("Photo updated!")
+                st.success("Photo updated successfully!")
 
         with col2:
             st.subheader("Account Details")
-            new_username = st.text_input(
-                "Username", value=st.session_state.username
-            )
-            new_phone = st.text_input(
-                "Phone Number (Optional)", value=st.session_state.phone
-            )
-            new_description = st.text_area(
-                "Profile Description", value=st.session_state.description
-            )
+            new_username = st.text_input("Username", value=st.session_state.username)
+            new_phone = st.text_input("Phone Number (Optional)", value=st.session_state.phone)
+            new_description = st.text_area("Profile Description", value=st.session_state.description)
 
             if st.button("Save Profile Changes"):
                 st.session_state.username = new_username
@@ -841,9 +419,7 @@ else:
         st.write(
             """
         Animal Advocators is dedicated to protecting endangered wildlife around the world.
-
-        Use the navigation menu on the left to explore endangered species, 
-        learn about conservation, and support wildlife through donations.
+        Use the navigation menu on the left to explore endangered species, learn about conservation, and support wildlife through donations.
         """
         )
 
@@ -856,8 +432,7 @@ else:
 
             def matches(row):
                 searchable = (
-                    f"{row['Animal']} {row['Region']} {row['Description']}"
-                    f" {row['Keywords']}"
+                    f"{row['Animal']} {row['Region']} {row['Description']} {row['Keywords']}"
                 ).lower()
                 return any(term in searchable for term in search_terms)
 
@@ -911,43 +486,67 @@ else:
 
             st.pydeck_chart(deck)
 
-        # DONATION SECTION
+        # DONATION SECTION WITH REWARDS & CREDIT CARD PAYMENT
         st.markdown("---")
-        st.header("💚 Donation Tracker & Rewards")
+        st.header("💚 Donation Goal Tracker & Free Rewards")
 
-        # Displays thank-you banner after donation submission
         if st.session_state.donation_success_msg:
             st.balloons()
             st.success(st.session_state.donation_success_msg)
             st.session_state.donation_success_msg = None
 
-        max_goal = 10000.0
         current_total = st.session_state.total_donated
-        progress_pct = min(1.0, current_total / max_goal)
+        goal_5000 = 5000.0
+        progress_pct = min(1.0, current_total / goal_5000)
 
-        col_stats, col_form = st.columns([1, 1])
+        # Rewards Milestone Display Table
+        st.subheader("🎯 Reward Milestones")
 
-        with col_stats:
-            st.subheader("Goal Progress")
-            st.progress(progress_pct)
-            st.metric(
-                label="Total Raised So Far",
-                value=f"${current_total:,.2f}",
-                delta=f"Goal: ${max_goal:,.0f}",
+        r1 = "✅ UNLOCKED!" if current_total >= 100 else f"${100 - current_total:,.2f} remaining"
+        r2 = "✅ UNLOCKED!" if current_total >= 500 else f"${500 - current_total:,.2f} remaining"
+        r3 = "✅ UNLOCKED!" if current_total >= 1000 else f"${1000 - current_total:,.2f} remaining"
+        r4 = "✅ UNLOCKED!" if current_total >= 5000 else f"${5000 - current_total:,.2f} remaining"
+
+        col_a, col_b, col_c, col_d = st.columns(4)
+        col_a.metric("🔑 Free Keychain", "$100 Goal", r1)
+        col_b.metric("👕 Free T-Shirt", "$500 Goal", r2)
+        col_c.metric("🏷️ Merch Discount", "$1,000 Goal", r3)
+        col_d.metric("🌟 VIP Visit to Help", "$5,000 Goal", r4)
+
+        st.write(f"**Overall Goal Progress to Maximum VIP Reward ($5,000):**")
+        st.progress(progress_pct)
+        st.metric(label="Total Donated So Far", value=f"${current_total:,.2f}")
+
+        # Payment Form
+        st.subheader("💳 Make a Donation")
+        with st.form("donation_payment_form"):
+            donation_amt = st.number_input(
+                "Enter Donation Amount ($):", min_value=1.0, value=50.0, step=5.0
             )
 
-        with col_form:
-            st.subheader("Make a Donation")
-            with st.form("donation_form"):
-                amount = st.number_input(
-                    "Donation Amount ($):", min_value=1.0, value=25.0, step=5.0
-                )
-                submitted = st.form_submit_button("Donate Now")
+            card_type = st.selectbox(
+                "Select Credit Card Type:",
+                ["Visa 💳", "Mastercard 💳", "American Express 💳", "Discover 💳"]
+            )
 
-                if submitted:
-                    st.session_state.total_donated += amount
+            col_card1, col_card2 = st.columns(2)
+            with col_card1:
+                card_name = st.text_input("Cardholder Name")
+                card_num = st.text_input("Card Number", type="password", max_chars=16)
+            with col_card2:
+                expiry = st.text_input("Expiration Date (MM/YY)", max_chars=5)
+                cvv = st.text_input("CVV / CVC", type="password", max_chars=4)
+
+            pay_submitted = st.form_submit_button("Complete Payment & Donate")
+
+            if pay_submitted:
+                if not card_name or not card_num or not expiry or not cvv:
+                    st.error("Please fill in all credit card payment details.")
+                else:
+                    st.session_state.total_donated += donation_amt
                     st.session_state.donation_success_msg = (
-                        f"Thank you for donating ${amount:,.2f}!"
+                        f"Thank you for donating ${donation_amt:,.2f} via {card_type}! "
+                        f"Your current total donated is ${st.session_state.total_donated:,.2f}."
                     )
                     st.rerun()
 
@@ -982,9 +581,7 @@ else:
     # -----------------------------
     elif page == "📚 Endangered Animal Library":
         st.title("📚 Endangered Animal Library")
-        st.write(
-            "Explore information on protected species tracked in our system."
-        )
+        st.write("Explore information on protected species tracked in our system.")
 
         selected_status = st.multiselect(
             "Filter by Threat Status:",
@@ -1006,10 +603,7 @@ else:
     # -----------------------------
     elif page == "🤝 Other Ways To Help":
         st.title("🤝 Other Ways To Help")
-        st.write(
-            "Donations aren't the only way to make a difference! Here is how"
-            " you can help protect wild animals:"
-        )
+        st.write("Donations aren't the only way to make a difference! Here is how you can help protect wild animals:")
 
         st.markdown(
             """
@@ -1023,17 +617,35 @@ else:
         show_bottom_banner()
 
     # -----------------------------
-    # PAGE 5: SETTINGS
+    # PAGE 5: SETTINGS & FEEDBACK / BUG REPORTING
     # -----------------------------
     elif page == "⚙️ Settings":
-        st.title("⚙️ App Settings")
-        st.write("Customize your application preferences.")
+        st.title("⚙️ Settings & Support")
 
-        st.subheader("Preferences")
-        st.checkbox("Enable sound notifications", value=True)
-        st.checkbox("Email newsletter updates", value=False)
+        st.subheader("🔔 Preferences")
+        st.checkbox("Enable email updates for goal rewards", value=True)
+        st.checkbox("Show map animation effects", value=True)
 
-        if st.button("Save Settings"):
-            st.success("Settings saved successfully!")
+        st.markdown("---")
+
+        st.subheader("💬 Contact Us & Send Feedback")
+        st.write("Report bugs, glitches, or send feedback to help us improve the app!")
+
+        with st.form("feedback_and_bug_form"):
+            feedback_type = st.selectbox(
+                "Category:",
+                ["🐛 Bug / Error Report", "💡 General Feedback", "❓ Question / Support"]
+            )
+            user_email = st.text_input("Your Email Address (Optional):")
+            subject = st.text_input("Subject:")
+            message = st.text_area("Describe the bug or feedback in detail:")
+
+            submit_feedback = st.form_submit_button("Submit Message")
+
+            if submit_feedback:
+                if not message or not subject:
+                    st.error("Please provide both a subject and a message description.")
+                else:
+                    st.success("Thank you! Your feedback/bug report has been successfully submitted to our team.")
 
         show_bottom_banner()

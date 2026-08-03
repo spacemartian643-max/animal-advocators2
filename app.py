@@ -107,14 +107,11 @@ if "donation_success_msg" not in st.session_state:
 
 
 # -----------------------------
-# Log Out Confirmation Dialog
+# Log Out Dialog
 # -----------------------------
 @st.dialog("Log Out Confirmation")
 def logout_confirm_dialog():
-    st.write(
-        "Are you sure you want to log out? All changes and donations you made"
-        " will remain saved."
-    )
+    st.write("Are you sure you want to log out? All your changes will remain saved.")
 
     col1, col2 = st.columns(2)
     with col1:
@@ -126,16 +123,14 @@ def logout_confirm_dialog():
             st.session_state.logged_in = False
             st.session_state.username = "Guest"
             st.session_state.phone = ""
-            st.session_state.description = (
-                "Passionate about protecting wildlife!"
-            )
+            st.session_state.description = "Passionate about protecting wildlife!"
             st.session_state.profile_pic = None
             st.session_state.view_profile = False
             st.rerun()
 
 
 # =============================================================================
-# 🔑 LOGIN / SIGN UP / GUEST VIEW
+# LOGIN / SIGN UP / GUEST VIEW
 # =============================================================================
 if not st.session_state.logged_in:
 
@@ -148,9 +143,7 @@ if not st.session_state.logged_in:
 
     with login_tab:
         login_username = st.text_input("Username", key="login_user")
-        login_password = st.text_input(
-            "Password", type="password", key="login_pass"
-        )
+        login_password = st.text_input("Password", type="password", key="login_pass")
 
         if st.button("Log In"):
             user_entry = st.session_state.users_db.get(login_username)
@@ -170,12 +163,8 @@ if not st.session_state.logged_in:
         username = st.text_input("Create Username", key="signup_user")
         email = st.text_input("Email Address", key="signup_email")
         phone = st.text_input("Phone Number (Optional)", key="signup_phone")
-        password = st.text_input(
-            "Create Password", type="password", key="signup_pass"
-        )
-        confirm = st.text_input(
-            "Confirm Password", type="password", key="signup_confirm"
-        )
+        password = st.text_input("Create Password", type="password", key="signup_pass")
+        confirm = st.text_input("Confirm Password", type="password", key="signup_confirm")
 
         if st.button("Create Account"):
             if not username or not email or not password:
@@ -208,12 +197,12 @@ if not st.session_state.logged_in:
 
 
 # =============================================================================
-# 🏠 MAIN APP VIEW
+# MAIN APP VIEW
 # =============================================================================
 else:
 
     # -----------------------------
-    # Shared Data Load (51 Animals)
+    # 51 Animals Dataset
     # -----------------------------
     animals = [
         {"Animal": "Amur Leopard", "Region": "Russia / China", "Status": "Critically Endangered", "Latitude": 43.2, "Longitude": 131.9, "Description": "One of the rarest big cats in the world.", "Keywords": "leopard leopards cat cats feline felines big cat"},
@@ -284,9 +273,9 @@ else:
         return list(terms)
 
     # -----------------------------
-    # Sidebar Navigation
+    # Sidebar Navigation (Clean Standard Text)
     # -----------------------------
-    st.sidebar.title("☰ Navigation")
+    st.sidebar.title("Navigation Menu")
 
     pic_to_show = (
         st.session_state.profile_pic
@@ -304,26 +293,26 @@ else:
     page = st.sidebar.radio(
         "Go to",
         [
-            "🏠 Home",
-            "🌎 Overview",
-            "📚 Endangered Animal Library",
-            "🤝 Other Ways To Help",
-            "⚙️ Settings",
+            "Home",
+            "Overview",
+            "Endangered Animal Library",
+            "Other Ways To Help",
+            "Settings",
         ],
     )
 
     st.sidebar.markdown("---")
 
-    if st.sidebar.button("🚪 Log Out", use_container_width=True):
+    if st.sidebar.button("Log Out", use_container_width=True):
         logout_confirm_dialog()
 
     # -----------------------------
-    # PAGE: PROFILE MANAGEMENT
+    # EDIT PROFILE (SINGLE UPLOAD ONLY)
     # -----------------------------
     if st.session_state.view_profile:
-        st.title("👤 Profile & Account Settings")
+        st.title("Profile & Account Settings")
 
-        if st.button("<< Back to App"):
+        if st.button("Back to App"):
             st.session_state.view_profile = False
             st.rerun()
 
@@ -335,9 +324,9 @@ else:
             st.subheader("Profile Photo")
             st.image(pic_to_show, width=150)
 
-            # Single Image Upload Field
+            # Strictly single uploader component
             uploaded_file = st.file_uploader(
-                "Upload photo", type=["jpg", "png", "jpeg"], key="single_pic_uploader"
+                "Upload a profile photo", type=["jpg", "png", "jpeg"], key="single_profile_pic_upload"
             )
             if uploaded_file is not None:
                 st.session_state.profile_pic = uploaded_file
@@ -356,7 +345,7 @@ else:
                 st.success("Profile changes saved!")
 
         st.markdown("---")
-        st.subheader("🔁 Account Options")
+        st.subheader("Account Options")
         if st.button("Switch Account"):
             st.session_state.logged_in = False
             st.session_state.view_profile = False
@@ -365,9 +354,9 @@ else:
         show_bottom_banner()
 
     # -----------------------------
-    # PAGE 1: HOME PAGE
+    # HOME PAGE
     # -----------------------------
-    elif page == "🏠 Home":
+    elif page == "Home":
 
         st.title("Animal Advocators 🌿")
         st.subheader("Voice the Voiceless")
@@ -383,7 +372,7 @@ else:
 
         st.markdown("---")
 
-        search = st.text_input("🔎 Search for an endangered animal or region:")
+        search = st.text_input("Search for an endangered animal or region:")
 
         if search.strip():
             search_terms = normalize_search(search)
@@ -406,7 +395,7 @@ else:
         elif filtered_df.empty and search.strip():
             st.warning("No animals were found.")
 
-        st.header("🗺️ Endangered Animal Map")
+        st.header("Endangered Animal Map")
 
         map_data = filtered_df if search.strip() else df
 
@@ -444,9 +433,9 @@ else:
 
             st.pydeck_chart(deck)
 
-        # DONATION CIRCLE & PRIZE CLAIM SYSTEM
+        # CIRCULAR DONATION GOAL & PRIZE CLAIMS
         st.markdown("---")
-        st.header("💚 Circular Donation Goal & Rewards Tracker")
+        st.header("Donation Goal & Reward Progress")
 
         if st.session_state.donation_success_msg:
             st.balloons()
@@ -456,13 +445,12 @@ else:
         curr_donation = st.session_state.total_donated
         goal_val = 5000.0
         pct = min(100.0, (curr_donation / goal_val) * 100)
-        stroke_dash = float(pct * 2.83)  # SVG Circumference math
+        stroke_dash = float(pct * 2.83)
 
         circle_col, reward_col = st.columns([1, 2])
 
         with circle_col:
-            st.subheader("Circle Goal Tracker")
-            # SVG Circular Progress Ring
+            st.subheader("Goal Circle")
             st.markdown(
                 f"""
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
@@ -479,13 +467,13 @@ else:
             )
 
         with reward_col:
-            st.subheader("🎁 Milestone Prize Unlocks")
+            st.subheader("Milestone Prizes")
 
             milestones = [
-                ("keychain", 100.0, "🔑 Free Keychain"),
-                ("tshirt", 500.0, "👕 Free T-Shirt"),
-                ("discount", 1000.0, "🏷️ Merch Discount"),
-                ("vip", 5000.0, "🌟 VIP Visit to Help"),
+                ("keychain", 100.0, "Free Keychain"),
+                ("tshirt", 500.0, "Free T-Shirt"),
+                ("discount", 1000.0, "Merch Discount"),
+                ("vip", 5000.0, "VIP Visit to Help"),
             ]
 
             for item_id, goal_amt, label in milestones:
@@ -500,18 +488,18 @@ else:
                 with col_m2:
                     if curr_donation >= goal_amt:
                         if item_id in st.session_state.claimed_rewards:
-                            st.button("✅ Claimed", key=f"claimed_{item_id}", disabled=True)
+                            st.button("Claimed", key=f"claimed_{item_id}", disabled=True)
                         else:
-                            if st.button(f"🎁 Claim Prize", key=f"claim_{item_id}"):
+                            if st.button(f"Claim Prize", key=f"claim_{item_id}"):
                                 st.session_state.claimed_rewards.add(item_id)
                                 st.balloons()
                                 st.success(f"You claimed your {label}!")
                                 st.rerun()
                     else:
-                        st.button("Locked 🔒", key=f"locked_{item_id}", disabled=True)
+                        st.button("Locked", key=f"locked_{item_id}", disabled=True)
 
         st.markdown("---")
-        st.subheader("💳 Make a Donation (Credit Card or Gift Card)")
+        st.subheader("Make a Donation")
 
         with st.form("donation_payment_form"):
             donation_amt = st.number_input(
@@ -520,30 +508,32 @@ else:
 
             pay_method = st.radio(
                 "Select Payment Method:",
-                ["Credit Card 💳", "Gift Card 🎁"],
+                ["Credit Card", "Gift Card"],
                 horizontal=True
             )
 
-            if pay_method == "Credit Card 💳":
+            if pay_method == "Credit Card":
                 card_type = st.selectbox("Card Brand:", ["Visa", "Mastercard", "American Express", "Discover"])
                 col_c1, col_c2 = st.columns(2)
                 with col_c1:
                     card_name = st.text_input("Cardholder Name")
-                    card_num = st.text_input("Card Number", type="password")
+                    # Clean text input without eye toggle icon
+                    card_num = st.text_input("Card Number")
                 with col_c2:
-                    expiry = st.text_input("MM/YY")
-                    cvv = st.text_input("CVV", type="password")
+                    expiry = st.text_input("Expiration Date (MM/YY)")
+                    # Clean text input without eye toggle icon
+                    cvv = st.text_input("CVV")
             else:
-                gift_code = st.text_input("Enter 16-Digit Gift Card Code:", type="password")
-                gift_pin = st.text_input("Gift Card PIN:", type="password")
+                # Simplified single input for Gift Card
+                gift_code = st.text_input("Enter Gift Card Number:")
 
             pay_submitted = st.form_submit_button("Complete Donation")
 
             if pay_submitted:
-                if pay_method == "Credit Card 💳" and (not card_name or not card_num or not expiry or not cvv):
+                if pay_method == "Credit Card" and (not card_name or not card_num or not expiry or not cvv):
                     st.error("Please fill in all credit card details.")
-                elif pay_method == "Gift Card 🎁" and (not gift_code or not gift_pin):
-                    st.error("Please enter a valid Gift Card Code and PIN.")
+                elif pay_method == "Gift Card" and not gift_code:
+                    st.error("Please enter your Gift Card number.")
                 else:
                     st.session_state.total_donated += donation_amt
                     st.session_state.donation_success_msg = (
@@ -555,10 +545,10 @@ else:
         show_bottom_banner()
 
     # -----------------------------
-    # PAGE 2: OVERVIEW
+    # OVERVIEW
     # -----------------------------
-    elif page == "🌎 Overview":
-        st.title("🌎 Overview & Mission")
+    elif page == "Overview":
+        st.title("Overview & Mission")
         st.write(
             """
         Welcome to the Overview of **Animal Advocators**. 
@@ -570,7 +560,7 @@ else:
         )
 
         st.markdown("---")
-        st.subheader("📊 Wildlife Conservation Impact")
+        st.subheader("Wildlife Conservation Impact")
         col1, col2, col3 = st.columns(3)
         col1.metric("Species Tracked", len(df))
         col2.metric("Critical Regions", len(df["Region"].unique()))
@@ -579,10 +569,10 @@ else:
         show_bottom_banner()
 
     # -----------------------------
-    # PAGE 3: ENDANGERED ANIMAL LIBRARY
+    # ENDANGERED ANIMAL LIBRARY
     # -----------------------------
-    elif page == "📚 Endangered Animal Library":
-        st.title("📚 Endangered Animal Library")
+    elif page == "Endangered Animal Library":
+        st.title("Endangered Animal Library")
         st.write("Explore all 51 species tracked in our system.")
 
         selected_status = st.multiselect(
@@ -601,42 +591,42 @@ else:
         show_bottom_banner()
 
     # -----------------------------
-    # PAGE 4: OTHER WAYS TO HELP
+    # OTHER WAYS TO HELP
     # -----------------------------
-    elif page == "🤝 Other Ways To Help":
-        st.title("🤝 Other Ways To Help")
+    elif page == "Other Ways To Help":
+        st.title("Other Ways To Help")
         st.write("Donations aren't the only way to make a difference! Here is how you can help protect wild animals:")
 
         st.markdown(
             """
-        * **📢 Spread Awareness**: Share wildlife protection campaigns on social media.
-        * **🌳 Reduce Carbon Footprint**: Protect natural habitats by reducing waste and recycling.
-        * **🙋 Volunteer**: Join local environmental cleanups and wildlife shelters.
-        * **🚫 Say No to Illegal Wildlife Trade**: Avoid purchasing products made from endangered species.
+        * **Spread Awareness**: Share wildlife protection campaigns on social media.
+        * **Reduce Carbon Footprint**: Protect natural habitats by reducing waste and recycling.
+        * **Volunteer**: Join local environmental cleanups and wildlife shelters.
+        * **Say No to Illegal Wildlife Trade**: Avoid purchasing products made from endangered species.
         """
         )
 
         show_bottom_banner()
 
     # -----------------------------
-    # PAGE 5: SETTINGS & FEEDBACK / BUG REPORTING
+    # SETTINGS
     # -----------------------------
-    elif page == "⚙️ Settings":
-        st.title("⚙️ Settings & Support")
+    elif page == "Settings":
+        st.title("Settings & Support")
 
-        st.subheader("🔔 Preferences")
+        st.subheader("Preferences")
         st.checkbox("Enable email updates for goal rewards", value=True)
         st.checkbox("Show map animation effects", value=True)
 
         st.markdown("---")
 
-        st.subheader("💬 Contact Us & Send Feedback")
+        st.subheader("Contact Us & Send Feedback")
         st.write("Report bugs, glitches, or send feedback directly to our team!")
 
         with st.form("feedback_and_bug_form"):
             feedback_type = st.selectbox(
                 "Category:",
-                ["🐛 Bug / Error Report", "💡 General Feedback", "❓ Question / Support"]
+                ["Bug / Error Report", "General Feedback", "Question / Support"]
             )
             user_email = st.text_input("Your Email Address (Optional):")
             subject = st.text_input("Subject:")

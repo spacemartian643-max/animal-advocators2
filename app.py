@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import pydeck as pdk
 
-# Default placeholder SVG image (Standard user profile avatar)
+# Default placeholder image (Standard user profile avatar)
 DEFAULT_AVATAR = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
 
 # -----------------------------
@@ -42,9 +42,10 @@ if "page" not in st.session_state:
     st.session_state.page = "🏠 Home"
 
 # -----------------------------
-# Full Animals Dataset
+# Full Animals Dataset (with 25 new animals, 10 from Antarctica)
 # -----------------------------
 animals = [
+    # --- Original Dataset ---
     {
         "Animal": "Amur Leopard",
         "Region": "Russia / China",
@@ -312,7 +313,7 @@ animals = [
         "Status": "Critically Endangered",
         "Latitude": 49.5,
         "Longitude": 46.0,
-        "Description": "A distinctive antelope known for its large, flexible nose. It faces threats from poaching and disease.",
+        "Description": "A distinctive antelope known for its large, flexible nose.",
         "Keywords": "saiga antelope antelopes mammal mammals"
     },
     {
@@ -321,7 +322,7 @@ animals = [
         "Status": "Critically Endangered",
         "Latitude": 27.5,
         "Longitude": 112.5,
-        "Description": "A shy, nocturnal mammal covered in protective scales and threatened by illegal wildlife trade.",
+        "Description": "A shy, nocturnal mammal covered in protective scales.",
         "Keywords": "pangolin pangolins mammal mammals scales"
     },
     {
@@ -330,7 +331,7 @@ animals = [
         "Status": "Least Concern",
         "Latitude": 71.0,
         "Longitude": -156.0,
-        "Description": "A white-furred subspecies of the gray wolf adapted to the Arctic tundra.",
+        "Description": "A white-furred subspecies of the gray wolf adapted to Arctic tundra.",
         "Keywords": "wolf wolves arctic wolf canine canines"
     },
     {
@@ -339,7 +340,7 @@ animals = [
         "Status": "Endangered",
         "Latitude": 33.5,
         "Longitude": -109.0,
-        "Description": "The rarest gray wolf subspecies in North America, reintroduced to the southwestern United States.",
+        "Description": "The rarest gray wolf subspecies in North America.",
         "Keywords": "wolf wolves mexican gray wolf canine canines"
     },
     {
@@ -348,7 +349,7 @@ animals = [
         "Status": "Vulnerable",
         "Latitude": 34.5,
         "Longitude": 78.5,
-        "Description": "An ancient lineage of wolf that lives at high elevations in the Himalayan Mountains.",
+        "Description": "An ancient lineage of wolf that lives high in the Himalayas.",
         "Keywords": "wolf wolves himalayan wolf canine canines"
     },
     {
@@ -357,7 +358,7 @@ animals = [
         "Status": "Least Concern",
         "Latitude": 58.0,
         "Longitude": 90.0,
-        "Description": "A widespread gray wolf subspecies found throughout Europe and northern Asia.",
+        "Description": "A widespread gray wolf subspecies across Europe and Asia.",
         "Keywords": "wolf wolves eurasian wolf gray wolf canine canines"
     },
     {
@@ -366,9 +367,238 @@ animals = [
         "Status": "Near Threatened",
         "Latitude": 56.5,
         "Longitude": -133.0,
-        "Description": "A coastal wolf that inhabits the forests and islands of southeastern Alaska.",
+        "Description": "A coastal wolf that inhabits the islands of southeastern Alaska.",
         "Keywords": "wolf wolves alexander archipelago wolf alaska canine canines"
     },
+
+    # --- 10 ANTARCTICA ANIMALS ---
+    {
+        "Animal": "Emperor Penguin",
+        "Region": "Antarctica",
+        "Status": "Near Threatened",
+        "Latitude": -75.0,
+        "Longitude": 0.0,
+        "Description": "The tallest and heaviest of all living penguin species, breeding in extreme cold.",
+        "Keywords": "penguin penguins emperor bird birds antarctica polar"
+    },
+    {
+        "Animal": "Weddell Seal",
+        "Region": "Antarctica",
+        "Status": "Least Concern",
+        "Latitude": -77.8,
+        "Longitude": 166.6,
+        "Description": "A ice-dwelling seal that lives further south than any other mammal.",
+        "Keywords": "seal seals weddell marine mammal polar antarctica"
+    },
+    {
+        "Animal": "Leopard Seal",
+        "Region": "Antarctica",
+        "Status": "Least Concern",
+        "Latitude": -65.0,
+        "Longitude": -64.0,
+        "Description": "A formidable Antarctic predator known for its spotted coat and speed in water.",
+        "Keywords": "seal seals leopard seal marine mammal predator antarctica"
+    },
+    {
+        "Animal": "Antarctic Krill",
+        "Region": "Antarctica",
+        "Status": "Least Concern",
+        "Latitude": -60.0,
+        "Longitude": -45.0,
+        "Description": "Tiny swimming crustaceans that form the foundation of the Antarctic food web.",
+        "Keywords": "krill crustacean marine life food chain antarctica"
+    },
+    {
+        "Animal": "Snow Petrel",
+        "Region": "Antarctica",
+        "Status": "Least Concern",
+        "Latitude": -71.0,
+        "Longitude": 10.0,
+        "Description": "A pure white bird that nests exclusively on the Antarctic continent.",
+        "Keywords": "petrel snow petrel bird birds antarctica polar"
+    },
+    {
+        "Animal": "Hourglass Dolphin",
+        "Region": "Antarctica",
+        "Status": "Least Concern",
+        "Latitude": -62.0,
+        "Longitude": -60.0,
+        "Description": "A striking black-and-white dolphin native to cold Antarctic waters.",
+        "Keywords": "dolphin dolphins hourglass marine mammal antarctica"
+    },
+    {
+        "Animal": "Chinstrap Penguin",
+        "Region": "Antarctica",
+        "Status": "Least Concern",
+        "Latitude": -62.2,
+        "Longitude": -58.9,
+        "Description": "Named for the thin black band under its chin, nesting in large Antarctic colonies.",
+        "Keywords": "penguin penguins chinstrap bird birds antarctica"
+    },
+    {
+        "Animal": "Adélie Penguin",
+        "Region": "Antarctica",
+        "Status": "Least Concern",
+        "Latitude": -66.5,
+        "Longitude": 140.0,
+        "Description": "A classic tuxedo-patterned penguin common along the Antarctic coast.",
+        "Keywords": "penguin penguins adelie bird birds antarctica"
+    },
+    {
+        "Animal": "Antarctic Petrel",
+        "Region": "Antarctica",
+        "Status": "Least Concern",
+        "Latitude": -70.0,
+        "Longitude": 2.0,
+        "Description": "A brown-and-white seabird highly adapted to life in icy polar winds.",
+        "Keywords": "petrel antarctic petrel bird birds seabird antarctica"
+    },
+    {
+        "Animal": "Wandering Albatross",
+        "Region": "Antarctica",
+        "Status": "Vulnerable",
+        "Latitude": -54.0,
+        "Longitude": -38.0,
+        "Description": "Boasts the largest wingspan of any living bird, soaring over Southern oceans.",
+        "Keywords": "albatross wandering albatross bird birds wingspan antarctica"
+    },
+
+    # --- 15 OTHER GLOBAL ANIMALS ---
+    {
+        "Animal": "Tasmanian Devil",
+        "Region": "Australia",
+        "Status": "Endangered",
+        "Latitude": -42.0,
+        "Longitude": 146.5,
+        "Description": "The world's largest carnivorous marsupial, native to Tasmania.",
+        "Keywords": "tasmanian devil marsupial australia carnivore"
+    },
+    {
+        "Animal": "Kakapo",
+        "Region": "New Zealand",
+        "Status": "Critically Endangered",
+        "Latitude": -46.6,
+        "Longitude": 167.5,
+        "Description": "A rare, flightless, nocturnal parrot native to New Zealand.",
+        "Keywords": "kakapo parrot bird flightless new zealand"
+    },
+    {
+        "Animal": "Lemur Leaf Frog",
+        "Region": "Central America",
+        "Status": "Critically Endangered",
+        "Latitude": 9.5,
+        "Longitude": -83.8,
+        "Description": "A small frog species capable of shifting its skin color from green to reddish-brown.",
+        "Keywords": "frog amphibian leaf frog central america"
+    },
+    {
+        "Animal": "Galapagos Giant Tortoise",
+        "Region": "Galapagos Islands",
+        "Status": "Vulnerable",
+        "Latitude": -0.8,
+        "Longitude": -91.1,
+        "Description": "Massive tortoises known for long lifespans exceeding 100 years.",
+        "Keywords": "tortoise giant tortoise reptile galapagos"
+    },
+    {
+        "Animal": "Iberian Lynx",
+        "Region": "Spain / Portugal",
+        "Status": "Vulnerable",
+        "Latitude": 38.0,
+        "Longitude": -4.0,
+        "Description": "A wild cat species native to the Iberian Peninsula in southwestern Europe.",
+        "Keywords": "lynx cat feline iberian lynx europe"
+    },
+    {
+        "Animal": "Sunda Pangolin",
+        "Region": "Southeast Asia",
+        "Status": "Critically Endangered",
+        "Latitude": 2.5,
+        "Longitude": 102.5,
+        "Description": "A scaly nocturnal mammal heavily targeted by wildlife trafficking.",
+        "Keywords": "pangolin sunda pangolin mammal scales southeast asia"
+    },
+    {
+        "Animal": "Komodo Dragon",
+        "Region": "Indonesia",
+        "Status": "Endangered",
+        "Latitude": -8.6,
+        "Longitude": 119.5,
+        "Description": "The largest living lizard species on Earth, native to Indonesian islands.",
+        "Keywords": "komodo dragon lizard reptile giant lizard indonesia"
+    },
+    {
+        "Animal": "African Wild Dog",
+        "Region": "Sub-Saharan Africa",
+        "Status": "Endangered",
+        "Latitude": -18.0,
+        "Longitude": 25.0,
+        "Description": "A highly social canine known for its unique patchy fur pattern and endurance hunting.",
+        "Keywords": "wild dog canine painted dog africa"
+    },
+    {
+        "Animal": "Flatback Sea Turtle",
+        "Region": "Australia",
+        "Status": "Data Deficient",
+        "Latitude": -12.5,
+        "Longitude": 130.8,
+        "Description": "A sea turtle endemic to the continental shelf of northern Australia.",
+        "Keywords": "turtle sea turtle flatback reptile australia"
+    },
+    {
+        "Animal": "Ganges River Dolphin",
+        "Region": "India / Nepal",
+        "Status": "Endangered",
+        "Latitude": 25.3,
+        "Longitude": 83.0,
+        "Description": "A freshwater dolphin species living in the muddy rivers of South Asia.",
+        "Keywords": "dolphin river dolphin freshwater dolphin ganges india"
+    },
+    {
+        "Animal": "Fossa",
+        "Region": "Madagascar",
+        "Status": "Vulnerable",
+        "Latitude": -19.0,
+        "Longitude": 47.0,
+        "Description": "A slender cat-like carnivorous mammal unique to Madagascar.",
+        "Keywords": "fossa carnivore predator madagascar"
+    },
+    {
+        "Animal": "Platypus",
+        "Region": "Australia",
+        "Status": "Near Threatened",
+        "Latitude": -35.3,
+        "Longitude": 149.1,
+        "Description": "An egg-laying semi-aquatic mammal native to eastern Australia.",
+        "Keywords": "platypus monotreme duckbill mammal australia"
+    },
+    {
+        "Animal": "Polar Bear",
+        "Region": "Arctic Ocean",
+        "Status": "Vulnerable",
+        "Latitude": 75.0,
+        "Longitude": -40.0,
+        "Description": "A hypercarnivorous bear whose native range lies largely within the Arctic Circle.",
+        "Keywords": "polar bear bear arctic polar mammal"
+    },
+    {
+        "Animal": "Chinchilla",
+        "Region": "Chile",
+        "Status": "Endangered",
+        "Latitude": -31.5,
+        "Longitude": -71.2,
+        "Description": "Small rodents famous for having the densest fur of all land mammals.",
+        "Keywords": "chinchilla rodent fur chile south america"
+    },
+    {
+        "Animal": "Pygmy Hippopotamus",
+        "Region": "West Africa",
+        "Status": "Endangered",
+        "Latitude": 6.3,
+        "Longitude": -10.8,
+        "Description": "A small reclusive hippopotamus native to the forests and swamps of West Africa.",
+        "Keywords": "hippo pygmy hippo mammal west africa"
+    }
 ]
 
 df = pd.DataFrame(animals)
@@ -463,7 +693,7 @@ else:
 
     st.sidebar.markdown("---")
 
-    # Categories without Profile option
+    # Categories list
     categories = [
         "🏠 Home",
         "🌎 Overview",
@@ -472,7 +702,6 @@ else:
         "⚙️ Settings",
     ]
 
-    # Handle current selection
     current_index = categories.index(st.session_state.page) if st.session_state.page in categories else 0
 
     def set_nav_page():
@@ -727,8 +956,17 @@ else:
     elif page == "👤 Profile":
         st.title("👤 User Profile")
 
-        if st.button("✏️ Toggle Edit Mode"):
-            st.session_state.editing_profile = not st.session_state.editing_profile
+        col_btn1, col_btn2 = st.columns([1, 4])
+        with col_btn1:
+            # Back to Home button
+            if st.button("🏠 Back to Home"):
+                st.session_state.page = "🏠 Home"
+                st.session_state.editing_profile = False
+                st.rerun()
+
+        with col_btn2:
+            if st.button("✏️ Toggle Edit Mode"):
+                st.session_state.editing_profile = not st.session_state.editing_profile
 
         # Expanded Edit Profile Inputs
         if st.session_state.editing_profile:
@@ -751,18 +989,20 @@ else:
             # Phone Number
             new_phone = st.text_input("Phone Number (Optional)", value=st.session_state.phone)
 
-            if st.button("💾 Save Profile Changes"):
-                if uploaded_photo is not None:
-                    st.session_state.profile_pic = uploaded_photo
+            col_save1, col_save2 = st.columns([1, 4])
+            with col_save1:
+                if st.button("💾 Save Changes"):
+                    if uploaded_photo is not None:
+                        st.session_state.profile_pic = uploaded_photo
 
-                if st.session_state.username != "Guest" and new_name.strip():
-                    st.session_state.username = new_name.strip()
+                    if st.session_state.username != "Guest" and new_name.strip():
+                        st.session_state.username = new_name.strip()
 
-                st.session_state.bio = new_bio.strip()
-                st.session_state.phone = new_phone.strip()
-                st.session_state.editing_profile = False
-                st.success("✅ Profile updated successfully!")
-                st.rerun()
+                    st.session_state.bio = new_bio.strip()
+                    st.session_state.phone = new_phone.strip()
+                    st.session_state.editing_profile = False
+                    st.success("✅ Profile updated successfully!")
+                    st.rerun()
 
         st.markdown("---")
 

@@ -445,7 +445,7 @@ else:
         st.rerun()
 
     # -----------------------------------
-    # HOME PAGE (Map & Donation)
+    # HOME PAGE (Search, Map & Donation)
     # -----------------------------------
     if page == "🏠 Home":
         st.title("🌿 Animal Advocators")
@@ -454,44 +454,73 @@ else:
 
         st.write("""
         Animal Advocators is dedicated to protecting endangered wildlife around the world.
-        Use the navigation menu on the left to explore endangered species and learn about conservation.
+        Use the search bar below to find specific animals or regions, explore the map, or support wildlife through donations.
         """)
+
+        # --- HOME SEARCH BAR ---
+        home_search = st.text_input("🔎 Search for an endangered animal or region:")
+
+        if home_search.strip():
+            search_terms = normalize_search(home_search)
+
+            def matches(row):
+                searchable = (
+                    f"{row['Animal']} "
+                    f"{row['Region']} "
+                    f"{row['Description']} "
+                    f"{row['Keywords']}"
+                ).lower()
+                return any(term in searchable for term in search_terms)
+
+            filtered_df = df[df.apply(matches, axis=1)]
+        else:
+            filtered_df = df
+
+        # --- SEARCH RESULTS (DISPLAYED IF FILTERED) ---
+        if home_search.strip():
+            st.markdown(f"### 🎯 Results for '{home_search}'")
+            if filtered_df.empty:
+                st.warning("No animals were found matching your search.")
+            else:
+                for _, animal in filtered_df.iterrows():
+                    st.info(f"**{animal['Animal']}** — *{animal['Region']}* ({animal['Status']})\n\n{animal['Description']}")
 
         # --- MAP SECTION ---
         st.header("🗺️ Endangered Animal Map")
         
-        view_state = pdk.ViewState(
-            latitude=float(df["Latitude"].mean()),
-            longitude=float(df["Longitude"].mean()),
-            zoom=1,
-            pitch=0,
-        )
+        if not filtered_df.empty:
+            view_state = pdk.ViewState(
+                latitude=float(filtered_df["Latitude"].mean()),
+                longitude=float(filtered_df["Longitude"].mean()),
+                zoom=1,
+                pitch=0,
+            )
 
-        layer = pdk.Layer(
-            "ScatterplotLayer",
-            data=df,
-            get_position='[Longitude, Latitude]',
-            get_radius=250000,
-            get_fill_color='[34, 139, 34, 180]',
-            pickable=True,
-        )
+            layer = pdk.Layer(
+                "ScatterplotLayer",
+                data=filtered_df,
+                get_position='[Longitude, Latitude]',
+                get_radius=250000,
+                get_fill_color='[34, 139, 34, 180]',
+                pickable=True,
+            )
 
-        tooltip = {
-            "html": """
-            <b>{Animal}</b><br/>
-            Region: {Region}<br/>
-            Status: {Status}<br/>
-            {Description}
-            """
-        }
+            tooltip = {
+                "html": """
+                <b>{Animal}</b><br/>
+                Region: {Region}<br/>
+                Status: {Status}<br/>
+                {Description}
+                """
+            }
 
-        deck = pdk.Deck(
-            layers=[layer],
-            initial_view_state=view_state,
-            tooltip=tooltip,
-        )
+            deck = pdk.Deck(
+                layers=[layer],
+                initial_view_state=view_state,
+                tooltip=tooltip,
+            )
 
-        st.pydeck_chart(deck)
+            st.pydeck_chart(deck)
 
         # --- DONATION SECTION ---
         st.markdown("---")

@@ -785,7 +785,7 @@ else:
     if st.session_state.view_profile:
         st.title("👤 Profile & Account Settings")
 
-        if st.button("⬅️ Back to App"):
+        if st.button("« Back to App"):
             st.session_state.view_profile = False
             st.rerun()
 

@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 import pydeck as pdk
 
@@ -13,6 +14,24 @@ st.set_page_config(
     page_icon="🦁",
     layout="wide"
 )
+
+# -----------------------------
+# Helper Function: Confetti Effect
+# -----------------------------
+def trigger_confetti():
+    components.html(
+        """
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        <script>
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 }
+            });
+        </script>
+        """,
+        height=0
+    )
 
 # -----------------------------
 # Initialize Session State
@@ -41,6 +60,9 @@ if "editing_profile" not in st.session_state:
 if "page" not in st.session_state:
     st.session_state.page = "🏠 Home"
 
+if "show_logout_dialog" not in st.session_state:
+    st.session_state.show_logout_dialog = False
+
 # --- Donation & Reward Gamification State ---
 if "total_donated" not in st.session_state:
     st.session_state.total_donated = 0
@@ -51,13 +73,41 @@ if "current_goal" not in st.session_state:
 if "claimed_rewards" not in st.session_state:
     st.session_state.claimed_rewards = []
 
-# Goal mapping config
 GOAL_TIERS = [
     {"goal": 100, "reward": "🔑 Free Keychain"},
     {"goal": 500, "reward": "👕 Free T-Shirt"},
     {"goal": 1000, "reward": "🏷️ Special Merch Discount"},
     {"goal": 5000, "reward": "🎟️ VIP Tour: Visit How We Help Animals!"},
 ]
+
+# -----------------------------
+# Modal Dialog: Logout Confirmation
+# -----------------------------
+@st.dialog("⚠️ Logout Confirmation")
+def logout_modal():
+    st.write("Are you sure you want to log out? Everything you have done will not change.")
+    col_close, col_yes = st.columns(2)
+    
+    with col_close:
+        if st.button("Close", use_container_width=True):
+            st.session_state.show_logout_dialog = False
+            st.session_state.page = "🏠 Home"
+            st.rerun()
+
+    with col_yes:
+        if st.button("Yes", use_container_width=True, type="primary"):
+            st.session_state.logged_in = False
+            st.session_state.username = "Guest"
+            st.session_state.profile_pic = None
+            st.session_state.phone = ""
+            st.session_state.editing_profile = False
+            st.session_state.page = "🏠 Home"
+            st.session_state.show_logout_dialog = False
+            st.rerun()
+
+# Trigger dialog if requested
+if st.session_state.show_logout_dialog:
+    logout_modal()
 
 # -----------------------------
 # Full Animals Dataset
@@ -735,13 +785,9 @@ else:
 
     st.sidebar.markdown("---")
 
+    # Logout button opens Pop-up Modal
     if st.sidebar.button("🚪 Log Out"):
-        st.session_state.logged_in = False
-        st.session_state.username = "Guest"
-        st.session_state.profile_pic = None
-        st.session_state.phone = ""
-        st.session_state.editing_profile = False
-        st.session_state.page = "🏠 Home"
+        st.session_state.show_logout_dialog = True
         st.rerun()
 
     page = st.session_state.page
@@ -853,6 +899,7 @@ else:
             # Goal met & Claim Reward button action
             if st.session_state.total_donated >= target_goal:
                 st.balloons()
+                trigger_confetti()
                 st.success(f"🎉 **Goal Completed!** You unlocked: **{reward_title}**!")
                 
                 if st.button("🎁 Claim Reward & Unlock Next Goal"):
@@ -866,11 +913,13 @@ else:
                     elif target_goal == 1000:
                         st.session_state.current_goal = 5000
                     
+                    trigger_confetti()
                     st.success("Reward Claimed! Your goal has leveled up!")
                     st.rerun()
         else:
             # All milestones achieved state
             st.balloons()
+            trigger_confetti()
             st.markdown("""
             <div style="background-color: #fff8e1; border: 2px solid #ffa000; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 25px;">
                 <h3 style="color: #f57f17;">🏆 Ultimate Wildlife Champion!</h3>
@@ -942,6 +991,7 @@ else:
                     st.error("Please complete all payment information.")
                 else:
                     st.session_state.total_donated += donation
+                    trigger_confetti()
                     st.success(f"🎉 Thank you for donating ${donation} using {st.session_state.payment_method}!")
                     st.rerun()
 
@@ -1029,15 +1079,19 @@ else:
     elif page == "👤 Profile":
         st.title("👤 User Profile")
 
-        col_btn1, col_btn2 = st.columns([1, 4])
+        col_btn1, col_btn2, col_btn3 = st.columns([1, 1, 3])
         with col_btn1:
-            # Back to Home button
             if st.button("🏠 Back to Home"):
                 st.session_state.page = "🏠 Home"
                 st.session_state.editing_profile = False
                 st.rerun()
 
         with col_btn2:
+            if st.button("🔄 Switch Account"):
+                st.session_state.show_logout_dialog = True
+                st.rerun()
+
+        with col_btn3:
             if st.button("✏️ Toggle Edit Mode"):
                 st.session_state.editing_profile = not st.session_state.editing_profile
 

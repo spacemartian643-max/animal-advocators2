@@ -23,6 +23,12 @@ if "username" not in st.session_state:
 if "payment_method" not in st.session_state:
     st.session_state.payment_method = None
 
+if "feedback_submitted" not in st.session_state:
+    st.session_state.feedback_submitted = False
+
+if "bug_submitted" not in st.session_state:
+    st.session_state.bug_submitted = False
+
 # -----------------------------
 # Full Animals Dataset
 # -----------------------------
@@ -433,6 +439,7 @@ else:
             "🏠 Home",
             "🌎 Overview",
             "📚 Endangered Animal Library",
+            "⚙️ Settings",
         ]
     )
 
@@ -593,20 +600,37 @@ else:
     # -----------------------------------
     elif page == "🌎 Overview":
         st.title("🌎 Overview")
+        
         st.markdown("""
-### Our Mission
+        ### 🎯 Our Mission
+        **Animal Advocators** raises awareness for endangered animals and supports global conservation efforts.
+        We provide tools for education, mapping, and direct financial contributions to preserve our planet's bio-diversity.
+        """)
 
-Animal Advocators raises awareness for endangered animals and supports conservation efforts.
+        st.markdown("---")
+        st.header("🤝 What You Can Do To Help")
 
-### What You Can Do
+        col1, col2 = st.columns(2)
 
-- 🔍 Search for endangered animals
-- 📚 Learn about endangered species
-- 🗺️ View animals on an interactive map
-- 💚 Donate to conservation projects
+        with col1:
+            st.subheader("1. 📢 Spread Awareness")
+            st.write("Share information about endangered animals with friends, family, and social media networks. Knowledge is the first step toward conservation.")
 
-Every donation helps protect wildlife and preserve habitats.
-""")
+            st.subheader("2. 🛍️ Make Sustainable Choices")
+            st.write("Avoid products made from endangered species, reduce single-use plastics that harm marine life, and support sustainable wildlife tourism.")
+
+            st.subheader("3. 💚 Donate & Support")
+            st.write("Contributions directly fund habitat protection, ranger anti-poaching patrols, and wildlife rehabilitation centers across the globe.")
+
+        with col2:
+            st.subheader("4. 🌿 Protect Natural Habitats")
+            st.write("Plant native plants, reduce waste, and support local wildlife conservation projects in your community.")
+
+            st.subheader("5. 📜 Advocate for Policy Change")
+            st.write("Support wildlife protection legislation and vote for policies that protect vulnerable natural ecosystems.")
+
+            st.subheader("6. 📚 Stay Educated")
+            st.write("Explore our **Endangered Animal Library** regularly to keep updated on species status and environmental challenges.")
 
     # -----------------------------------
     # ENDANGERED ANIMAL LIBRARY PAGE
@@ -639,6 +663,51 @@ Every donation helps protect wildlife and preserve habitats.
                 filtered_df[["Animal", "Region", "Status", "Description"]],
                 use_container_width=True
             )
+
+    # -----------------------------------
+    # SETTINGS PAGE (Feedback & Bug Report)
+    # -----------------------------------
+    elif page == "⚙️ Settings":
+        st.title("⚙️ Settings & Support")
+        st.write("We value your feedback and bug reports to make Animal Advocators better!")
+
+        tab_feedback, tab_bug = st.tabs(["💬 Send Feedback", "🐛 Report a Bug or Error"])
+
+        # Feedback Tab
+        with tab_feedback:
+            st.subheader("Share Your Thoughts")
+            st.write("How can we improve your experience with Animal Advocators?")
+            
+            rating = st.select_slider(
+                "How would you rate your overall experience?",
+                options=["⭐ Poor", "⭐⭐ Fair", "⭐⭐⭐ Good", "⭐⭐⭐⭐ Very Good", "⭐⭐⭐⭐⭐ Excellent"],
+                value="⭐⭐⭐⭐⭐ Excellent"
+            )
+            feedback_text = st.text_area("Your Feedback or Suggestions:", placeholder="Type your feedback here...")
+
+            if st.button("Submit Feedback"):
+                if feedback_text.strip():
+                    st.success("🎉 Thank you! Your feedback has been sent to our team.")
+                else:
+                    st.error("Please enter some text before submitting.")
+
+        # Bug Report Tab
+        with tab_bug:
+            st.subheader("Report an Issue")
+            st.write("Found a bug or incorrect information? Let us know below.")
+
+            bug_category = st.selectbox(
+                "Issue Category:",
+                ["Map / Display Error", "Incorrect Animal Data", "Payment / Donation Issue", "Search Bar Issue", "Other"]
+            )
+            bug_title = st.text_input("Brief Summary of the Issue:", placeholder="e.g., Map dots not loading")
+            bug_details = st.text_area("Detailed Description:", placeholder="Please describe what happened and how to reproduce it...")
+
+            if st.button("Submit Bug Report"):
+                if bug_title.strip() and bug_details.strip():
+                    st.success("🚨 Bug report submitted! Thank you for helping us keep Animal Advocators running smoothly.")
+                else:
+                    st.error("Please complete both the summary and detailed description fields.")
 
     # -----------------------------------
     # Footer

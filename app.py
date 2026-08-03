@@ -23,11 +23,17 @@ if "username" not in st.session_state:
 if "payment_method" not in st.session_state:
     st.session_state.payment_method = None
 
-if "feedback_submitted" not in st.session_state:
-    st.session_state.feedback_submitted = False
+if "profile_pic" not in st.session_state:
+    st.session_state.profile_pic = None
 
-if "bug_submitted" not in st.session_state:
-    st.session_state.bug_submitted = False
+if "bio" not in st.session_state:
+    st.session_state.bio = "Wildlife advocate passionate about protecting endangered species."
+
+if "phone" not in st.session_state:
+    st.session_state.phone = ""
+
+if "editing_profile" not in st.session_state:
+    st.session_state.editing_profile = False
 
 # -----------------------------
 # Full Animals Dataset
@@ -417,6 +423,7 @@ if not st.session_state.logged_in:
             else:
                 st.session_state.logged_in = True
                 st.session_state.username = username
+                st.session_state.phone = phone
                 st.rerun()
 
     st.markdown("---")
@@ -433,6 +440,15 @@ if not st.session_state.logged_in:
 else:
     # Sidebar Navigation
     st.sidebar.title("☰ Navigation")
+    
+    # Sidebar Profile Display
+    if st.session_state.profile_pic:
+        st.sidebar.image(st.session_state.profile_pic, width=80)
+    else:
+        st.sidebar.write("👤 *(No Photo)*")
+        
+    st.sidebar.write(f"**{st.session_state.username}**")
+
     page = st.sidebar.radio(
         "Go to",
         [
@@ -440,16 +456,18 @@ else:
             "🌎 Overview",
             "📚 Endangered Animal Library",
             "🤝 What You Can Do To Help",
-            "⚙️ Settings",
+            "👤 Profile & Settings",
         ]
     )
 
     st.sidebar.markdown("---")
-    st.sidebar.write(f"Logged in as: **{st.session_state.username}**")
 
     if st.sidebar.button("🚪 Log Out"):
         st.session_state.logged_in = False
         st.session_state.username = "Guest"
+        st.session_state.profile_pic = None
+        st.session_state.phone = ""
+        st.session_state.editing_profile = False
         st.rerun()
 
     # -----------------------------------
@@ -675,11 +693,62 @@ else:
             st.write("Use our **Endangered Animal Library** to keep updated on species status and learn more about global environmental challenges.")
 
     # -----------------------------------
-    # SETTINGS PAGE (Feedback & Bug Report)
+    # PROFILE & SETTINGS PAGE
     # -----------------------------------
-    elif page == "⚙️ Settings":
-        st.title("⚙️ Settings & Support")
-        st.write("We value your feedback and bug reports to make Animal Advocators better!")
+    elif page == "👤 Profile & Settings":
+        st.title("👤 User Profile & Settings")
+
+        profile_col, edit_col = st.columns([1, 2])
+
+        with profile_col:
+            st.subheader("Profile Details")
+            if st.session_state.profile_pic:
+                st.image(st.session_state.profile_pic, width=150)
+            else:
+                st.info("📷 No Profile Picture Uploaded")
+
+            st.write(f"**Username:** {st.session_state.username}")
+            st.write(f"**Bio / Description:** {st.session_state.bio}")
+            st.write(f"**Phone Number:** {st.session_state.phone if st.session_state.phone else 'Not provided'}")
+
+            if st.button("✏️ Edit Profile"):
+                st.session_state.editing_profile = not st.session_state.editing_profile
+
+        with edit_col:
+            if st.session_state.editing_profile:
+                st.subheader("✏️ Edit Profile Information")
+
+                # 1. Profile Picture Upload
+                uploaded_photo = st.file_uploader("Upload Profile Picture", type=["png", "jpg", "jpeg"])
+
+                # 2. Change Name (Restricted for Guest)
+                if st.session_state.username == "Guest":
+                    st.text_input("Username", value="Guest", disabled=True, help="Guests cannot change their username.")
+                    new_name = "Guest"
+                else:
+                    new_name = st.text_input("Username", value=st.session_state.username)
+
+                # 3. Description / Bio
+                new_bio = st.text_area("Description / Bio", value=st.session_state.bio)
+
+                # 4. Optional Phone Number
+                new_phone = st.text_input("Phone Number (Optional)", value=st.session_state.phone)
+
+                if st.button("💾 Save Profile Changes"):
+                    if uploaded_photo is not None:
+                        st.session_state.profile_pic = uploaded_photo
+                    
+                    if st.session_state.username != "Guest" and new_name.strip():
+                        st.session_state.username = new_name.strip()
+                    
+                    st.session_state.bio = new_bio.strip()
+                    st.session_state.phone = new_phone.strip()
+                    st.session_state.editing_profile = False
+                    st.success("✅ Profile updated successfully!")
+                    st.rerun()
+
+        st.markdown("---")
+        st.header("⚙️ App Support & Feedback")
 
         tab_feedback, tab_bug = st.tabs(["💬 Send Feedback", "🐛 Report a Bug or Error"])
 

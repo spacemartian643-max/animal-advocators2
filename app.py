@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import pydeck as pdk
 
+# Default placeholder SVG image (Standard user profile avatar)
+DEFAULT_AVATAR = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+
 # -----------------------------
 # Page Configuration
 # -----------------------------
@@ -441,12 +444,9 @@ else:
     # Sidebar Navigation
     st.sidebar.title("☰ Navigation")
     
-    # Sidebar Profile Display
-    if st.session_state.profile_pic:
-        st.sidebar.image(st.session_state.profile_pic, width=80)
-    else:
-        st.sidebar.write("*(No Photo Uploaded)*")
-        
+    # Sidebar Profile Image Display
+    display_image = st.session_state.profile_pic if st.session_state.profile_pic else DEFAULT_AVATAR
+    st.sidebar.image(display_image, width=80)
     st.sidebar.write(f"**{st.session_state.username}**")
 
     page = st.sidebar.radio(
@@ -699,16 +699,16 @@ else:
     elif page == "👤 Profile":
         st.title("👤 User Profile")
 
-        # Edit Profile Button placed at the very top
+        # Edit Profile Button placed at top
         if st.button("✏️ Edit Profile"):
             st.session_state.editing_profile = not st.session_state.editing_profile
 
-        # Expanded Edit Profile Section (Appears directly above profile info)
+        # Expanded Edit Profile Section
         if st.session_state.editing_profile:
             st.markdown("---")
             st.subheader("✏️ Edit Profile Information")
 
-            # Upload Image
+            # Upload Image File
             uploaded_photo = st.file_uploader("Upload Profile Picture", type=["png", "jpg", "jpeg"])
 
             # Name Edit (Disabled for Guest)
@@ -743,10 +743,9 @@ else:
         col_img, col_info = st.columns([1, 2])
 
         with col_img:
-            if st.session_state.profile_pic:
-                st.image(st.session_state.profile_pic, width=200, caption="Profile Picture")
-            else:
-                st.info("No profile picture uploaded yet.")
+            # Displays uploaded image or standard placeholder avatar
+            main_profile_img = st.session_state.profile_pic if st.session_state.profile_pic else DEFAULT_AVATAR
+            st.image(main_profile_img, width=180)
 
         with col_info:
             st.write(f"**Username:** {st.session_state.username}")

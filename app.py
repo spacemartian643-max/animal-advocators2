@@ -431,7 +431,7 @@ if not st.session_state.logged_in:
 # MAIN APPLICATION SCREEN
 # -----------------------------
 else:
-    # Sidebar
+    # Sidebar Navigation
     st.sidebar.title("☰ Navigation")
     page = st.sidebar.radio(
         "Go to",
@@ -439,6 +439,7 @@ else:
             "🏠 Home",
             "🌎 Overview",
             "📚 Endangered Animal Library",
+            "🤝 What You Can Do To Help",
             "⚙️ Settings",
         ]
     )
@@ -605,32 +606,12 @@ else:
         ### 🎯 Our Mission
         **Animal Advocators** raises awareness for endangered animals and supports global conservation efforts.
         We provide tools for education, mapping, and direct financial contributions to preserve our planet's bio-diversity.
+
+        ### 🌿 What We Do
+        - **Educate:** Provide accurate data and conservation statuses for vulnerable species.
+        - **Visualize:** Map habitats globally so users can see where conservation focus is needed most.
+        - **Action:** Facilitate direct support to fund sanctuary protections, anti-poaching initiatives, and habitat restoration.
         """)
-
-        st.markdown("---")
-        st.header("🤝 What You Can Do To Help")
-
-        col1, col2 = st.columns(2)
-
-        with col1:
-            st.subheader("1. 📢 Spread Awareness")
-            st.write("Share information about endangered animals with friends, family, and social media networks. Knowledge is the first step toward conservation.")
-
-            st.subheader("2. 🛍️ Make Sustainable Choices")
-            st.write("Avoid products made from endangered species, reduce single-use plastics that harm marine life, and support sustainable wildlife tourism.")
-
-            st.subheader("3. 💚 Donate & Support")
-            st.write("Contributions directly fund habitat protection, ranger anti-poaching patrols, and wildlife rehabilitation centers across the globe.")
-
-        with col2:
-            st.subheader("4. 🌿 Protect Natural Habitats")
-            st.write("Plant native plants, reduce waste, and support local wildlife conservation projects in your community.")
-
-            st.subheader("5. 📜 Advocate for Policy Change")
-            st.write("Support wildlife protection legislation and vote for policies that protect vulnerable natural ecosystems.")
-
-            st.subheader("6. 📚 Stay Educated")
-            st.write("Explore our **Endangered Animal Library** regularly to keep updated on species status and environmental challenges.")
 
     # -----------------------------------
     # ENDANGERED ANIMAL LIBRARY PAGE
@@ -663,6 +644,35 @@ else:
                 filtered_df[["Animal", "Region", "Status", "Description"]],
                 use_container_width=True
             )
+
+    # -----------------------------------
+    # WHAT YOU CAN DO TO HELP PAGE
+    # -----------------------------------
+    elif page == "🤝 What You Can Do To Help":
+        st.title("🤝 What You Can Do To Help")
+        st.write("Every action counts when it comes to preserving wildlife. Here are meaningful ways you can help protect endangered species:")
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.subheader("1. 📢 Spread Awareness")
+            st.write("Share information about endangered animals with friends, family, and social media networks. Educating others is the first step toward conservation.")
+
+            st.subheader("2. 🛍️ Make Sustainable Choices")
+            st.write("Avoid products made from endangered species, reduce single-use plastics that harm marine life, and support eco-friendly wildlife tourism.")
+
+            st.subheader("3. 💚 Donate & Support")
+            st.write("Contributions directly fund habitat protection, anti-poaching ranger patrols, and wildlife rehabilitation centers across the globe.")
+
+        with col2:
+            st.subheader("4. 🌿 Protect Natural Habitats")
+            st.write("Plant native plants, reduce waste, and support local wildlife conservation projects and nature preserves in your community.")
+
+            st.subheader("5. 📜 Advocate for Policy Change")
+            st.write("Support wildlife protection legislation and vote for policies that protect vulnerable natural ecosystems and combat climate change.")
+
+            st.subheader("6. 📚 Stay Educated")
+            st.write("Use our **Endangered Animal Library** to keep updated on species status and learn more about global environmental challenges.")
 
     # -----------------------------------
     # SETTINGS PAGE (Feedback & Bug Report)

@@ -38,6 +38,9 @@ if "phone" not in st.session_state:
 if "editing_profile" not in st.session_state:
     st.session_state.editing_profile = False
 
+if "page" not in st.session_state:
+    st.session_state.page = "🏠 Home"
+
 # -----------------------------
 # Full Animals Dataset
 # -----------------------------
@@ -441,24 +444,46 @@ if not st.session_state.logged_in:
 # MAIN APPLICATION SCREEN
 # -----------------------------
 else:
-    # Sidebar Navigation
+    # Sidebar Navigation Header
     st.sidebar.title("☰ Navigation")
     
-    # Sidebar Profile Image Display
-    display_image = st.session_state.profile_pic if st.session_state.profile_pic else DEFAULT_AVATAR
-    st.sidebar.image(display_image, width=80)
-    st.sidebar.write(f"**{st.session_state.username}**")
+    # Profile photo & Edit Profile button placed next to each other
+    sb_col1, sb_col2 = st.sidebar.columns([1, 1.3])
 
-    page = st.sidebar.radio(
+    with sb_col1:
+        display_image = st.session_state.profile_pic if st.session_state.profile_pic else DEFAULT_AVATAR
+        st.image(display_image, width=70)
+
+    with sb_col2:
+        st.write(f"**{st.session_state.username}**")
+        if st.button("✏️ Edit Profile", key="sb_edit_profile"):
+            st.session_state.page = "👤 Profile"
+            st.session_state.editing_profile = True
+            st.rerun()
+
+    st.sidebar.markdown("---")
+
+    # Categories without Profile option
+    categories = [
+        "🏠 Home",
+        "🌎 Overview",
+        "📚 Endangered Animal Library",
+        "🤝 What You Can Do To Help",
+        "⚙️ Settings",
+    ]
+
+    # Handle current selection
+    current_index = categories.index(st.session_state.page) if st.session_state.page in categories else 0
+
+    def set_nav_page():
+        st.session_state.page = st.session_state.nav_radio
+
+    selected_category = st.sidebar.radio(
         "Go to",
-        [
-            "🏠 Home",
-            "🌎 Overview",
-            "📚 Endangered Animal Library",
-            "🤝 What You Can Do To Help",
-            "👤 Profile",
-            "⚙️ Settings",
-        ]
+        categories,
+        index=current_index,
+        key="nav_radio",
+        on_change=set_nav_page
     )
 
     st.sidebar.markdown("---")
@@ -469,7 +494,10 @@ else:
         st.session_state.profile_pic = None
         st.session_state.phone = ""
         st.session_state.editing_profile = False
+        st.session_state.page = "🏠 Home"
         st.rerun()
+
+    page = st.session_state.page
 
     # -----------------------------------
     # HOME PAGE (Search, Map & Donation)
@@ -694,16 +722,15 @@ else:
             st.write("Use our **Endangered Animal Library** to keep updated on species status and learn more about global environmental challenges.")
 
     # -----------------------------------
-    # PROFILE PAGE
+    # PROFILE PAGE (EDIT / VIEW)
     # -----------------------------------
     elif page == "👤 Profile":
         st.title("👤 User Profile")
 
-        # Edit Profile Button placed at top
-        if st.button("✏️ Edit Profile"):
+        if st.button("✏️ Toggle Edit Mode"):
             st.session_state.editing_profile = not st.session_state.editing_profile
 
-        # Expanded Edit Profile Section
+        # Expanded Edit Profile Inputs
         if st.session_state.editing_profile:
             st.markdown("---")
             st.subheader("✏️ Edit Profile Information")
@@ -739,17 +766,16 @@ else:
 
         st.markdown("---")
 
-        # User Profile Display
-        col_img, col_info = st.columns([1, 2])
+        # User Profile Display (Clear, medium-large photo size)
+        col_img, col_info = st.columns([1, 1.8])
 
         with col_img:
-            # Displays uploaded image or standard placeholder avatar
             main_profile_img = st.session_state.profile_pic if st.session_state.profile_pic else DEFAULT_AVATAR
-            st.image(main_profile_img, width=180)
+            st.image(main_profile_img, width=320)
 
         with col_info:
-            st.write(f"**Username:** {st.session_state.username}")
-            st.write(f"**Description:** {st.session_state.bio}")
+            st.subheader(f"Username: {st.session_state.username}")
+            st.write(f"**Bio / Description:**\n{st.session_state.bio}")
             st.write(f"**Phone Number:** {st.session_state.phone if st.session_state.phone else 'Not provided'}")
 
     # -----------------------------------

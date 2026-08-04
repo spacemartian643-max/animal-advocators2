@@ -918,6 +918,7 @@ else:
         "🌎 Overview",
         "📚 Endangered Animal Library",
         "🤝 What You Can Do To Help",
+        "🛍️ Merch Shop",
         "⚙️ Settings",
     ]
 
@@ -1275,6 +1276,128 @@ else:
 
             st.subheader("6. 📚 Stay Educated")
             st.write("Use our **Endangered Animal Library** to keep updated on species status and learn more about global environmental challenges.")
+
+    # -----------------------------------
+    # MERCH SHOP PAGE
+    # -----------------------------------
+    elif page == "🛍️ Merch Shop":
+        st.title("🛍️ Merch Shop")
+        st.write("Every purchase helps fund conservation efforts. Shop our wildlife-inspired merchandise below!")
+
+        if "merch_cart_total" not in st.session_state:
+            st.session_state.merch_cart_total = 0
+
+        products = [
+            {
+                "name": "🐾 Wildlife Advocators T-Shirt",
+                "price": 25,
+                "image": "https://placehold.co/300x300?text=T-Shirt",
+                "description": "Soft cotton tee featuring our signature paw logo.",
+            },
+            {
+                "name": "🧥 Conservation Hoodie",
+                "price": 45,
+                "image": "https://placehold.co/300x300?text=Hoodie",
+                "description": "Cozy fleece hoodie, perfect for a chilly day out in nature.",
+            },
+            {
+                "name": "🔑 Endangered Species Keychain",
+                "price": 10,
+                "image": "https://placehold.co/300x300?text=Keychain",
+                "description": "A mini enamel keychain featuring your favorite endangered animal.",
+            },
+            {
+                "name": "👜 Canvas Tote Bag",
+                "price": 18,
+                "image": "https://placehold.co/300x300?text=Tote+Bag",
+                "description": "Reusable canvas tote printed with our 'Voice the Voiceless' design.",
+            },
+            {
+                "name": "☕ Wildlife Mug",
+                "price": 15,
+                "image": "https://placehold.co/300x300?text=Mug",
+                "description": "Ceramic mug featuring illustrations of endangered species.",
+            },
+            {
+                "name": "🧢 Snapback Cap",
+                "price": 22,
+                "image": "https://placehold.co/300x300?text=Cap",
+                "description": "Adjustable snapback cap with embroidered logo.",
+            },
+        ]
+
+        shop_col1, shop_col2, shop_col3 = st.columns(3)
+        shop_columns = [shop_col1, shop_col2, shop_col3]
+
+        for idx, product in enumerate(products):
+            with shop_columns[idx % 3]:
+                st.image(product["image"], use_container_width=True)
+                st.subheader(product["name"])
+                st.write(product["description"])
+                st.markdown(f"**${product['price']}**")
+                if st.button(f"🛒 Buy Now", key=f"buy_{idx}"):
+                    st.session_state.merch_cart_total += product["price"]
+                    trigger_confetti()
+                    st.success(f"🎉 Added **{product['name']}** to your order!")
+                st.markdown("---")
+
+        if st.session_state.merch_cart_total > 0:
+            st.markdown("### 🧾 Order Summary")
+            st.info(f"Current order total: **${st.session_state.merch_cart_total}**")
+
+            st.subheader("Choose a Payment Method")
+
+            mcol1, mcol2, mcol3, mcol4 = st.columns(4)
+
+            with mcol1:
+                if st.button("💳 Visa", use_container_width=True, key="merch_visa"):
+                    st.session_state.payment_method = "Visa"
+
+            with mcol2:
+                if st.button("💳 Mastercard", use_container_width=True, key="merch_mc"):
+                    st.session_state.payment_method = "Mastercard"
+
+            with mcol3:
+                if st.button("💳 American Express", use_container_width=True, key="merch_amex"):
+                    st.session_state.payment_method = "American Express"
+
+            with mcol4:
+                if st.button("💳 Chase", use_container_width=True, key="merch_chase"):
+                    st.session_state.payment_method = "Chase Credit Card"
+
+            mcol5, mcol6 = st.columns(2)
+
+            with mcol5:
+                if st.button("🎁 Visa Gift Card", use_container_width=True, key="merch_visa_gift"):
+                    st.session_state.payment_method = "Visa Gift Card"
+
+            with mcol6:
+                if st.button("🎁 Mastercard Gift Card", use_container_width=True, key="merch_mc_gift"):
+                    st.session_state.payment_method = "Mastercard Gift Card"
+
+            if st.session_state.payment_method:
+                st.markdown("---")
+                st.subheader(f"Payment - {st.session_state.payment_method}")
+
+                if "Gift Card" in st.session_state.payment_method:
+                    merch_gift_code = st.text_input("Gift Card Code", key="merch_gift_code")
+                else:
+                    merch_card_number = st.text_input("Card Number", key="merch_card_number")
+                    merch_card_name = st.text_input("Name on Card", key="merch_card_name")
+                    merch_expiry = st.text_input("Expiration Date (MM/YY)", key="merch_expiry")
+                    merch_cvv = st.text_input("CVV", type="password", key="merch_cvv")
+
+                if st.button("Complete Purchase", key="merch_complete_purchase"):
+                    if "Gift Card" in st.session_state.payment_method and not merch_gift_code:
+                        st.error("Please enter your gift card code.")
+                    elif "Gift Card" not in st.session_state.payment_method and not (merch_card_number and merch_card_name and merch_expiry and merch_cvv):
+                        st.error("Please complete all payment information.")
+                    else:
+                        st.balloons()
+                        trigger_confetti()
+                        st.success(f"🎉 Thank you for your order of ${st.session_state.merch_cart_total}, paid with {st.session_state.payment_method}! Your merch will ship soon.")
+                        st.session_state.merch_cart_total = 0
+                        st.rerun()
 
     # -----------------------------------
     # PROFILE PAGE (EDIT / VIEW)

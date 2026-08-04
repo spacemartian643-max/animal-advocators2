@@ -2,6 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 import pandas as pd
 import pydeck as pdk
+import requests
 
 # Default placeholder image (Standard user profile avatar)
 DEFAULT_AVATAR = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
@@ -72,6 +73,35 @@ def gradient_progress_bar(progress_pct, height_px=22):
     )
 
 # -----------------------------
+# Helper Function: Correct, Animal-Specific Photo Lookup
+# -----------------------------
+FALLBACK_ANIMAL_PHOTO = "https://placehold.co/500x350?text=Photo+Unavailable"
+
+@st.cache_data(ttl=60 * 60 * 24, show_spinner=False)
+def get_animal_photo_url(animal_name: str) -> str:
+    """
+    Looks up the real photo for a SPECIFIC animal by querying Wikipedia's
+    summary API using that exact animal's name, so the photo returned is
+    always tied to the correct animal (never a random/generic image).
+    """
+    try:
+        title = animal_name.strip().replace(" ", "_")
+        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{title}"
+        headers = {"User-Agent": "AnimalAdvocatorsApp/1.0 (educational streamlit app)"}
+        response = requests.get(url, headers=headers, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            thumbnail = data.get("thumbnail", {}).get("source")
+            original = data.get("originalimage", {}).get("source")
+            if thumbnail:
+                return thumbnail
+            if original:
+                return original
+        return FALLBACK_ANIMAL_PHOTO
+    except Exception:
+        return FALLBACK_ANIMAL_PHOTO
+
+# -----------------------------
 # Initialize Session State
 # -----------------------------
 if "logged_in" not in st.session_state:
@@ -110,6 +140,15 @@ if "current_goal" not in st.session_state:
 
 if "claimed_rewards" not in st.session_state:
     st.session_state.claimed_rewards = []
+
+# --- Map Click -> Per-Animal Donation State ---
+GENERAL_FUND_LABEL = "🌍 General Conservation Fund"
+
+if "donation_target" not in st.session_state:
+    st.session_state.donation_target = GENERAL_FUND_LABEL
+
+if "_clear_map_selection" not in st.session_state:
+    st.session_state._clear_map_selection = False
 
 GOAL_TIERS = [
     {"goal": 100, "reward": "🔑 Free Keychain"},
@@ -873,7 +912,8 @@ else:
 
         # --- MAP SECTION ---
         st.header("🗺️ Endangered Animal Map")
-        
+        st.caption("💡 Click a green circle on the map to see that animal's photo and donate directly to help it.")
+
         if not filtered_df.empty:
             view_state = pdk.ViewState(
                 latitude=float(filtered_df["Latitude"].mean()),
@@ -884,11 +924,13 @@ else:
 
             layer = pdk.Layer(
                 "ScatterplotLayer",
+                id="animal-layer",
                 data=filtered_df,
                 get_position='[Longitude, Latitude]',
                 get_radius=250000,
                 get_fill_color='[34, 139, 34, 180]',
                 pickable=True,
+                auto_highlight=True,
             )
 
             tooltip = {
@@ -906,7 +948,51 @@ else:
                 tooltip=tooltip,
             )
 
-            st.pydeck_chart(deck)
+            # If the user asked to clear their map selection, reset the
+            # chart's selection state before it's instantiated below.
+            if st.session_state._clear_map_selection:
+                if "animal_map" in st.session_state:
+                    del st.session_state["animal_map"]
+                st.session_state._clear_map_selection = False
+                st.session_state.donation_target = GENERAL_FUND_LABEL
+
+            map_event = st.pydeck_chart(
+                deck,
+                on_select="rerun",
+                selection_mode="single-object",
+                key="animal_map",
+            )
+
+            # --- Handle a clicked animal ---
+            selected_animal_row = None
+            if map_event and map_event.selection:
+                selected_objects = map_event.selection.get("objects", {}).get("animal-layer", [])
+                if selected_objects:
+                    clicked_name = selected_objects[0].get("Animal")
+                    match = df[df["Animal"] == clicked_name]
+                    if not match.empty:
+                        selected_animal_row = match.iloc[0]
+                        st.session_state.donation_target = clicked_name
+
+            # --- Selected Animal Card (correct photo tied to that exact animal) ---
+            if selected_animal_row is not None:
+                st.markdown("### 🐾 Selected Animal")
+                card_col1, card_col2 = st.columns([1, 2])
+
+                with card_col1:
+                    photo_url = get_animal_photo_url(selected_animal_row["Animal"])
+                    st.image(photo_url, use_container_width=True, caption=selected_animal_row["Animal"])
+
+                with card_col2:
+                    st.subheader(selected_animal_row["Animal"])
+                    st.write(f"**Region:** {selected_animal_row['Region']}")
+                    st.write(f"**Status:** {selected_animal_row['Status']}")
+                    st.write(selected_animal_row["Description"])
+                    st.info(f"💚 Your donation below will go toward helping the **{selected_animal_row['Animal']}**.")
+
+                    if st.button("✖️ Clear Selection & Donate Generally"):
+                        st.session_state._clear_map_selection = True
+                        st.rerun()
 
         # --- DONATION & GOAL PROGRESS SECTION ---
         st.markdown("---")
@@ -972,6 +1058,11 @@ else:
 
         st.markdown("### 💳 Make a Donation")
 
+        if st.session_state.donation_target != GENERAL_FUND_LABEL:
+            st.caption(f"You're currently donating to help the **{st.session_state.donation_target}**. Click a different animal on the map, or use 'Clear Selection' above, to change this.")
+        else:
+            st.caption("Donating to the general conservation fund. Click an animal on the map above to direct your donation to that specific animal.")
+
         donation = st.slider(
             "Choose a donation amount ($)",
             min_value=5,
@@ -1030,7 +1121,10 @@ else:
                 else:
                     st.session_state.total_donated += donation
                     trigger_confetti()
-                    st.success(f"🎉 Thank you for donating ${donation} using {st.session_state.payment_method}!")
+                    if st.session_state.donation_target != GENERAL_FUND_LABEL:
+                        st.success(f"🎉 Thank you for donating ${donation} to help the {st.session_state.donation_target}, using {st.session_state.payment_method}!")
+                    else:
+                        st.success(f"🎉 Thank you for donating ${donation} using {st.session_state.payment_method}!")
                     st.rerun()
 
     # -----------------------------------

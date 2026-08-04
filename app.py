@@ -34,6 +34,44 @@ def trigger_confetti():
     )
 
 # -----------------------------
+# Helper Function: Animated Gradient Progress Bar
+# -----------------------------
+def gradient_progress_bar(progress_pct, height_px=22):
+    pct = max(0.0, min(progress_pct, 1.0)) * 100
+    st.markdown(
+        f"""
+        <style>
+        @keyframes gradientMove {{
+            0% {{ background-position: 0% 50%; }}
+            50% {{ background-position: 100% 50%; }}
+            100% {{ background-position: 0% 50%; }}
+        }}
+        .gradient-progress-outer {{
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 999px;
+            padding: 3px;
+            box-sizing: border-box;
+            margin: 8px 0 16px 0;
+        }}
+        .gradient-progress-inner {{
+            width: {pct}%;
+            height: {height_px}px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #1e88e5, #43a047, #1e88e5, #43a047);
+            background-size: 300% 300%;
+            animation: gradientMove 4s ease infinite;
+            transition: width 0.4s ease;
+        }}
+        </style>
+        <div class="gradient-progress-outer">
+            <div class="gradient-progress-inner"></div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# -----------------------------
 # Initialize Session State
 # -----------------------------
 if "logged_in" not in st.session_state:
@@ -893,8 +931,8 @@ else:
             </div>
             """, unsafe_allow_html=True)
 
-            # Streamlit progress bar tracking goal
-            st.progress(progress_pct)
+            # Animated blue-green gradient progress bar tracking goal
+            gradient_progress_bar(progress_pct)
 
             # Goal met & Claim Reward button action
             if st.session_state.total_donated >= target_goal:
@@ -926,7 +964,7 @@ else:
                 <p style="font-size: 16px;">You have beaten all donation milestones ($5,000 max tier)! Thank you for your incredible impact on wildlife conservation.</p>
             </div>
             """, unsafe_allow_html=True)
-            st.progress(1.0)
+            gradient_progress_bar(1.0)
 
         # Claimed Rewards Summary Box
         if st.session_state.claimed_rewards:

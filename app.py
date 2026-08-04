@@ -1296,7 +1296,7 @@ else:
             },
             {
                 "name": "🧥 Conservation Hoodie",
-                "price": 45,
+                "price": 35,
                 "image": "https://placehold.co/300x300?text=Hoodie",
                 "description": "Cozy fleece hoodie, perfect for a chilly day out in nature.",
             },
@@ -1305,24 +1305,6 @@ else:
                 "price": 10,
                 "image": "https://placehold.co/300x300?text=Keychain",
                 "description": "A mini enamel keychain featuring your favorite endangered animal.",
-            },
-            {
-                "name": "👜 Canvas Tote Bag",
-                "price": 18,
-                "image": "https://placehold.co/300x300?text=Tote+Bag",
-                "description": "Reusable canvas tote printed with our 'Voice the Voiceless' design.",
-            },
-            {
-                "name": "☕ Wildlife Mug",
-                "price": 15,
-                "image": "https://placehold.co/300x300?text=Mug",
-                "description": "Ceramic mug featuring illustrations of endangered species.",
-            },
-            {
-                "name": "🧢 Snapback Cap",
-                "price": 22,
-                "image": "https://placehold.co/300x300?text=Cap",
-                "description": "Adjustable snapback cap with embroidered logo.",
             },
         ]
 

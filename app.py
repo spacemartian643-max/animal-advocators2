@@ -860,12 +860,41 @@ else:
         on_change=set_nav_page
     )
 
-    st.sidebar.markdown("---")
+
+st.sidebar.markdown("---")
 
     # Logout button opens Pop-up Modal
     if st.sidebar.button("🚪 Log Out"):
         st.session_state.show_logout_dialog = True
         st.rerun()
+
+    # -----------------------------
+    # Horizontal Top Navigation
+    # -----------------------------
+    categories = [
+        "🏠 Home",
+        "🌎 Overview",
+        "📚 Endangered Animal Library",
+        "🤝 What You Can Do To Help",
+        "⚙️ Settings",
+    ]
+
+    current_index = categories.index(st.session_state.page) if st.session_state.page in categories else 0
+
+    def set_nav_page():
+        st.session_state.page = st.session_state.nav_radio
+
+    selected_category = st.radio(
+        "Go to",
+        categories,
+        index=current_index,
+        key="nav_radio",
+        on_change=set_nav_page,
+        horizontal=True,
+        label_visibility="collapsed",
+    )
+
+    st.markdown("---")
 
     page = st.session_state.page
 

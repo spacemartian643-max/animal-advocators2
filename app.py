@@ -3,6 +3,8 @@ import streamlit.components.v1 as components
 import pandas as pd
 import pydeck as pdk
 import requests
+import sqlite3
+import hashlib
 
 # Default placeholder image (Standard user profile avatar)
 DEFAULT_AVATAR = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
@@ -15,6 +17,64 @@ st.set_page_config(
     page_icon="🦁",
     layout="wide"
 )
+
+# -----------------------------
+# Database Setup (SQLite) for User Accounts
+# -----------------------------
+DB_PATH = "animal_advocators_users.db"
+
+def init_db():
+    """Creates the users table if it doesn't already exist."""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            username TEXT PRIMARY KEY,
+            email TEXT,
+            phone TEXT,
+            password_hash TEXT NOT NULL
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+def hash_password(password: str) -> str:
+    """Returns a SHA-256 hash of the given password (so raw passwords are never stored)."""
+    return hashlib.sha256(password.encode("utf-8")).hexdigest()
+
+def create_user(username: str, email: str, phone: str, password: str) -> bool:
+    """
+    Adds a new user to the database.
+    Returns True if the account was created, False if the username already exists.
+    """
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT username FROM users WHERE username = ?", (username,))
+    if cursor.fetchone() is not None:
+        conn.close()
+        return False
+
+    cursor.execute(
+        "INSERT INTO users (username, email, phone, password_hash) VALUES (?, ?, ?, ?)",
+        (username, email, phone, hash_password(password))
+    )
+    conn.commit()
+    conn.close()
+    return True
+
+def verify_user(username: str, password: str) -> bool:
+    """Checks whether the given username/password combination matches a stored account."""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT password_hash FROM users WHERE username = ?", (username,))
+    row = cursor.fetchone()
+    conn.close()
+    if row is None:
+        return False
+    return row[0] == hash_password(password)
+
+# Make sure the database and users table exist before the app runs
+init_db()
 
 # -----------------------------
 # Helper Function: Confetti Effect
@@ -782,9 +842,12 @@ if not st.session_state.logged_in:
 
         if st.button("Log In"):
             if login_username and login_password:
-                st.session_state.logged_in = True
-                st.session_state.username = login_username
-                st.rerun()
+                if verify_user(login_username, login_password):
+                    st.session_state.logged_in = True
+                    st.session_state.username = login_username
+                    st.rerun()
+                else:
+                    st.error("Incorrect username or password. Please try again, or sign up if you don't have an account yet.")
             else:
                 st.error("Please enter both username and password.")
 
@@ -802,10 +865,14 @@ if not st.session_state.logged_in:
             elif password != confirm:
                 st.error("Passwords do not match.")
             else:
-                st.session_state.logged_in = True
-                st.session_state.username = username
-                st.session_state.phone = phone
-                st.rerun()
+                account_created = create_user(username, email, phone, password)
+                if account_created:
+                    st.session_state.logged_in = True
+                    st.session_state.username = username
+                    st.session_state.phone = phone
+                    st.rerun()
+                else:
+                    st.error("That username is already taken. Please choose a different username, or log in instead.")
 
     st.markdown("---")
     st.write("Don't want to make an account?")
@@ -837,31 +904,6 @@ else:
             st.rerun()
 
     st.sidebar.markdown("---")
-
-    # Categories list
-    categories = [
-        "🏠 Home",
-        "🌎 Overview",
-        "📚 Endangered Animal Library",
-        "🤝 What You Can Do To Help",
-        "⚙️ Settings",
-    ]
-
-    current_index = categories.index(st.session_state.page) if st.session_state.page in categories else 0
-
-    def set_nav_page():
-        st.session_state.page = st.session_state.nav_radio
-
-    selected_category = st.sidebar.radio(
-        "Go to",
-        categories,
-        index=current_index,
-        key="nav_radio",
-        on_change=set_nav_page
-    )
-
-
-st.sidebar.markdown("---")
 
     # Logout button opens Pop-up Modal
     if st.sidebar.button("🚪 Log Out"):

@@ -881,15 +881,78 @@ else:
             reward_title = current_tier["reward"]
             target_goal = current_tier["goal"]
             progress_pct = min(st.session_state.total_donated / target_goal, 1.0)
+            progress_int = int(progress_pct * 100)
 
             # Circular Progress Ring & Milestone Display
             st.markdown(f"""
-            <div style="background-color: #f0f7f4; border: 2px solid #2e7d32; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 25px;">
-                <h3 style="color: #2e7d32; margin-bottom: 5px;">🎯 Next Reward Goal: ${target_goal}</h3>
-                <h4 style="color: #1b5e20; margin-top: 0px;">Reward: {reward_title}</h4>
+            <div style="background-color: #f0f8ff; border: 2px solid #0088cc; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 25px;">
+                <h3 style="color: #0088cc; margin-bottom: 5px;">🎯 Next Reward Goal: ${target_goal}</h3>
+                <h4 style="color: #005580; margin-top: 0px;">Reward: {reward_title}</h4>
                 <div style="font-size: 20px; font-weight: bold; margin: 15px 0; color: #333;">
-                    Total Donated: <span style="color: #2e7d32;">${st.session_state.total_donated}</span> / ${target_goal}
+                    Total Donated: <span style="color: #0088cc;">${st.session_state.total_donated}</span> / ${target_goal}
                 </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            # Moving Blue-to-Green Gradient Progress Bar Custom Styling
+            st.markdown(f"""
+            <style>
+                @keyframes gradientMove {{
+                    0% {{ background-position: 0% 50%; }}
+                    50% {{ background-position: 100% 50%; }}
+                    100% {{ background-position: 0% 50%; }}
+                }}
+                .custom-progress-bg {{
+                    width: 100%;
+                    background-color: #e0e0e0;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    height: 24px;
+                    margin-bottom: 20px;
+                }}
+                .custom-progress-fill {{
+                    width: {progress_int}%;
+                    height: 100%;
+                    background: linear-gradient(270deg, #00c6ff, #0072ff, #11998e, #38ef7d);
+                    background-size: 400% 400%;
+                    animation: gradientMove 4s ease infinite;
+                    border-radius: 10px;
+                    transition: width 0.5s ease;
+                }}
+            </style>
+            <div class="custom-progress-bg">
+                <div class="custom-progress-fill"></div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            # Goal met & Claim Reward button action
+            if st.session_state.total_donated >= target_goal:
+                st.balloons()
+                trigger_confetti()
+                st.success(f"🎉 **Goal Completed!** You unlocked: **{reward_title}**!")
+                
+                if st.button("🎁 Claim Reward & Unlock Next Goal"):
+                    st.session_state.claimed_rewards.append(reward_title)
+                    
+                    # Scale goal to next tier
+                    if target_goal == 100:
+                        st.session_state.current_goal = 500
+                    elif target_goal == 500:
+                        st.session_state.current_goal = 1000
+                    elif target_goal == 1000:
+                        st.session_state.current_goal = 5000
+                    
+                    trigger_confetti()
+                    st.success("Reward Claimed! Your goal has leveled up!")
+                    st.rerun()
+        else:
+            # All milestones achieved state
+            st.balloons()
+            trigger_confetti()
+            st.markdown("""
+            <div style="background-color: #fff8e1; border: 2px solid #ffa000; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 25px;">
+                <h3 style="color: #d84315;">🎉 All Donation Goals Reached!</h3>
+                <p>Thank you for being an extraordinary advocate for wildlife!</p>
             </div>
             """, unsafe_allow_html=True)
 

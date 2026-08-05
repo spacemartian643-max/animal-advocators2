@@ -210,6 +210,10 @@ if "donation_target" not in st.session_state:
 if "_clear_map_selection" not in st.session_state:
     st.session_state._clear_map_selection = False
 
+# --- Language Preference State ---
+if "language" not in st.session_state:
+    st.session_state.language = "English"
+
 GOAL_TIERS = [
     {"goal": 100, "reward": "🔑 Free Keychain"},
     {"goal": 500, "reward": "👕 Free T-Shirt"},
@@ -1461,7 +1465,7 @@ else:
         st.title("⚙️ Settings & Support")
         st.write("We value your feedback and bug reports to make Animal Advocators better!")
 
-        tab_feedback, tab_bug = st.tabs(["💬 Send Feedback", "🐛 Report a Bug or Error"])
+        tab_feedback, tab_bug, tab_language = st.tabs(["💬 Send Feedback", "🐛 Report a Bug or Error", "🌐 Change Languages"])
 
         # Feedback Tab
         with tab_feedback:
@@ -1498,6 +1502,24 @@ else:
                     st.success("🚨 Bug report submitted! Thank you for helping us keep Animal Advocators running smoothly.")
                 else:
                     st.error("Please complete both the summary and detailed description fields.")
+
+        # Change Languages Tab
+        with tab_language:
+            st.subheader("Change Language")
+            st.write("Select your preferred language for Animal Advocators.")
+
+            language_options = ["English", "Spanish", "Russian", "Italian", "Mandarin", "German"]
+
+            selected_language = st.selectbox(
+                "Choose a language:",
+                language_options,
+                index=language_options.index(st.session_state.language)
+            )
+
+            if st.button("Save Language"):
+                st.session_state.language = selected_language
+                st.success(f"✅ Language updated to {selected_language}!")
+                st.rerun()
 
     # -----------------------------------
     # Footer

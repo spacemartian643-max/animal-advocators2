@@ -5,6 +5,11 @@ import pydeck as pdk
 import requests
 import sqlite3
 import hashlib
+import os
+
+# Directory this script lives in, so local asset paths (like merch photos)
+# resolve correctly no matter what directory `streamlit run` is launched from.
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Default placeholder image (Standard user profile avatar)
 DEFAULT_AVATAR = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
@@ -136,6 +141,18 @@ def gradient_progress_bar(progress_pct, height_px=22):
 # Helper Function: Correct, Animal-Specific Photo Lookup
 # -----------------------------
 FALLBACK_ANIMAL_PHOTO = "https://placehold.co/500x350?text=Photo+Unavailable"
+
+def resolve_product_image(local_path, fallback_label):
+    """
+    Returns the local product image path if that file actually exists on
+    disk (e.g. the merch photos shipped in /assets). If it's missing --
+    for example because the assets/ folder wasn't kept next to app.py on
+    this machine -- falls back to a placeholder instead of letting
+    st.image() throw an error and break the page.
+    """
+    if local_path and os.path.exists(local_path):
+        return local_path
+    return f"https://placehold.co/300x300?text={fallback_label}"
 
 @st.cache_data(ttl=60 * 60 * 24, show_spinner=False)
 def get_animal_photo_url(animal_name: str) -> str:
@@ -2393,13 +2410,13 @@ else:
             {
                 "name": "🐾 Wildlife Advocators T-Shirt",
                 "price": 25,
-                "image": "https://placehold.co/300x300?text=T-Shirt",
+                "image": os.path.join(BASE_DIR, "assets", "animal_advocators_tshirt.png"),
                 "description": "Soft cotton tee featuring our signature paw logo.",
             },
             {
                 "name": "🧥 Conservation Hoodie",
                 "price": 35,
-                "image": "https://placehold.co/300x300?text=Hoodie",
+                "image": os.path.join(BASE_DIR, "assets", "animal_advocators_hoodie.png"),
                 "description": "Cozy fleece hoodie, perfect for a chilly day out in nature.",
             },
         ]
@@ -2409,9 +2426,10 @@ else:
 
         for idx, product in enumerate(products):
             with shop_columns[idx % 3]:
-                st.image(product["image"], use_container_width=True)
+                display_image = resolve_product_image(product["image"], product["name"].split(" ", 1)[-1].replace(" ", "+"))
+                st.image(display_image, use_container_width=True)
                 if st.button(t("view_larger_btn"), key=f"view_larger_merch_{idx}"):
-                    show_larger_photo(product["image"], caption=product["name"])
+                    show_larger_photo(display_image, caption=product["name"])
                 st.subheader(product["name"])
                 st.write(product["description"])
                 st.markdown(f"**${product['price']}**")

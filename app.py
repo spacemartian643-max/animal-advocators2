@@ -5,7 +5,6 @@ import pydeck as pdk
 import requests
 import sqlite3
 import hashlib
-LOGO_PATH = "ANIMAL_ADVOCATORS.png"
 
 # Default placeholder image (Standard user profile avatar)
 DEFAULT_AVATAR = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
@@ -1923,7 +1922,6 @@ def normalize_search(text):
 # AUTHENTICATION SCREEN
 # -----------------------------
 if not st.session_state.logged_in:
-    st.image(LOGO_PATH, width=150)
     st.title(t("app_title"))
     st.subheader(t("app_tagline"))
     st.write(t("login_intro"))
@@ -1982,7 +1980,6 @@ if not st.session_state.logged_in:
 # -----------------------------
 else:
     # Sidebar Navigation Header
-    st.sidebar.image(LOGO_PATH, width=100)
     st.sidebar.title(t("sidebar_nav_header"))
     
     # Profile photo & Edit Profile button placed next to each other

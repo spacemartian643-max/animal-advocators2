@@ -4980,7 +4980,7 @@ else:
                         st.session_state._clear_map_selection = True
                         st.rerun()
 
-         # --- DONATION & GOAL PROGRESS SECTION ---
+        # --- DONATION & GOAL PROGRESS SECTION ---
         st.markdown("---")
         st.header(t("support_header"))
 
@@ -5042,94 +5042,81 @@ else:
             gradient_progress_bar(1.0)
 
         # Claimed Rewards Summary Box
-if st.session_state.claimed_rewards:
-    st.markdown(t("claimed_rewards_label") + ", ".join(st.session_state.claimed_rewards))
+        if st.session_state.claimed_rewards:
+            st.markdown(t("claimed_rewards_label") + ", ".join(st.session_state.claimed_rewards))
 
-st.markdown(t("make_donation_header"))
+        st.markdown(t("make_donation_header"))
 
-if st.session_state.donation_target != GENERAL_FUND_LABEL:
-    st.caption(t("donating_to_animal_caption", animal=st.session_state.donation_target))
-else:
-    st.caption(t("donating_general_caption"))
-
-donation = st.slider(
-    t("donation_slider_label"),
-    min_value=5,
-    max_value=500,
-    value=25,
-    step=5
-)
-
-st.subheader(t("choose_payment_header"))
-
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    if st.button("💳 Visa", use_container_width=True):
-        st.session_state.payment_method = "Visa"
-
-with col2:
-    if st.button("💳 Mastercard", use_container_width=True):
-        st.session_state.payment_method = "Mastercard"
-
-with col3:
-    if st.button("💳 American Express", use_container_width=True):
-        st.session_state.payment_method = "American Express"
-
-with col4:
-    if st.button("💳 Chase", use_container_width=True):
-        st.session_state.payment_method = "Chase Credit Card"
-
-col5, col6, col7 = st.columns(3)
-
-with col5:
-    if st.button("🎁 Visa Gift Card", use_container_width=True):
-        st.session_state.payment_method = "Visa Gift Card"
-
-with col6:
-    if st.button("🎁 Mastercard Gift Card", use_container_width=True):
-        st.session_state.payment_method = "Mastercard Gift Card"
-
-if st.session_state.payment_method:
-    st.markdown("---")
-    st.subheader(t("payment_header", method=st.session_state.payment_method))
-
-    if "Gift Card" in st.session_state.payment_method:
-        gift_code = st.text_input(t("gift_card_code_label"))
-    else:
-        card_number = st.text_input(t("card_number_label"))
-        card_name = st.text_input(t("name_on_card_label"))
-        expiry = st.text_input(t("expiry_label"))
-        cvv = st.text_input(t("cvv_label"), type="password")
-
-    if st.button(t("complete_donation_btn")):
-        if "Gift Card" in st.session_state.payment_method and not gift_code:
-            st.error(t("missing_gift_code_error"))
-
-        elif "Gift Card" not in st.session_state.payment_method and not (card_number and card_name and expiry and cvv):
-            st.error(t("missing_payment_info_error"))
-
+        if st.session_state.donation_target != GENERAL_FUND_LABEL:
+            st.caption(t("donating_to_animal_caption", animal=st.session_state.donation_target))
         else:
-            # Save donation
-            st.session_state.total_donated += donation
+            st.caption(t("donating_general_caption"))
 
-            # Celebrate 🎉
-            trigger_confetti()
+        donation = st.slider(
+            t("donation_slider_label"),
+            min_value=5,
+            max_value=500,
+            value=25,
+            step=5
+        )
 
-            # Personalized thank-you message
-            if st.session_state.donation_target != GENERAL_FUND_LABEL:
-                st.success(
-                    f"🎉 Thank you for donating **${donation}** to help the **{st.session_state.donation_target}** using **{st.session_state.payment_method}**!\n\n"
-                    "Your generosity helps protect this endangered species and supports wildlife conservation efforts."
-                )
+        st.subheader(t("choose_payment_header"))
+
+        col1, col2, col3, col4 = st.columns(4)
+
+        with col1:
+            if st.button("💳 Visa", use_container_width=True):
+                st.session_state.payment_method = "Visa"
+
+        with col2:
+            if st.button("💳 Mastercard", use_container_width=True):
+                st.session_state.payment_method = "Mastercard"
+
+        with col3:
+            if st.button("💳 American Express", use_container_width=True):
+                st.session_state.payment_method = "American Express"
+
+        with col4:
+            if st.button("💳 Chase", use_container_width=True):
+                st.session_state.payment_method = "Chase Credit Card"
+
+        col5, col6, col7 = st.columns(3)
+
+        with col5:
+            if st.button("🎁 Visa Gift Card", use_container_width=True):
+                st.session_state.payment_method = "Visa Gift Card"
+
+        with col6:
+            if st.button("🎁 Mastercard Gift Card", use_container_width=True):
+                st.session_state.payment_method = "Mastercard Gift Card"
+
+        if st.session_state.payment_method:
+            st.markdown("---")
+            st.subheader(t("payment_header", method=st.session_state.payment_method))
+
+            if "Gift Card" in st.session_state.payment_method:
+                gift_code = st.text_input(t("gift_card_code_label"))
             else:
-                st.success(
-                    f"🎉 Thank you for donating **${donation}** using **{st.session_state.payment_method}** to support endangered wildlife!\n\n"
-                    "Your generosity helps protect animals around the world."
-                )
+                card_number = st.text_input(t("card_number_label"))
+                card_name = st.text_input(t("name_on_card_label"))
+                expiry = st.text_input(t("expiry_label"))
+                cvv = st.text_input(t("cvv_label"), type="password")
 
-            # Reset payment method so another donation starts fresh
-            st.session_state.payment_method = None
+            if st.button(t("complete_donation_btn")):
+                if "Gift Card" in st.session_state.payment_method and not gift_code:
+                    st.error(t("missing_gift_code_error"))
+                elif "Gift Card" not in st.session_state.payment_method and not (card_number and card_name and expiry and cvv):
+                    st.error(t("missing_payment_info_error"))
+                else:
+                    st.session_state.total_donated += donation
+                    trigger_confetti()
+                    if st.session_state.donation_target != GENERAL_FUND_LABEL:
+                        st.success(f"Thank you for donating ${donation} to {st.session_state.donation_target}!")
+                        st.success(t("donation_thanks_animal", amount=donation, animal=st.session_state.donation_target, method=st.session_state.payment_method))
+                    else:
+                        st.success(t("donation_thanks_general", amount=donation, method=st.session_state.payment_method))
+                    st.rerun()
+
     # -----------------------------------
     # OVERVIEW PAGE
     # -----------------------------------

@@ -2211,6 +2211,8 @@ else:
                         st.session_state.current_goal = 1000
                     elif target_goal == 1000:
                         st.session_state.current_goal = 5000
+                    elif target_goal == 5000:
+                        st.session_state.current_goal = None
                     
                     trigger_confetti()
                     st.success(t("reward_claimed"))
@@ -2219,6 +2221,7 @@ else:
             # All milestones achieved state
             st.balloons()
             trigger_confetti()
+            st.success("Thank you for claiming all rewards! You may continue to donate, but without rewards.")
             st.markdown(f"""
             <div style="background-color: #fff8e1; border: 2px solid #ffa000; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 25px;">
                 <h3 style="color: #f57f17;">{t("ultimate_champion_title")}</h3>
@@ -2297,6 +2300,7 @@ else:
                     st.session_state.total_donated += donation
                     trigger_confetti()
                     if st.session_state.donation_target != GENERAL_FUND_LABEL:
+                        st.success(f"Thank you for donating ${donation} to {st.session_state.donation_target}!")
                         st.success(t("donation_thanks_animal", amount=donation, animal=st.session_state.donation_target, method=st.session_state.payment_method))
                     else:
                         st.success(t("donation_thanks_general", amount=donation, method=st.session_state.payment_method))

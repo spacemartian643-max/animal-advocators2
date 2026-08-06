@@ -156,7 +156,11 @@ def get_animal_photo_url(animal_name: str) -> str:
       up instead of the actual animal).
     """
     headers = {"User-Agent": "AnimalAdvocatorsApp/1.0 (educational streamlit app)"}
-    non_photo_keywords = ["skull", "skeleton", "fossil", "bone", "taxidermy", "specimen", "mount.jpg", "diagram"]
+    non_photo_keywords = [
+        "skull", "skeleton", "fossil", "bone", "taxidermy", "specimen",
+        "mount", "museum", "diagram", "drawing", "illustration", "map",
+        "distribution", "range map", "cladogram", "anatomy",
+    ]
 
     def is_usable_image(image_url):
         if not image_url:
@@ -164,9 +168,71 @@ def get_animal_photo_url(animal_name: str) -> str:
         lower_url = image_url.lower()
         return not any(bad in lower_url for bad in non_photo_keywords)
 
+    def get_page_photo(page_title, animal_terms):
+        """Returns a suitable photo from the article's image gallery as a fallback."""
+        image_list_params = {
+            "action": "query",
+            "titles": page_title,
+            "prop": "images",
+            "imlimit": 50,
+            "format": "json",
+        }
+        image_list_response = requests.get(
+            "https://en.wikipedia.org/w/api.php",
+            params=image_list_params,
+            headers=headers,
+            timeout=5,
+        )
+        if image_list_response.status_code != 200:
+            return None
+
+        pages = image_list_response.json().get("query", {}).get("pages", {})
+        image_titles = [
+            image["title"]
+            for page in pages.values()
+            for image in page.get("images", [])
+            if is_usable_image(image.get("title"))
+        ]
+        if not image_titles:
+            return None
+
+        def image_score(title):
+            lower_title = title.lower()
+            return sum(term in lower_title for term in animal_terms) + (".jpg" in lower_title or ".jpeg" in lower_title)
+
+        image_titles.sort(key=image_score, reverse=True)
+        image_info_params = {
+            "action": "query",
+            "titles": "|".join(image_titles[:20]),
+            "prop": "imageinfo",
+            "iiprop": "url",
+            "iiurlwidth": 900,
+            "format": "json",
+        }
+        image_info_response = requests.get(
+            "https://en.wikipedia.org/w/api.php",
+            params=image_info_params,
+            headers=headers,
+            timeout=5,
+        )
+        if image_info_response.status_code != 200:
+            return None
+
+        image_pages = image_info_response.json().get("query", {}).get("pages", {})
+        image_urls = {
+            page.get("title"): page.get("imageinfo", [{}])[0].get("thumburl") or page.get("imageinfo", [{}])[0].get("url")
+            for page in image_pages.values()
+        }
+        for image_title in image_titles:
+            image_url = image_urls.get(image_title)
+            if is_usable_image(image_url):
+                return image_url
+        return None
+
     try:
         name = animal_name.strip()
         candidate_titles = [name]
+        animal_terms = [term for term in name.lower().replace("-", " ").split() if len(term) > 2]
 
         # Use Wikipedia's search API to find the best-matching page title
         # in case the animal's exact name isn't an exact Wikipedia title.
@@ -184,7 +250,7 @@ def get_animal_photo_url(animal_name: str) -> str:
             if len(search_data) > 1 and search_data[1]:
                 # Prefer search results, but keep the original name as a
                 # fallback in case the search API returns nothing useful.
-                candidate_titles = list(search_data[1]) + candidate_titles
+                candidate_titles.extend(search_data[1])
 
         for candidate in candidate_titles:
             page_title = candidate.strip().replace(" ", "_")
@@ -204,6 +270,13 @@ def get_animal_photo_url(animal_name: str) -> str:
                 return thumbnail
             if is_usable_image(original):
                 return original
+
+            try:
+                gallery_photo = get_page_photo(candidate, animal_terms)
+            except Exception:
+                gallery_photo = None
+            if gallery_photo:
+                return gallery_photo
 
         return FALLBACK_ANIMAL_PHOTO
     except Exception:

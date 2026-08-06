@@ -143,20 +143,68 @@ def get_animal_photo_url(animal_name: str) -> str:
     Looks up the real photo for a SPECIFIC animal by querying Wikipedia's
     summary API using that exact animal's name, so the photo returned is
     always tied to the correct animal (never a random/generic image).
+
+    Improvements over a plain exact-title lookup:
+    - First tries Wikipedia's search (opensearch) API to resolve the best
+      matching page title. This fixes cases where the exact animal name
+      doesn't match a Wikipedia page title 1:1 (which previously showed
+      "Photo Unavailable" for some animals).
+    - Skips disambiguation pages, since their lead image isn't the animal.
+    - Skips any image whose filename indicates it's a skull, skeleton,
+      fossil, taxidermy mount, or museum specimen rather than a photo of
+      the live animal (which previously caused some skull photos to show
+      up instead of the actual animal).
     """
+    headers = {"User-Agent": "AnimalAdvocatorsApp/1.0 (educational streamlit app)"}
+    non_photo_keywords = ["skull", "skeleton", "fossil", "bone", "taxidermy", "specimen", "mount.jpg", "diagram"]
+
+    def is_usable_image(image_url):
+        if not image_url:
+            return False
+        lower_url = image_url.lower()
+        return not any(bad in lower_url for bad in non_photo_keywords)
+
     try:
-        title = animal_name.strip().replace(" ", "_")
-        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{title}"
-        headers = {"User-Agent": "AnimalAdvocatorsApp/1.0 (educational streamlit app)"}
-        response = requests.get(url, headers=headers, timeout=5)
-        if response.status_code == 200:
+        name = animal_name.strip()
+        candidate_titles = [name]
+
+        # Use Wikipedia's search API to find the best-matching page title
+        # in case the animal's exact name isn't an exact Wikipedia title.
+        search_url = "https://en.wikipedia.org/w/api.php"
+        search_params = {
+            "action": "opensearch",
+            "search": name,
+            "limit": 3,
+            "namespace": 0,
+            "format": "json",
+        }
+        search_response = requests.get(search_url, params=search_params, headers=headers, timeout=5)
+        if search_response.status_code == 200:
+            search_data = search_response.json()
+            if len(search_data) > 1 and search_data[1]:
+                # Prefer search results, but keep the original name as a
+                # fallback in case the search API returns nothing useful.
+                candidate_titles = list(search_data[1]) + candidate_titles
+
+        for candidate in candidate_titles:
+            page_title = candidate.strip().replace(" ", "_")
+            url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{page_title}"
+            response = requests.get(url, headers=headers, timeout=5)
+            if response.status_code != 200:
+                continue
+
             data = response.json()
+            if data.get("type") == "disambiguation":
+                continue
+
             thumbnail = data.get("thumbnail", {}).get("source")
             original = data.get("originalimage", {}).get("source")
-            if thumbnail:
+
+            if is_usable_image(thumbnail):
                 return thumbnail
-            if original:
+            if is_usable_image(original):
                 return original
+
         return FALLBACK_ANIMAL_PHOTO
     except Exception:
         return FALLBACK_ANIMAL_PHOTO
@@ -395,6 +443,8 @@ TRANSLATIONS = {
         "language_updated": "✅ Language updated to {language}!",
 
         "footer_text": "Animal Advocators • Helping Wild Animals Worldwide 🌍",
+        "view_larger_btn": "🔍 View Larger Photo",
+        "larger_photo_title": "🔍 Larger Photo",
     },
 
     "Spanish": {
@@ -497,7 +547,7 @@ TRANSLATIONS = {
         "help_3_title": "3. 💚 Dona y Apoya",
         "help_3_desc": "Las contribuciones financian directamente la protección de hábitats, las patrullas contra la caza furtiva y los centros de rehabilitación de fauna en todo el mundo.",
         "help_4_title": "4. 🌿 Protege los Hábitats Naturales",
-        "help_4_desc": "Planta especies nativas, reduce los residuos y apoya proyectos locales de conservación y reservas naturales en tu comunidad.",
+        "help_4_desc": "Planta especies autoctonas, reduce los residuos y apoya proyectos locales de conservación y reservas naturales en tu comunidad.",
         "help_5_title": "5. 📜 Aboga por Cambios de Política",
         "help_5_desc": "Apoya la legislación de protección de la vida silvestre y vota por políticas que protejan los ecosistemas naturales vulnerables y combatan el cambio climático.",
         "help_6_title": "6. 📚 Mantente Informado",
@@ -520,7 +570,7 @@ TRANSLATIONS = {
         "upload_photo_label": "Subir Foto de Perfil",
         "guest_username_help": "Las cuentas de invitado no pueden cambiar su nombre de usuario.",
         "bio_label": "Descripción / Biografía",
-        "phone_label": "Número de Teléfono (Opcional)",
+        "phone_label": "Número de Teléfono (Facoltativo)",
         "save_changes_btn": "💾 Guardar Cambios",
         "profile_updated": "✅ ¡Perfil actualizado con éxito!",
         "username_display": "Usuario: {name}",
@@ -1281,6 +1331,13 @@ def logout_modal():
 # Trigger dialog if requested
 if st.session_state.show_logout_dialog:
     logout_modal()
+
+# -----------------------------
+# Modal Dialog: Larger Photo Viewer (ADDED)
+# -----------------------------
+@st.dialog("🔍 Larger Photo")
+def show_larger_photo(image, caption=""):
+    st.image(image, use_container_width=True, caption=caption if caption else None)
 
 # -----------------------------
 # Full Animals Dataset
@@ -2345,12 +2402,6 @@ else:
                 "image": "https://placehold.co/300x300?text=Hoodie",
                 "description": "Cozy fleece hoodie, perfect for a chilly day out in nature.",
             },
-            {
-                "name": "🔑 Endangered Species Keychain",
-                "price": 10,
-                "image": "https://placehold.co/300x300?text=Keychain",
-                "description": "A mini enamel keychain featuring your favorite endangered animal.",
-            },
         ]
 
         shop_col1, shop_col2, shop_col3 = st.columns(3)
@@ -2359,6 +2410,8 @@ else:
         for idx, product in enumerate(products):
             with shop_columns[idx % 3]:
                 st.image(product["image"], use_container_width=True)
+                if st.button(t("view_larger_btn"), key=f"view_larger_merch_{idx}"):
+                    show_larger_photo(product["image"], caption=product["name"])
                 st.subheader(product["name"])
                 st.write(product["description"])
                 st.markdown(f"**${product['price']}**")
@@ -2492,6 +2545,8 @@ else:
         with col_img:
             main_profile_img = st.session_state.profile_pic if st.session_state.profile_pic else DEFAULT_AVATAR
             st.image(main_profile_img, width=320)
+            if st.button(t("view_larger_btn"), key="view_larger_profile"):
+                show_larger_photo(main_profile_img, caption=st.session_state.username)
 
         with col_info:
             st.subheader(t("username_display", name=st.session_state.username))

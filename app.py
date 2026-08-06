@@ -5110,29 +5110,26 @@ if st.session_state.payment_method:
             st.error(t("missing_payment_info_error"))
 
         else:
-            # Save donation (this updates your progress bar)
+            # Save donation
             st.session_state.total_donated += donation
 
-            # Celebrate
+            # Celebrate 🎉
             trigger_confetti()
 
-            # Save thank-you message for after refresh
+            # Personalized thank-you message
             if st.session_state.donation_target != GENERAL_FUND_LABEL:
-                st.session_state.donation_message = (
+                st.success(
                     f"🎉 Thank you for donating **${donation}** to help the **{st.session_state.donation_target}** using **{st.session_state.payment_method}**!\n\n"
                     "Your generosity helps protect this endangered species and supports wildlife conservation efforts."
                 )
             else:
-                st.session_state.donation_message = (
+                st.success(
                     f"🎉 Thank you for donating **${donation}** using **{st.session_state.payment_method}** to support endangered wildlife!\n\n"
                     "Your generosity helps protect animals around the world."
                 )
 
-            # Reset payment method
+            # Reset payment method so another donation starts fresh
             st.session_state.payment_method = None
-
-            # Refresh page so the donation progress bar updates
-            st.rerun()
     # -----------------------------------
     # OVERVIEW PAGE
     # -----------------------------------

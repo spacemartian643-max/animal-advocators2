@@ -5,11 +5,6 @@ import pydeck as pdk
 import requests
 import sqlite3
 import hashlib
-import os
-
-# Directory this script lives in, so local asset paths (like merch photos)
-# resolve correctly no matter what directory `streamlit run` is launched from.
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Default placeholder image (Standard user profile avatar)
 DEFAULT_AVATAR = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
@@ -2398,13 +2393,13 @@ else:
             {
                 "name": "🐾 Wildlife Advocators T-Shirt",
                 "price": 25,
-                "image": os.path.join(BASE_DIR, "assets", "animal_advocators_tshirt.png"),
+                "image": "https://placehold.co/300x300?text=T-Shirt",
                 "description": "Soft cotton tee featuring our signature paw logo.",
             },
             {
                 "name": "🧥 Conservation Hoodie",
                 "price": 35,
-                "image": os.path.join(BASE_DIR, "assets", "animal_advocators_hoodie.png"),
+                "image": "https://placehold.co/300x300?text=Hoodie",
                 "description": "Cozy fleece hoodie, perfect for a chilly day out in nature.",
             },
         ]

@@ -4980,7 +4980,7 @@ else:
                         st.session_state._clear_map_selection = True
                         st.rerun()
 
-        # --- DONATION & GOAL PROGRESS SECTION ---
+         # --- DONATION & GOAL PROGRESS SECTION ---
         st.markdown("---")
         st.header(t("support_header"))
 
@@ -5110,26 +5110,29 @@ if st.session_state.payment_method:
             st.error(t("missing_payment_info_error"))
 
         else:
-            # Save donation
+            # Save donation (this updates your progress bar)
             st.session_state.total_donated += donation
 
-            # Celebrate 🎉
+            # Celebrate
             trigger_confetti()
 
-            # Personalized thank-you message
+            # Save thank-you message for after refresh
             if st.session_state.donation_target != GENERAL_FUND_LABEL:
-                st.success(
+                st.session_state.donation_message = (
                     f"🎉 Thank you for donating **${donation}** to help the **{st.session_state.donation_target}** using **{st.session_state.payment_method}**!\n\n"
                     "Your generosity helps protect this endangered species and supports wildlife conservation efforts."
                 )
             else:
-                st.success(
+                st.session_state.donation_message = (
                     f"🎉 Thank you for donating **${donation}** using **{st.session_state.payment_method}** to support endangered wildlife!\n\n"
                     "Your generosity helps protect animals around the world."
                 )
 
-            # Reset payment method so another donation starts fresh
+            # Reset payment method
             st.session_state.payment_method = None
+
+            # Refresh page so the donation progress bar updates
+            st.rerun()
     # -----------------------------------
     # OVERVIEW PAGE
     # -----------------------------------

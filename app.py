@@ -5,9 +5,11 @@ import pydeck as pdk
 import requests
 import sqlite3
 import hashlib
+from pathlib import Path
 
 # Default placeholder image (Standard user profile avatar)
 DEFAULT_AVATAR = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+ASSETS_DIR = Path(__file__).parent / "assets"
 
 # -----------------------------
 # Page Configuration
@@ -2470,13 +2472,13 @@ else:
             {
                 "name": "🐾 Wildlife Advocators T-Shirt",
                 "price": 25,
-                "image": "https://placehold.co/300x300?text=T-Shirt",
+                "image": str(ASSETS_DIR / "wildlife-advocators-tshirt.png"),
                 "description": "Soft cotton tee featuring our signature paw logo.",
             },
             {
                 "name": "🧥 Conservation Hoodie",
                 "price": 35,
-                "image": "https://placehold.co/300x300?text=Hoodie",
+                "image": str(ASSETS_DIR / "conservation-hoodie.png"),
                 "description": "Cozy fleece hoodie, perfect for a chilly day out in nature.",
             },
         ]
